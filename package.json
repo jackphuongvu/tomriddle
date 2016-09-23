@@ -1,0 +1,26 @@
+{
+  "name": "typewritesomething",
+  "version": "0.1.0",
+  "description": "An online typewriter simulator",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.16.0",
+    "gulp": "^3.9.1"
+  },
+  "scripts": {
+    "start": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/bozdoz/typewritesomething.git"
+  },
+  "keywords": [
+    "typewriter",
+    "simulator",
+    "typewritesomething"
+  ],
+  "author": "Benjamin J DeLong",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/bozdoz/typewritesomething#readme"
+}
