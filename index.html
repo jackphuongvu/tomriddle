@@ -3,10 +3,12 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="keywords" content="typewriter, online, simulator, writing, poetry, robert m drake, rmdrk, jayme, bergman, jane, porter, bozdoz, creative, writing" />
+	<meta 
+		name="keywords" 
+		content="typewriter, online, simulator, writing, poetry, jayme, bergman, jane, porter, bozdoz, creative" />
 	<meta 
 		name="description" 
-		content="A minimalistic, online typewriter simulator to help you write more creatively!" />
+		content="A minimalistic typewriter simulator to help you write more creatively!" />
 	<meta name="author" content="Benjamin J DeLong" />
 	<meta name="viewport" content="width=device-width">
 	<link rel="shortcut icon" href="/favicon.ico" />
@@ -15,6 +17,9 @@
 </head>
 
 <body>
+	<div id="container">
+		<canvas id="text-canvas"></canvas>
+	</div>
 
 	<!-- prevent Chrome autocomplete -->
 	<input type="text" style="display:none">
@@ -26,11 +31,6 @@
 		name="this-is-no-password"
 		type="password"
 		autocomplete="off" />
-
-	<div id="stage"></div>
-
-	<canvas id="paper-canvas"></canvas>
-	<canvas id="text-canvas"></canvas>
 	<canvas id="cursor-canvas"></canvas>
 
 	<script src="script.js"></script> 
