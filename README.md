@@ -5,7 +5,7 @@ Typewrite Something
 &nbsp;
 ![MIT License](http://img.shields.io/badge/license-MIT-lightgrey.svg)
 
-A repo to showcase how to make an online typewriter simulator with JavaScript and the HTML5 canvas element.  Useable on mobile, tablet, and desktop.  Still in it's early stages!
+A repo to showcase how to make an online typewriter simulator with JavaScript and the HTML5 canvas element.  Useable on mobile, tablet, and desktop.
 
 ![Screenshot](http://i.imgur.com/xkJtUK4.png)
 
