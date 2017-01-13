@@ -232,19 +232,29 @@ window.addEventListener('load', function () {
 
     document.addEventListener('touchstart', mouseDown);
 
-    function onClick (e) {
+    function getPositionFromEvent (e) {
         var touch = e.touches && e.touches[0] || {},
-            _x = e.clientX || touch.clientX || posx,
-            _y = e.clientY || touch.clientY || posy;
+            _x = e.pageX || touch.clientX || posx,
+            _y = e.pageY || touch.clientY || posy;
+        return {
+            x : _x,
+            y : _y
+        };
+    }
+
+    function onClick (e) {
+        var _position = getPositionFromEvent(e),
+            _x = _position.x,
+            _y = _position.y;
         Cursor.update(_x - letter_width/2, _y - line_height/2);
         cursorInput.focus();
     }
 
     function mousemove (e) {
         // move holder
-        var touch = e.touches && e.touches[0] || {},
-            _x = e.clientX || touch.clientX || posx,
-            _y = e.clientY || touch.clientY || posy;
+        var _position = getPositionFromEvent(e),
+            _x = _position.x,
+            _y = _position.y;
         container.style.left = (_x - original_pos.x) + 'px';
         container.style.top = (_y - original_pos.y) + 'px';
         Cursor.clear();
@@ -255,9 +265,9 @@ window.addEventListener('load', function () {
         removeMoveEvent();
 
         if (original_pos) {
-            var touch = e.touches && e.touches[0] || {},
-                _x = e.clientX || touch.clientX || posx,
-                _y = e.clientY || touch.clientY || posy;
+            var _position = getPositionFromEvent(e),
+                _x = _position.x,
+                _y = _position.y;
 
             TypeWriter.reposition(_x - original_pos.x, _y - original_pos.y);
             original_pos = null;
@@ -276,16 +286,12 @@ window.addEventListener('load', function () {
         mousedowntime = new Date();
 
         mouseuptimeout = window.setTimeout(function () {
-            var touch = e.touches && e.touches[0] || {};
             
             document.addEventListener('mousemove', mousemove);
             document.addEventListener('touchmove', mousemove);
             document.addEventListener('mouseup', removeMoveEvent);
             
-            original_pos = {
-                x : e.clientX || touch.clientX || posx,
-                y : e.clientY || touch.clientY || posy
-            };
+            original_pos = getPositionFromEvent(e);
         }, 200);
     }
 
