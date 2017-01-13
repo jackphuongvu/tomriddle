@@ -331,16 +331,23 @@ window.addEventListener('load', function () {
 
         if (!value && !nav) return;
 
-        this.value = ' ';
-
         if (nav) {
             nav();
-        } else {            
+        } else {
             TypeWriter.addCharacter( value );
         }
+        forceSpace.call(this);
     });
 
-    cursorInput.value = ' ';
+    cursorInput.addEventListener('focus', forceSpace);
+
+    function forceSpace () {
+        // firefox allows navigation within input
+        // this forces cursor to the end
+        this.value = '';
+        this.value = ' ';
+    }
+
     resetCanvases();
     Cursor.draw();
     cursorInput.focus();
