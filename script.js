@@ -17,10 +17,10 @@ var container = document.getElementById('container'),
     letter_size = 26,
     letter_width = letter_size * 12 / 20,
     line_height = letter_size + 8,
-    paddingx = 100,
-    paddingy = 100,
+    paddingx = Math.min(100, window.innerWidth / 8),
+    paddingy = Math.min(paddingx, window.innerHeight / 8),
     offsetx = 0,
-    offsety = 0,
+    offsety = offsetx,
     posx = paddingx,
     posy = paddingy,
     DEVICE_PIXEL_RATIO = window.devicePixelRatio || 0,
@@ -234,8 +234,8 @@ window.addEventListener('load', function () {
 
     function getPositionFromEvent (e) {
         var touch = e.touches && e.touches[0] || {},
-            _x = e.pageX || touch.clientX || posx,
-            _y = e.pageY || touch.clientY || posy;
+            _x = e.clientX || touch.clientX || posx,
+            _y = e.clientY || touch.clientY || posy;
         return {
             x : _x,
             y : _y
@@ -264,6 +264,15 @@ window.addEventListener('load', function () {
         window.clearTimeout(mouseuptimeout);
         removeMoveEvent();
 
+        if (e.type === 'touchend' && !e.touches.length) {
+            if (e.changedTouches.length) {
+                e.clientX = e.changedTouches[0].clientX;
+                e.clientY = e.changedTouches[0].clientY;
+            } else {
+                return;
+            }
+        }
+
         if (original_pos) {
             var _position = getPositionFromEvent(e),
                 _x = _position.x,
@@ -271,9 +280,7 @@ window.addEventListener('load', function () {
 
             TypeWriter.reposition(_x - original_pos.x, _y - original_pos.y);
             original_pos = null;
-        }
-
-        if (new Date() - mousedowntime <= clickdelay) {
+        } else if (new Date() - mousedowntime <= clickdelay) {
             // click
             onClick(e);
         }
@@ -287,12 +294,13 @@ window.addEventListener('load', function () {
 
         mouseuptimeout = window.setTimeout(function () {
             
+            original_pos = original_pos || getPositionFromEvent(e);
+
             document.addEventListener('mousemove', mousemove);
             document.addEventListener('touchmove', mousemove);
             document.addEventListener('mouseup', removeMoveEvent);
             
-            original_pos = getPositionFromEvent(e);
-        }, 200);
+        }, mousemovedelay);
     }
 
     function removeMoveEvent () {
@@ -352,6 +360,12 @@ window.addEventListener('load', function () {
     Cursor.draw();
     cursorInput.focus();
 });
+
+document.addEventListener("deviceready", function(){
+    shake.startWatch(function () {
+        TypeWriter.addCharacter('Shake Shake');
+    }, 10);
+}, false);
 
 //
 // helper functions
