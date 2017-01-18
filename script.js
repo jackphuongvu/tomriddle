@@ -378,10 +378,10 @@ document.addEventListener("deviceready", function(){
 
         navigator.notification.confirm("Do you want to clear the canvas?", function (button) {
             if (button === 1) {
-                TypeWriter.clear();
+                TypeWriter.reset();
             }
         });
-        
+
     });
 
 }, false);
