@@ -372,12 +372,18 @@ window.addEventListener('load', function () {
 });
 
 document.addEventListener("deviceready", function(){
+
+    // vibrate gives option to clear typewriter
     shake.startWatch(function () {
-        var makesure = confirm("Do you want to clear the canvas?");
-        if (makesure) {
-            TypeWriter.clear();
-        }
-    }, 40);
+
+        navigator.notification.confirm("Do you want to clear the canvas?", function (button) {
+            if (button === 1) {
+                TypeWriter.clear();
+            }
+        });
+        
+    });
+
 }, false);
 
 //
