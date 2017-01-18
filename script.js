@@ -32,8 +32,6 @@ var container = document.getElementById('container'),
     TRANSLATE_MARGIN = 0.1,
     Cursor = new function () {
         var cursor_height = line_height,
-            orig_posx = posx,
-            orig_posy = posy,
             _cursor_timeout,
             _raf,
             _time,
@@ -167,6 +165,18 @@ var container = document.getElementById('container'),
 
             resetCanvases();
             this.redraw();
+        };
+
+        this.reset = function () {
+            chars = [];
+            posx = paddingx;
+            posy = paddingy;
+            offsetx = 0;
+            offsety = 0;
+
+            this.reposition(0, 0);
+            Cursor.draw();
+            cursorInput.focus();
         };
     };
 
@@ -363,8 +373,11 @@ window.addEventListener('load', function () {
 
 document.addEventListener("deviceready", function(){
     shake.startWatch(function () {
-        TypeWriter.addCharacter('Shake Shake');
-    }, 10);
+        var makesure = confirm("Do you want to clear the canvas?");
+        if (makesure) {
+            TypeWriter.clear();
+        }
+    }, 40);
 }, false);
 
 //
