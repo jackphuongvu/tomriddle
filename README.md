@@ -10,3 +10,10 @@ A repo to showcase how to make an online typewriter simulator with JavaScript an
 ![Screenshot](http://i.imgur.com/xkJtUK4.png)
 
 See it live on [typewritesomething.com](http://typewritesomething.com)
+
+## Mobile App
+
+This project has been made into an app using PhoneGap:
+
+* [Google Play Store](https://play.google.com/store/apps/details?id=com.phonegap.typewritesomething)
+* [Apple App Store](https://play.google.com/store/apps/details?id=com.phonegap.typewritesomething)
