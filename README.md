@@ -13,7 +13,7 @@ See it live on [typewritesomething.com](http://typewritesomething.com)
 
 ## Mobile App
 
-This project has been made into an app using PhoneGap:
+This project has been made into an app using PhoneGap (see the [:octocat: GitHub](https://github.com/bozdoz/phonegap-typewritesomething)):
 
 * [Google Play Store](https://play.google.com/store/apps/details?id=com.phonegap.typewritesomething)
 * Apple App Store (soon)
