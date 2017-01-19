@@ -18,4 +18,4 @@ This project has been made into an app using PhoneGap (see the [:octocat: GitHub
 * [Google Play Store](https://play.google.com/store/apps/details?id=com.phonegap.typewritesomething)
 * Apple App Store (soon)
 
-[soon](https://render.bitstrips.com/v2/cpanel/8736524-173281661_42-s1-v1.png?transparent=1&palette=1)
+![soon](https://render.bitstrips.com/v2/cpanel/8736524-173281661_42-s1-v1.png?transparent=1&palette=1)
