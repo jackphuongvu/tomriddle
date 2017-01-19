@@ -23,6 +23,7 @@ var container = document.getElementById('container'),
     offsety = offsetx,
     posx = paddingx,
     posy = paddingy,
+    IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g),
     DEVICE_PIXEL_RATIO = window.devicePixelRatio || 0,
     TEXT_COLOR = '#150904',
     CURSOR_COLOR = '#4787ea',
@@ -32,8 +33,6 @@ var container = document.getElementById('container'),
     TRANSLATE_MARGIN = 0.1,
     Cursor = new function () {
         var cursor_height = line_height,
-            orig_posx = posx,
-            orig_posy = posy,
             _cursor_timeout,
             _raf,
             _time,
@@ -168,6 +167,18 @@ var container = document.getElementById('container'),
             resetCanvases();
             this.redraw();
         };
+
+        this.reset = function () {
+            chars = [];
+            posx = paddingx;
+            posy = paddingy;
+            offsetx = 0;
+            offsety = 0;
+
+            this.reposition(0, 0);
+            Cursor.draw();
+            cursorInput.focus();
+        };
     };
 
 function resetCanvases () {
@@ -228,7 +239,10 @@ window.addEventListener('load', function () {
     document.addEventListener('touchend', mouseUp);
 
     document.addEventListener('mousedown', mouseDown);
-    // document.addEventListener('click', mouseDown);
+
+    if (IS_IOS) {
+        document.addEventListener('touchstart', onClick);
+    }
 
     document.addEventListener('touchstart', mouseDown);
 
@@ -280,7 +294,8 @@ window.addEventListener('load', function () {
 
             TypeWriter.reposition(_x - original_pos.x, _y - original_pos.y);
             original_pos = null;
-        } else if (new Date() - mousedowntime <= clickdelay) {
+        } else if (new Date() - mousedowntime <= clickdelay &&
+            !IS_IOS) {
             // click
             onClick(e);
         }
@@ -288,6 +303,7 @@ window.addEventListener('load', function () {
 
     function mouseDown (e) {
 
+        // ignore right click
         if (e.button === 2) return;
 
         mousedowntime = new Date();
@@ -357,14 +373,26 @@ window.addEventListener('load', function () {
     }
 
     resetCanvases();
-    Cursor.draw();
-    cursorInput.focus();
+
+    if (!IS_IOS) {
+        Cursor.draw();
+        cursorInput.focus();
+    }
 });
 
 document.addEventListener("deviceready", function(){
+
+    // vibrate gives option to clear typewriter
     shake.startWatch(function () {
-        TypeWriter.addCharacter('Shake Shake');
-    }, 10);
+
+        navigator.notification.confirm("Do you want to clear the canvas?", function (button) {
+            if (button === 1) {
+                TypeWriter.reset();
+            }
+        });
+
+    });
+
 }, false);
 
 //

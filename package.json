@@ -1,7 +1,7 @@
 {
   "name": "typewritesomething",
-  "version": "0.2.1",
-  "description": "A typewriter simulator",
+  "version": "0.2.5",
+  "description": "A minimalistic typewriter simulator to help you write more creatively!",
   "main": "gulpfile.js",
   "dependencies": {},
   "devDependencies": {
@@ -28,6 +28,5 @@
     "writing"
   ],
   "author": "Benjamin J DeLong",
-  "license": "MIT",
-  "homepage": "https://bitbucket.org/bozdoz/typewritesomething#readme"
+  "license": "MIT"
 }
