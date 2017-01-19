@@ -23,6 +23,7 @@ var container = document.getElementById('container'),
     offsety = offsetx,
     posx = paddingx,
     posy = paddingy,
+    IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g),
     DEVICE_PIXEL_RATIO = window.devicePixelRatio || 0,
     TEXT_COLOR = '#150904',
     CURSOR_COLOR = '#4787ea',
@@ -238,7 +239,10 @@ window.addEventListener('load', function () {
     document.addEventListener('touchend', mouseUp);
 
     document.addEventListener('mousedown', mouseDown);
-    // document.addEventListener('click', mouseDown);
+
+    if (IS_IOS) {
+        document.addEventListener('touchstart', onClick);
+    }
 
     document.addEventListener('touchstart', mouseDown);
 
@@ -290,7 +294,8 @@ window.addEventListener('load', function () {
 
             TypeWriter.reposition(_x - original_pos.x, _y - original_pos.y);
             original_pos = null;
-        } else if (new Date() - mousedowntime <= clickdelay) {
+        } else if (new Date() - mousedowntime <= clickdelay &&
+            !IS_IOS) {
             // click
             onClick(e);
         }
@@ -298,6 +303,7 @@ window.addEventListener('load', function () {
 
     function mouseDown (e) {
 
+        // ignore right click
         if (e.button === 2) return;
 
         mousedowntime = new Date();
@@ -367,8 +373,11 @@ window.addEventListener('load', function () {
     }
 
     resetCanvases();
-    Cursor.draw();
-    cursorInput.focus();
+
+    if (!IS_IOS) {
+        Cursor.draw();
+        cursorInput.focus();
+    }
 });
 
 document.addEventListener("deviceready", function(){

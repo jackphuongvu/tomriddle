@@ -40,8 +40,8 @@ canvas {
     bottom:0;
 }
 #cursor-input {
-    width: 0;
-    height: 0;
+    width: 1px;
+    height: 1px;
     border: none;
     outline: none;
     padding: 0;
