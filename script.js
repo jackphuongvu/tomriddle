@@ -5,7 +5,7 @@
 */
 
 var options = new function () {
-        this.play_audio = false;
+        this.play_audio = true;
     },  
     container = document.getElementById('container'),
     container_origin = new Vector(0,0),
@@ -569,20 +569,6 @@ window.addEventListener('load', function () {
 
     // ready when window is!
     simulatorReady();
-
-    TypeWriter.addCharacter('test', 50, 50);
-    container_scale = 1.5;
-    container_origin = new Vector(0, 0);
-    container_offset = container_origin.multiplyBy(1 - container_scale);
-    console.log('scaling');
-    setTimeout(function () {
-        TypeWriter.reposition();
-        console.log('moving');
-        setTimeout(function () {
-            TypeWriter.reposition(new Vector(50,0));
-        }, 500);
-    }, 500);
-
 });
 
 window.addEventListener('resize', function () {
