@@ -5,7 +5,7 @@
 */
 
 var options = new function () {
-        this.play_audio = false;
+        this.play_audio = true;
     },  
     container = document.getElementById('container'),
     container_origin = new Vector(0,0),
@@ -13,7 +13,7 @@ var options = new function () {
     container_offset = new Vector(0,0),
     canvas_offset = new Vector(0, 0),
     textCanvas = document.getElementById('text-canvas'),
-    textCtx = textCanvas.getContext('2d'),
+    textCtx = textCanvas.getContext('2d', {alpha:true}),
     cursorCanvas = document.getElementById('cursor-canvas'),
     cursorCtx = cursorCanvas.getContext('2d'),
     cursorInput = document.getElementById('cursor-input'),
@@ -28,7 +28,7 @@ var options = new function () {
     ROTATE_MARGIN = 0.05,
     TRANSLATE_MARGIN = 0.2,
     chars = [],
-    letter_size = parseInt(Math.min(26, window.innerWidth / 20)),
+    letter_size = parseInt(Math.min(26, window.innerWidth / 17)),
     letter_width = letter_size * 12 / 20,
     line_height = letter_size + 8,
     padding_vec = (function () {
@@ -387,13 +387,61 @@ cursorInput.addEventListener('keyup', function (e) {
 
 cursorInput.addEventListener('focus', forceSpace);
 
+window.addEventListener('resize', function () {
+    TypeWriter.reposition();
+});
+
 /*
 *
-* window load handlers
+* mobile app listener 
 *
 */
 
-window.addEventListener('load', function () {
+document.addEventListener('deviceready', function(){
+
+    // vibrate gives option to clear typewriter
+    shake.startWatch(function () {
+
+        navigator.notification.confirm("Do you want to clear the canvas?", function (button) {
+            if (button === 1) {
+                TypeWriter.reset();
+            }
+        });
+
+    });
+
+}, false);
+
+/*
+*
+* basic app handlers
+*
+*/
+var startTyping = (function () {
+    /*
+
+    button click handler to start basic 
+    app functions/handlers
+
+    */
+    var typing;
+    return function () {
+        if (typing) return;
+
+        typing = true;
+
+        addEventHandlers();
+        cursorInput.focus();
+        Cursor.draw();
+
+        document.getElementById('splash').style = 'display:none';
+
+        sendEvent('function', 'startTyping');
+    };
+})();
+
+function addEventHandlers () {
+
     /*
     super messy event handlers for document, input,
     ranging from mouse|touch start|move|stop events
@@ -567,54 +615,26 @@ window.addEventListener('load', function () {
         removeZoomEvent();
     }
 
-    // ready when window is!
     simulatorReady();
+}
 
-    TypeWriter.addCharacter('test', 50, 50);
-    container_scale = 1.5;
-    container_origin = new Vector(0, 0);
-    container_offset = container_origin.multiplyBy(1 - container_scale);
-    console.log('scaling');
-    setTimeout(function () {
-        TypeWriter.reposition();
-        console.log('moving');
-        setTimeout(function () {
-            TypeWriter.reposition(new Vector(50,0));
-        }, 500);
-    }, 500);
-
-});
-
-window.addEventListener('resize', function () {
-    TypeWriter.reposition();
-});
-
-/*
-*
-* mobile app listener 
-*
-*/
-
-document.addEventListener('deviceready', function(){
-
-    // vibrate gives option to clear typewriter
-    shake.startWatch(function () {
-
-        navigator.notification.confirm("Do you want to clear the canvas?", function (button) {
-            if (button === 1) {
-                TypeWriter.reset();
-            }
-        });
-
-    });
-
-}, false);
+function simulatorReady () {
+    resetCanvases();
+}
 
 /*
 *
 * some miscellaneous functions
 *
 */
+function sendEvent() {
+    var args = Array.prototype.slice.call( arguments );
+
+    console.log( args );
+
+    // send to Google
+    ga.apply(this, ['send','event'].concat( args ));
+}
 
 function resetCanvases () {
     [textCtx, cursorCtx].forEach(function (ctx) {
@@ -639,15 +659,6 @@ function resetCanvases () {
 
     cursorCtx.fillStyle = CURSOR_COLOR;
     cursorCtx.scale(container_scale, container_scale);
-}
-
-function simulatorReady () {
-    resetCanvases();
-
-    if (!IS_IOS) {
-        Cursor.draw();
-        cursorInput.focus();
-    }
 }
 
 function forceSpace () {
