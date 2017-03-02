@@ -37,6 +37,54 @@ var options = new function () {
         return new Vector(_x, _y);
     })(),
     pos_vec = padding_vec,
+    stamp_key = 'tws_stamp',
+    events_key = 'tws_event',
+    stamp = (function () {
+        var i = 0;
+        return function stamp (obj) {
+            if (!obj[stamp_key]) {
+                obj[stamp_key] = ++i;
+            }
+            return obj[stamp_key];
+        };
+    })(),
+    DOMEvent = new function () {
+        // Inspired by LeafletJS
+        // todo: better backwards compatibility
+
+        this.getId = function (obj, type, fn, context) {
+            return type + stamp(fn) + (context ? '_' + stamp(context) : '');
+        };
+
+        this.on = function (obj, type, fn, context) {
+            var id = this.getId.apply(this, arguments),
+                handler = function (e) {
+                    return fn.call(context || obj, e || window.event);
+                };
+
+            if ('addEventListener' in obj) {
+                obj.addEventListener(type, handler);
+            } else if ('attachEvent' in obj) {
+                obj.attachEvent('on' + type, handler);
+            }
+
+            obj[events_key] = obj[events_key] || {};
+            obj[events_key][id] = obj[events_key] || {};
+        };
+
+        this.off = function (obj, type, fn, context) {
+            var id = this.getId.apply(this, arguments),
+                handler = obj[events_key] && obj[events_key][id];
+
+            if ('removeEventListener' in obj) {
+                obj.removeEventListener(type, handler);
+            } else if ('detachEvent' in obj) {
+                obj.detachEvent('on' + type, handler);
+            }
+
+            obj[events_key][id] = null;
+        };
+    },
     Cursor = new function () {
         /*
         Cursor singleton for controlling cursor 
@@ -518,11 +566,13 @@ function addEventHandlers () {
         if (e.button === 2) return;
 
         if (e.touches && e.touches.length === 2) {
+            // todo: work on zooming
+            e.preventDefault();
+            return false;
             // two finger zoom
             removeMoveEvent();
             removeZoomEvent();
             zoomStart(e);
-            e.preventDefault();
         } else {
             // single finger or mouse
             mousedowntime = new Date();
@@ -687,7 +737,6 @@ function setFontSize (new_size) {
 * helper functions
 *
 */
-
 function makeMultiAudio (src) {
     var output = [],
          current = 0,
