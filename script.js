@@ -618,15 +618,12 @@ function addEventHandlers () {
     simulatorReady();
 }
 
-function simulatorReady () {
-    resetCanvases();
-}
-
 /*
 *
 * some miscellaneous functions
 *
 */
+
 function sendEvent() {
     var args = Array.prototype.slice.call( arguments );
 
@@ -634,6 +631,10 @@ function sendEvent() {
 
     // send to Google
     ga.apply(this, ['send','event'].concat( args ));
+}
+
+function simulatorReady () {
+    resetCanvases();
 }
 
 function resetCanvases () {
