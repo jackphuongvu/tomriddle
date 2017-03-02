@@ -425,7 +425,7 @@ var startTyping = (function () {
 
     */
     var typing;
-    return function () {
+    return function startTyping () {
         if (typing) return;
 
         typing = true;
@@ -434,7 +434,7 @@ var startTyping = (function () {
         cursorInput.focus();
         Cursor.draw();
 
-        document.getElementById('splash').style = 'display:none';
+        document.getElementById('splash').style.display = 'none';
 
         sendEvent('function', 'startTyping');
     };
