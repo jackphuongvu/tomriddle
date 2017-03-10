@@ -48,18 +48,39 @@
 <body>
 	<main role="main" class="main" id="main">
 		<div id="splash" class="flex-column">
-			<div class="flex">
+			<div id="splash-section-1" class="flex first">
 				<div class="splash-title">
 					<h1>TYPEWRITE SOMETHING</h1>
 					<h2>A simple typewriter simulator</h2>
 				</div>
 			</div>
-			<div class="flex">
+			<div id="splash-section-2" class="flex second">
 				<div class="actions">
 					<div class="flex-column">
-						<button type="button" onclick="startTyping()" role="button">Start Typing</button>
+						<button type="button" onclick="startTyping()" role="button">Start Simulator</button>
+						<button type="button" onclick="pasteText()" role="button">Paste Text</button>
 					</div>
 				</div>
+			</div>
+			<div id="splash-section-3" class="flex third hidden">
+				<form 
+					id="pastetext" 
+					class="flex-column" 
+					name="pastetext">
+					<textarea 
+						id="text-to-paste" 
+						class="flex" 
+						name="pasted"
+						placeholder="Type/Paste text here"></textarea>
+					<div class="flex paste-actions">
+						<div class="flex">
+							<button type="submit" role="button">Typewrite It</button>
+						</div>
+						<div class="flex">
+							<button id="paste-cancel" type="button" role="button">Cancel</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 		<div id="container">

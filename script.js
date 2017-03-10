@@ -5,7 +5,12 @@
 */
 
 var options = new function () {
+        /*
+        todo: build a GUI for these options
+        */
         this.play_audio = true;
+        this.font_size = 26;
+        this.line_height = null;
     },  
     container = document.getElementById('container'),
     container_origin = new Vector(0,0),
@@ -17,8 +22,8 @@ var options = new function () {
     cursorCanvas = document.getElementById('cursor-canvas'),
     cursorCtx = cursorCanvas.getContext('2d'),
     cursorInput = document.getElementById('cursor-input'),
-    keypress_audio = window.keypress_audio || new makeMultiAudio('inc/keypress.mp3'),
-    newline_audio = window.newline_audio || new makeMultiAudio('inc/return.mp3'),
+    keypress_audio = window.keypress_audio || new makeMultiAudio('inc/keypress.mp3', 5),
+    newline_audio = window.newline_audio || new makeMultiAudio('inc/return.mp3', 2),
     IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g),
     DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1,
     TEXT_COLOR = '#150904',
@@ -28,9 +33,9 @@ var options = new function () {
     ROTATE_MARGIN = 0.05,
     TRANSLATE_MARGIN = 0.2,
     chars = [],
-    letter_size = parseInt(Math.min(26, window.innerWidth / 17)),
+    letter_size = parseInt(Math.min(options.font_size, window.innerWidth / 17)),
     letter_width = letter_size * 12 / 20,
-    line_height = letter_size + 8,
+    line_height = (options.line_height === null) ? letter_size + 8 : options.line_height,
     padding_vec = (function () {
         var _x = Math.min(100, window.innerWidth / 8),
             _y = Math.min(_x, window.innerHeight / 8);
@@ -83,6 +88,20 @@ var options = new function () {
             }
 
             obj[events_key][id] = null;
+        };
+    },
+    DOMUtil = new function () {
+        this.addClass = function (elem, class_str) {
+            var regex = new RegExp('\b' + class_str + '\b', 'g');
+            if (elem.className.match(regex)) {
+                return;
+            }
+            elem.className += ' ' + class_str;
+        };
+
+        this.removeClass = function (elem, class_str) {
+            var regex = new RegExp('\b' + class_str + '\b', 'g');
+            elem.className = elem.className.replace(class_str, '');
         };
     },
     Cursor = new function () {
@@ -465,26 +484,89 @@ document.addEventListener('deviceready', function(){
 * basic app handlers
 *
 */
-var startTyping = (function () {
+function startTyping () {
     /*
 
     button click handler to start basic 
     app functions/handlers
 
     */
-    var typing;
-    return function startTyping () {
-        if (typing) return;
+    sendEvent('button', 'startTyping');
+    beginApp();
+}
 
-        typing = true;
+var pasteText = (function () {
+    /*
 
+    form submit handler to start secondary 
+    function of pasting text to appear simulated
+
+    */
+    var section2 = document.getElementById('splash-section-2'),
+        section3 = document.getElementById('splash-section-3'),
+        paste_cancel = document.getElementById('paste-cancel'),
+        form = document.pastetext;
+
+    // add event handler once
+    DOMEvent.on(form, 'submit', function (e) {
+        var text = form.pasted.value,
+            lines = [];
+        e.preventDefault();
+
+        if (text) {
+            sendEvent('action', 'Submitted text');
+            // begin app
+            beginApp();
+
+            // add each line
+            lines = text.split(/\n/);
+
+            for (var i = 0, len = lines.length; i < len; i++) {
+                var item = lines[i];
+                // paste text
+                TypeWriter.addCharacter(item);
+                // new line
+                Cursor.newline();
+            }
+        }
+    });
+
+    DOMEvent.on(paste_cancel, 'click', function (e) {
+        console.log('cancelled');
+        // empty textarea
+        form.pasted.value = '';
+        // retoggle section visibility
+        DOMUtil.removeClass(section2, 'hidden');
+        DOMUtil.addClass(section3, 'hidden');
+    });
+
+    return function pasteText () {
+        // hide section 2 action buttons
+        DOMUtil.addClass(section2, 'hidden');
+        // show section 3 textbox
+        DOMUtil.removeClass(section3, 'hidden');
+
+        form.pasted.focus();
+
+        sendEvent('button', 'pasteText');
+    };
+})();
+
+var beginApp = (function () {
+    /* this should only execute once */
+    var fired = false;
+
+    return function beginApp () {
+        if (fired) {
+            console.error('This should only fire once, b/c there is no way to get back to the splash page ATM');
+            return;
+        }
+        fired = true;
         addEventHandlers();
         cursorInput.focus();
         Cursor.draw();
 
         document.getElementById('splash').style.display = 'none';
-
-        sendEvent('function', 'startTyping');
     };
 })();
 
@@ -737,15 +819,17 @@ function setFontSize (new_size) {
 * helper functions
 *
 */
-function makeMultiAudio (src) {
+function makeMultiAudio (src, instances) {
     var output = [],
-         current = 0,
-         num = 5;
+        current = 0,
+        num = instances || 5;
     for (var i = 0; i < num; i++) {
         output.push(new Audio(src));
     }
     this.play = function () {
-        output[current++ % num].play();
+        var audio = output[current++ % num];
+        audio.currentTime = 0;
+        audio.play();
     };
 }
 

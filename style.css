@@ -91,12 +91,12 @@ h1,h2,h3,h4,h5 {
     background-color: transparent;
     color: rgba(111,94,70,0.8);
     border-color: rgba(109,78,33,0.2);
-    transition:all 0.2s ease-in-out;
+    transition:all 0.2s ease-in;
     box-shadow: rgba(109,78,33,0.2) 0px 2px 0;
 }
 #splash button:hover {
-    color: rgba(111,94,70,1);
-    border-color: rgba(109,78,33,0.4);
+    color: rgba(111,94,70,0.9);
+    border-color: rgba(109,78,33,0.3);
 }
 
 .splash-title,
@@ -154,14 +154,49 @@ canvas {
     position: relative;
 }
 
+form#pastetext {
+    height:100%;
+    top:5%;
+}
+#text-to-paste {
+    display: block;
+    margin:0 auto;
+    width: 50%;
+    padding:2em;
+    font-size:1.3em;
+    color:#555;
+    text-shadow: #FFF 1px 1px 1px;
+    background-color: #f6f3e3;
+    box-shadow: inset rgba(109,78,33,0.2) 0em 0em 0.5em,
+    rgba(109,78,33,0.2) 0em 0.3em 0.2em;
+    border-color: rgba(109,78,33,0.3);
+    font-family: arial, sans-serif;
+}
+.paste-actions .flex {
+    display: block;
+}
+
+/* had to do it: sorry bootstrap, mom, etc. */
+.hidden {
+    display: none;
+}
+
+.flex.third {
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+    -ms-flex: 2;
+    flex: 2;
+}
+
 @media screen and (orientation:portrait) {
-    .flex:first-child {
+    .flex.first {
         -webkit-box-flex: 8;
         -webkit-flex: 8;
         -ms-flex: 8;
         flex: 8;
     }
-    .flex:last-child {
+    .flex.second,
+    .flex.third {
         -webkit-box-flex: 13;
         -webkit-flex: 13;
         -ms-flex: 13;
@@ -172,5 +207,24 @@ canvas {
         -webkit-transform: translateY(calc(61.8%/2));
         -ms-transform: translateY(calc(61.8%/2));
         transform: translateY(calc(61.8%/2));
+    }
+}
+@media screen and (min-width:35em) {
+    .paste-actions .flex {
+        display: flex;
+    }
+    .paste-actions {
+        -webkit-flex-direction: row-reverse;
+        flex-direction: row-reverse;
+        flex-flow: row-reverse;
+        display: flex;
+    }
+    .paste-actions .flex button {
+        position: absolute;
+        right:0;
+    }
+    .paste-actions .flex:first-child button {
+        right:initial;
+        left:0;
     }
 }
