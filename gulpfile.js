@@ -11,7 +11,7 @@ gulp.task('default', function() {
         	ignored : 'node_modules/*'
         },
         ui : false,
-        online : false,
+        online : true,
         notify : false,
 		files : ['*.html','*.css','*.js']
     });

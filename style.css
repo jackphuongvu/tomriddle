@@ -11,7 +11,9 @@
 }
 
 * {
-    box-sizing: border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
     margin: 0;
     padding: 0;
     position: relative;
@@ -52,27 +54,26 @@ h1,h2,h3,h4,h5 {
     bottom:0;
     text-align: center;
 }
-.flex-column {
-    display: flex;
-    flex-flow: column;
-}
-
 #splash h1, 
 #splash h2 {
     color:rgba(71, 77, 82, 1);
     font-weight: normal;
+    padding:0 1rem;
 }
 #splash h1 {
-    font-size:3em;
+    font-size:2.4em;
 }
 #splash h2 {
-    margin-top:0.8em;
+    margin-top:1.5rem;
     font-size:1.5em;
     opacity: 0.8;
 }
 
 #splash button {
     margin:0.5em auto;
+    width:50%;
+    max-width: 300px;
+    min-width: 180px;
     font-weight: normal;
     cursor: pointer;
     border: 1px solid transparent;
@@ -98,10 +99,6 @@ h1,h2,h3,h4,h5 {
     border-color: rgba(109,78,33,0.4);
 }
 
-.flex {
-    flex: 1;
-}
-
 .splash-title,
 .actions {
     position: absolute;
@@ -111,12 +108,14 @@ h1,h2,h3,h4,h5 {
 }
 
 .splash-title {
-    bottom:10%;
+    bottom:0;
 }
 
 .actions {
-    bottom:50%;
-    transform: translateY(50%);
+    bottom:38.2%;
+    -webkit-transform: translateY(calc(38.2%/2));
+    -ms-transform: translateY(calc(38.2%/2));
+    transform: translateY(calc(38.2%/2));
 }
 
 canvas {
@@ -135,4 +134,43 @@ canvas {
     margin: 0;
     position:absolute;
     z-index: -1;
+}
+
+.flex-column {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    flex-flow: column;
+}
+
+.flex {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    position: relative;
+}
+
+@media screen and (orientation:portrait) {
+    .flex:first-child {
+        -webkit-box-flex: 8;
+        -webkit-flex: 8;
+        -ms-flex: 8;
+        flex: 8;
+    }
+    .flex:last-child {
+        -webkit-box-flex: 13;
+        -webkit-flex: 13;
+        -ms-flex: 13;
+        flex: 13;
+    }
+    .actions {
+        bottom:61.8%;
+        -webkit-transform: translateY(calc(61.8%/2));
+        -ms-transform: translateY(calc(61.8%/2));
+        transform: translateY(calc(61.8%/2));
+    }
 }
