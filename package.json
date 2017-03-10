@@ -1,6 +1,6 @@
 {
   "name": "typewritesomething",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A minimalistic typewriter simulator to help you write more creatively!",
   "main": "gulpfile.js",
   "dependencies": {},
