@@ -67,6 +67,8 @@ var options = new function () {
                     return fn.call(context || obj, e || window.event);
                 };
 
+            if (!obj) return;
+
             if ('addEventListener' in obj) {
                 obj.addEventListener(type, handler);
             } else if ('attachEvent' in obj) {
@@ -80,6 +82,8 @@ var options = new function () {
         this.off = function (obj, type, fn, context) {
             var id = this.getId.apply(this, arguments),
                 handler = obj[events_key] && obj[events_key][id];
+
+            if (!obj) return;
 
             if ('removeEventListener' in obj) {
                 obj.removeEventListener(type, handler);
