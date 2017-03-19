@@ -4,14 +4,18 @@
 *
 */
 
-var options = new function () {
-        /*
-        todo: build a GUI for these options
-        */
-        this.play_audio = true;
-        this.font_size = 26;
-        this.line_height = null;
-    },  
+var options = (function () {
+        function Options () {
+            /*
+            todo: build a GUI for these options
+            */
+            this.play_audio = true;
+            this.font_size = 26;
+            this.line_height = null;
+        }
+
+        return new Options();
+    })(),  
     container = document.getElementById('container'),
     container_origin = new Vector(0,0),
     container_scale = 1,
@@ -53,154 +57,164 @@ var options = new function () {
             return obj[stamp_key];
         };
     })(),
-    DOMEvent = new function () {
-        // Inspired by LeafletJS
-        // todo: better backwards compatibility
+    DOMEvent = (function () {
+        function DOMEvent () {
+            // Inspired by LeafletJS
+            // todo: better backwards compatibility
 
-        this.getId = function (obj, type, fn, context) {
-            return type + stamp(fn) + (context ? '_' + stamp(context) : '');
-        };
+            this.getId = function (obj, type, fn, context) {
+                return type + stamp(fn) + (context ? '_' + stamp(context) : '');
+            };
 
-        this.on = function (obj, type, fn, context) {
-            var id = this.getId.apply(this, arguments),
-                handler = function (e) {
-                    return fn.call(context || obj, e || window.event);
-                };
+            this.on = function (obj, type, fn, context) {
+                var id = this.getId.apply(this, arguments),
+                    handler = function (e) {
+                        return fn.call(context || obj, e || window.event);
+                    };
 
-            if (!obj) return;
+                if (!obj) return;
 
-            if ('addEventListener' in obj) {
-                obj.addEventListener(type, handler);
-            } else if ('attachEvent' in obj) {
-                obj.attachEvent('on' + type, handler);
-            }
+                if ('addEventListener' in obj) {
+                    obj.addEventListener(type, handler);
+                } else if ('attachEvent' in obj) {
+                    obj.attachEvent('on' + type, handler);
+                }
 
-            obj[events_key] = obj[events_key] || {};
-            obj[events_key][id] = obj[events_key] || {};
-        };
+                obj[events_key] = obj[events_key] || {};
+                obj[events_key][id] = handler;
+            };
 
-        this.off = function (obj, type, fn, context) {
-            var id = this.getId.apply(this, arguments),
-                handler = obj[events_key] && obj[events_key][id];
+            this.off = function (obj, type, fn, context) {
+                var id = this.getId.apply(this, [obj, type, fn, context]),
+                    handler = obj[events_key] && obj[events_key][id];
 
-            if (!obj) return;
+                if (!obj) return;
 
-            if ('removeEventListener' in obj) {
-                obj.removeEventListener(type, handler);
-            } else if ('detachEvent' in obj) {
-                obj.detachEvent('on' + type, handler);
-            }
+                if ('removeEventListener' in obj) {
+                    obj.removeEventListener(type, handler);
+                } else if ('detachEvent' in obj) {
+                    obj.detachEvent('on' + type, handler);
+                }
 
-            obj[events_key][id] = null;
-        };
-    },
-    DOMUtil = new function () {
-        this.addClass = function (elem, class_str) {
-            var regex = new RegExp('\b' + class_str + '\b', 'g');
-            if (elem.className.match(regex)) {
-                return;
-            }
-            elem.className += ' ' + class_str;
-        };
+                obj[events_key][id] = null;
+            };
+        }
+        return new DOMEvent();
+    })(),
+    DOMUtil = (function () {
+        function DOMUtil () {
+            this.addClass = function (elem, class_str) {
+                var regex = new RegExp('\b' + class_str + '\b', 'g');
+                if (elem.className.match(regex)) {
+                    return;
+                }
+                elem.className += ' ' + class_str;
+            };
 
-        this.removeClass = function (elem, class_str) {
-            var regex = new RegExp('\b' + class_str + '\b', 'g');
-            elem.className = elem.className.replace(class_str, '');
-        };
-    },
-    Cursor = new function () {
-        /*
-        Cursor singleton for controlling cursor 
-        position and visibility
-        */
-        var _cursor_timeout,
-            _raf,
-            _time,
-            _opacity;
+            this.removeClass = function (elem, class_str) {
+                elem.className = elem.className.replace(class_str, '');
+            };
+        }
 
-        this.clear = function () {
-            var _pos = pos_vec.subtract(1).divideBy(container_scale);
-
-            cursorCtx.clearRect(_pos.x, _pos.y, letter_width + 2, line_height + 2);
-        };
-
-        this.update = function (vec) {
-            this.clear();
-            
-            pos_vec = vec;
-            cursorInput.style.left = Math.min(vec.x, innerWidth) + 'px';
-            cursorInput.style.top = Math.min(vec.y, innerHeight) + 'px';
-            this.draw();
-        };
-
-        this._draw = function () {
-            var _pos = pos_vec.divideBy(container_scale);
-
-            cursorCtx.fillRect(_pos.x, _pos.y, letter_width, line_height);
-        };
-
-        this.draw = function () {
-            this._draw();
-            
-            window.clearTimeout(_cursor_timeout);
-            if (_raf) {
-                window.cancelAnimationFrame(_raf);
-            }
-            _opacity = GLOBAL_ALPHA;
-            _cursor_timeout = window.setTimeout(this.fadeOut.bind(this), 2200);
-        };
-
-        this.nudge = function (vec) {
-            this.update( pos_vec.add(vec.multiplyBy(container_scale)) );
-        };
-
-        this.moveleft = function () {
-            this.nudge(new Vector(-letter_width, 0));
-        };
-        this.moveright = function () {
-            this.nudge(new Vector(letter_width, 0));
-        };
-        this.moveup = function () {
-            this.nudge(new Vector(0, -line_height));
-        };
-        this.movedown = function () {
-            this.nudge(new Vector(0, line_height));
-        };
-        this.addtab = function () {
-            this.nudge(new Vector(letter_width * 4, 0));
-        };
-        
-        this.newline = function () {
+        return new DOMUtil();
+    })(),
+    Cursor = (function () {
+        function Cursor () {
             /*
-            todo: newline might be better off
-            moving to x = previous click location
-            instead of paddingx
+            Cursor singleton for controlling cursor 
+            position and visibility
             */
-            this.update(new Vector(padding_vec.x, pos_vec.y + line_height));
-        };
+            var _cursor_timeout,
+                _raf,
+                _time,
+                _opacity;
 
-        this.fadeOut = function () {
-            _time = new Date();
-            _raf = window.requestAnimationFrame( this._fadeanim.bind(this) );
-        };
+            this.clear = function () {
+                var _pos = pos_vec.subtract(1).divideBy(container_scale);
 
-        this._fadeanim = function () {
-            var dt = new Date() - _time,
-                new_opacity = _opacity - 0.1 * dt / 300;
+                cursorCtx.clearRect(_pos.x, _pos.y, letter_width + 2, line_height + 2);
+            };
 
-            if (new_opacity <= 0) {
+            this.update = function (vec) {
                 this.clear();
-            } else {
-                cursorCtx.save();
-                this.clear();
-                _opacity = new_opacity;
-                cursorCtx.globalAlpha = _opacity;
+                
+                pos_vec = vec;
+                cursorInput.style.left = Math.min(vec.x, window.innerWidth) + 'px';
+                cursorInput.style.top = Math.min(vec.y, window.innerHeight) + 'px';
+                this.draw();
+            };
+
+            this._draw = function () {
+                var _pos = pos_vec.divideBy(container_scale);
+
+                cursorCtx.fillRect(_pos.x, _pos.y, letter_width, line_height);
+            };
+
+            this.draw = function () {
                 this._draw();
-                cursorCtx.restore();
+                
+                window.clearTimeout(_cursor_timeout);
+                if (_raf) {
+                    window.cancelAnimationFrame(_raf);
+                }
+                _opacity = GLOBAL_ALPHA;
+                _cursor_timeout = window.setTimeout(this.fadeOut.bind(this), 2200);
+            };
+
+            this.nudge = function (vec) {
+                this.update( pos_vec.add(vec.multiplyBy(container_scale)) );
+            };
+
+            this.moveleft = function () {
+                this.nudge(new Vector(-letter_width, 0));
+            };
+            this.moveright = function () {
+                this.nudge(new Vector(letter_width, 0));
+            };
+            this.moveup = function () {
+                this.nudge(new Vector(0, -line_height));
+            };
+            this.movedown = function () {
+                this.nudge(new Vector(0, line_height));
+            };
+            this.addtab = function () {
+                this.nudge(new Vector(letter_width * 4, 0));
+            };
+            
+            this.newline = function () {
+                /*
+                todo: newline might be better off
+                moving to x = previous click location
+                instead of paddingx
+                */
+                this.update(new Vector(padding_vec.x, pos_vec.y + line_height));
+            };
+
+            this.fadeOut = function () {
+                _time = new Date();
                 _raf = window.requestAnimationFrame( this._fadeanim.bind(this) );
-            }
-        };
-    },
+            };
+
+            this._fadeanim = function () {
+                var dt = new Date() - _time,
+                    new_opacity = _opacity - 0.1 * dt / 300;
+
+                if (new_opacity <= 0) {
+                    this.clear();
+                } else {
+                    cursorCtx.save();
+                    this.clear();
+                    _opacity = new_opacity;
+                    cursorCtx.globalAlpha = _opacity;
+                    this._draw();
+                    cursorCtx.restore();
+                    _raf = window.requestAnimationFrame( this._fadeanim.bind(this) );
+                }
+            };
+        }
+
+        return new Cursor();
+    })(),
     // mapping for keys that move cursor 
     NAV_BUTTONS = {
         8: Cursor.moveleft.bind( Cursor ),
@@ -240,65 +254,397 @@ var options = new function () {
         123 : 'F12'
     },
     ENTER = 13,
-    TypeWriter = new function () {
-        /*
-        TypeWriter singleton for handling characters
-        and global positioning system (GPS, ya know)
-        */
-        this.addCharacter = function (char_str, _x, _y) {
-            if (_x && _y) {
-                Cursor.update( new Vector(_x, _y));
+    TypeWriter = (function () {
+        function TypeWriter () {
+            /*
+            TypeWriter singleton for handling characters
+            and global positioning system (GPS, ya know)
+            */
+            this.addCharacter = function (char_str, _x, _y) {
+                if (_x && _y) {
+                    Cursor.update( new Vector(_x, _y));
+                }
+                for (var i = 0, len = char_str.length; i < len; i++) {
+                    var char = char_str[i];
+                   
+                    chars.push( new Character( char ) );
+                    Cursor.moveright();
+                }
+            };
+
+            this.redraw = function () {
+                /*
+                pure redraw (no resetting/clearing)
+                */
+                asyncForLoop(chars, process_fn);
+
+                function process_fn (char) {
+                    char.draw();
+                }
+            };
+
+            this.resetCanvases = function () {
+                [textCtx, cursorCtx].forEach(function (ctx) {
+                    var canvas = ctx.canvas;
+
+                    ctx.setTransform(1,0,0,1,0,0);
+
+                    canvas.width = window.innerWidth * DEVICE_PIXEL_RATIO;
+                    canvas.height = window.innerHeight * DEVICE_PIXEL_RATIO;
+                    canvas.style.width = window.innerWidth + 'px';
+                    canvas.style.height = window.innerHeight + 'px';
+
+                    ctx.scale(DEVICE_PIXEL_RATIO, DEVICE_PIXEL_RATIO);
+
+                    ctx.globalAlpha = GLOBAL_ALPHA;
+                });
+
+                // reset contexts, because resizing wipes them
+                textCtx.font = letter_size + "px Special Elite, serif";
+                textCtx.textBaseline = "top";
+                textCtx.fillStyle = TEXT_COLOR;
+
+                cursorCtx.fillStyle = CURSOR_COLOR;
+                cursorCtx.scale(container_scale, container_scale);
+            };
+
+            this.reposition = function (vec) {
+                /*
+                offset characters for given x/y
+                useful for moving/dragging
+                useful for redrawing (b/c needs resetting)
+                */
+                canvas_offset._add( vec || new Vector(0, 0) );
+
+                container.style.left = '0px';
+                container.style.top = '0px';
+
+                this.resetCanvases();
+                this.redraw();
+            };
+
+            this.reset = function () {
+                /*
+                back to original blank canvas
+                */
+                chars = [];
+                pos_vec = padding_vec;
+                canvas_offset = new Vector(0, 0);
+                container_origin = new Vector(0, 0);
+                container_scale = 1;
+                container.setAttribute('style', '');
+
+                this.reposition();
+                Cursor.draw();
+                cursorInput.focus();
+            };
+        }
+
+        return new TypeWriter();
+    })(),
+    App = (function () {
+        function App () {
+            var mouseuptimeout, mousemovedelay,
+                mousedowntime, clickdelay,
+                original_pos, zoom_distance,
+                zoom_scale, zoom_center_diff,
+                splash_elem = document.getElementById('splash'),
+                display_val = splash_elem.style.display;
+
+            this.running = false;
+
+            this.reset = function () {
+                mouseuptimeout = 0;
+                mousemovedelay = 150;
+                mousedowntime = 0;
+                clickdelay = 150;
+                original_pos = 0;
+                zoom_distance = 0;
+                zoom_scale = 0;
+                zoom_center_diff = 0;
+            };
+
+            this.start = function () {
+
+                if (this.running) return;
+                
+                this.running = true;
+                this.reset();
+                TypeWriter.reset();
+                console.log('on events');
+                this.events('on');
+                cursorInput.focus();
+                Cursor.draw();
+
+                splash_elem.style.display = 'none';
+            };
+
+            this.stop = function () {
+                this.splash();
+                if (!this.running) return;
+                this.running = false;
+                
+                // kill events
+                console.log('off events');
+                this.events('off');
+                removeMoveEvent();
+            };
+
+            this.splash_events = [];
+
+            this.splash = function () {
+                splash_elem.style.display = display_val;
+
+                // some functions below 
+                // should push to this array
+                // to describe tear down events
+                for (var i = 0, len = this.splash_events.length; i < len; i++) {
+                    var fnc = this.splash_events[i];
+                    fnc();
+                }
+            };
+
+            this.events = function (_onoff) {
+                var onoff = _onoff || 'on',
+                    document_events = {
+                        mouseup : mouseup,
+                        touchend : touchend,
+                        mousedown : mousedown,
+                        touchstart : touchstart
+                    },
+                    cursor_events = {
+                        keydown : keydown,
+                        keyup : keyup,
+                        focus : focus
+                    },
+                    key, fnc;
+
+                console.warn('events', onoff);
+
+                for (key in document_events) {
+                    fnc = document_events[key];
+                    DOMEvent[onoff](document, key, fnc);
+                }
+
+                for (key in cursor_events) {
+                    fnc = cursor_events[key];
+                    DOMEvent[onoff](cursorInput, key, fnc);
+                }
+
+                if (IS_IOS) {
+                    DOMEvent[onoff](document, 'touchstart', iosTouchStart);
+                }
+            };
+
+            function keydown (e) {
+                /*
+                keydown handles audio
+                */
+                var no_audio = NO_AUDIO[ e.which ];
+
+                if (!no_audio && options.play_audio) {
+                    if (e.which === ENTER) {
+                        newline_audio.play();
+                    } else {
+                        keypress_audio.play();
+                    }
+                    return true;
+                }
+                
+                if (no_audio === 'TAB') {
+                    /* todo : add 2 or 4 spaces */
+
+                    // refocus
+                    window.setTimeout(function () {
+                        cursorInput.focus();
+                    }, 10);
+                    e.preventDefault();
+                }
             }
-            for (var i = 0, len = char_str.length; i < len; i++) {
-                var char = char_str[i];
+
+            function keyup (e) {
+                /*
+                keyup handles character input and navigation
+                */
+                var nav = NAV_BUTTONS[ e.which ],
+                    value = this.value.substr(1);
+
+                if (!value && !nav) return;
+
+                if (nav) {
+                    nav();
+                } else {
+                    TypeWriter.addCharacter( value );
+                }
+                forceSpace.call(this);
+            }
+
+            function focus () {
+                console.log('event', 'focus');
+                forceSpace.call(this);
+            }
+
+            function mouseup (e) {
+                removeMoveEvent();
+
+                if (original_pos) {
+                    var _position = getPositionFromEvent(e);
+                    
+                    _position._subtract( original_pos );
+
+                    TypeWriter.reposition( _position );
+                    original_pos = null;
+                } else if (new Date() - mousedowntime <= clickdelay &&
+                    !IS_IOS) {
+                    // click
+                    updateCursor(e);
+                }
+            }
+
+            function touchend (e) {
+                if (!e.touches.length) {
+                    if (e.changedTouches.length) {
+                        e.clientX = e.changedTouches[0].clientX;
+                        e.clientY = e.changedTouches[0].clientY;
+                    } else {
+                        removeMoveEvent();
+                        return;
+                    }
+                }
+
+                return mouseup(e);
+            }
+
+            function mousedown (e) {
+                // ignore right click
+                if (e.button === 2) return;
+
+                // single finger or mouse
+                mousedowntime = new Date();
+
+                mouseuptimeout = window.setTimeout(function () {
+                    
+                    original_pos = original_pos || getPositionFromEvent(e);
+
+                    DOMEvent.on(document, 'mousemove', mousemove);
+                    DOMEvent.on(document, 'touchmove', mousemove);
+                    DOMEvent.on(document, 'mouseup', removeMoveEvent);
+                    
+                }, mousemovedelay);
+            }
+
+            function touchstart (e) {
+                if (e.touches && e.touches.length === 2) {
+                    // todo: work on zooming
+                    e.preventDefault();
+                    return false;
+                } else {
+                    return mousedown(e);
+                }
+            }
+
+            function iosTouchStart (e) {
+                return updateCursor(e);
+            }
+
+            function mousemove (e) {
+                if (!original_pos) return; 
+                // move holder
+                var _position = getPositionFromEvent(e);
+
+                _position._subtract( original_pos );
+
+                container.style.left = _position.x + 'px';
+                container.style.top = _position.y + 'px';
+                Cursor.clear();
+            }
+
+            function updateCursor (e) {
+                var _position = getPositionFromEvent(e),
+                    letter_offset = new Vector(letter_width/2, line_height/2),
+                    _newpos = _position.subtract(letter_offset);
+                Cursor.update( _newpos );
+                cursorInput.focus();
+            }
+
+            function removeMoveEvent () {
+                window.clearTimeout( mouseuptimeout );
+                DOMEvent.off(document, 'mousemove', mousemove);
+                DOMEvent.off(document, 'touchmove', mousemove);
+                DOMEvent.off(document, 'mouseup', removeMoveEvent);
+            }
+            /*function getFingerPositions (e) {
+                var touches = e.touches,
+                    touch1 = touches[0],
+                    touch2 = touches[1];
+
+                return [ 
+                    new Vector(touch1.clientX, touch1.clientY),
+                    new Vector(touch2.clientX, touch2.clientY)
+                ];
+            }*/
+
+            /*
+            extremely experimental zooming 
+            */
+
+            /*function zoomStart (e) {
+                var positions = getFingerPositions(e),
+                    f1 = positions[0],
+                    f2 = positions[1];
+                
+                zoom_distance = f1.distanceTo( f2 );
+                container_origin._add(f1)._add(f2)._divideBy(2);
+
+                container.style.transformOrigin = container_origin.x + 'px ' + container_origin.y + 'px';
+
+                DOMEvent.on(document, 'touchmove', zoomMove);
+                DOMEvent.on(document, 'touchend', zoomEnd);
+            }
+
+            function removeZoomEvent () {
+                DOMEvent.off(document, 'touchmove', zoomMove);
+                DOMEvent.off(document, 'touchend', zoomEnd);
+            }
+
+            function zoomMove (e) {
+                // css resize
+                var positions = getFingerPositions(e),
+                    f1 = positions[0],
+                    f2 = positions[1],
+                    zc = f1.add(f2).divideBy(2);
+
+                zoom_center_diff = zc.subtract(container_origin);
+                
+                zoom_scale = f1.distanceTo(f2) / zoom_distance;
+
+                // scale (impacted by origin in zoomStart)
+                container.style.transform = 'scale(' + zoom_scale + ')';
+
+                // translate
+                container.style.left = zoom_center_diff.x + 'px';
+                container.style.top = zoom_center_diff.y + 'px';
                
-                chars.push( new Character( char ) );
-                Cursor.moveright();
+                e.preventDefault();
             }
-        };
 
-        this.redraw = function () {
-            /*
-            pure redraw (no resetting/clearing)
-            */
-            asyncForLoop(chars, process_fn);
+            function zoomEnd () {
 
-            function process_fn (char) {
-                char.draw();
-            }
-        };
+                // get new offset for canvas to figure out
+                container_scale *= zoom_scale;
+                container_offset = container_origin.multiplyBy(1 - container_scale);
 
-        this.reposition = function (vec) {
-            /*
-            offset characters for given x/y
-            useful for moving/dragging
-            useful for redrawing (b/c needs resetting)
-            */
-            canvas_offset._add( vec || new Vector(0, 0) );
+                container.setAttribute('style', '');
 
-            container.style.left = '0px';
-            container.style.top = '0px';
+                // reposition by zoom_center_diff
+                TypeWriter.reposition( zoom_center_diff );
 
-            resetCanvases();
-            this.redraw();
-        };
+                removeZoomEvent();
+            }*/
+        }
 
-        this.reset = function () {
-            /*
-            back to original blank canvas
-            */
-            chars = [];
-            pos_vec = padding_vec;
-            canvas_offset = new Vector(0, 0);
-            container_origin = new Vector(0, 0);
-            container_scale = 1;
-            container.setAttribute('style', '');
-
-            this.reposition();
-            Cursor.draw();
-            cursorInput.focus();
-        };
-    };
+        return new App();
+    })();
 
 /*
 *
@@ -310,6 +656,10 @@ function Vector (x, y) {
     this.x = x;
     this.y = y;
 }
+
+Vector.prototype.get = function (axis) {
+    return this[axis];
+};
 
 Vector.prototype.add = function (vector) {
     if (typeof(vector) === 'number') {
@@ -369,9 +719,9 @@ Vector.prototype.distanceTo = function (vector) {
 * Character class for drawing characters on TypeWriter singleton
 *
 */
-function Character (char_str, x, y) {
-    var x = randMargin(x || pos_vec.x, TRANSLATE_MARGIN),
-        y = randMargin(y || pos_vec.y, TRANSLATE_MARGIN);
+function Character (char_str, _x, _y) {
+    var x = randMargin(_x || pos_vec.x, TRANSLATE_MARGIN),
+        y = randMargin(_y || pos_vec.y, TRANSLATE_MARGIN);
 
     this.str = char_str;
     this.rotate = randMargin(0, ROTATE_MARGIN);
@@ -407,58 +757,7 @@ Character.prototype.draw = function () {
     textCtx.restore();
 };
 
-/*
-*
-* cursor input handlers
-*
-*/
-
-cursorInput.addEventListener('keydown', function (e) {
-    /*
-    keydown handles audio
-    */
-    var no_audio = NO_AUDIO[ e.which ];
-
-    if (!no_audio && options.play_audio) {
-        if (e.which === ENTER) {
-            newline_audio.play();
-        } else {
-            keypress_audio.play();
-        }
-        return true;
-    }
-    
-    if (no_audio === 'TAB') {
-        /* todo : add 2 or 4 spaces */
-
-        // refocus
-        setTimeout(function () {
-            cursorInput.focus();
-        }, 10);
-        e.preventDefault();
-    }
-});
-
-cursorInput.addEventListener('keyup', function (e) {
-    /*
-    keyup handles character input and navigation
-    */
-    var nav = NAV_BUTTONS[ e.which ],
-        value = this.value.substr(1);
-
-    if (!value && !nav) return;
-
-    if (nav) {
-        nav();
-    } else {
-        TypeWriter.addCharacter( value );
-    }
-    forceSpace.call(this);
-});
-
-cursorInput.addEventListener('focus', forceSpace);
-
-window.addEventListener('resize', function () {
+DOMEvent.on(window, 'resize', function () {
     TypeWriter.reposition();
 });
 
@@ -468,10 +767,12 @@ window.addEventListener('resize', function () {
 *
 */
 
-document.addEventListener('deviceready', function(){
+DOMEvent.on(document, 'deviceready', function(){
 
     // vibrate gives option to clear typewriter
     shake.startWatch(function () {
+
+        if (!App.running) return;
 
         navigator.notification.confirm("Do you want to clear the canvas?", function (button) {
             if (button === 1) {
@@ -488,16 +789,29 @@ document.addEventListener('deviceready', function(){
 * basic app handlers
 *
 */
-function startTyping () {
-    /*
+DOMEvent.on(window, 'hashchange', function () {
+    var hash = window.location.hash;
+    if (!hash || hash === '#') {
+        // splash screen
+        sendEvent('button', 'backToSplash');
+        App.stop();
+    } else if (hash === '#typing') {
+        // start typing
+        sendEvent('button', 'startTyping');
+        App.start();
+    } else if (hash === '#paste') {
+        // paste text
+        sendEvent('button', 'pasteText');
+        pasteText();
+    }
+});
 
-    button click handler to start basic 
-    app functions/handlers
-
-    */
-    sendEvent('button', 'startTyping');
-    beginApp();
-}
+// onload wipe hash?
+DOMEvent.on(window, 'load', function () {
+    if (window.location.hash) {
+        window.location.hash = '';
+    }
+});
 
 var pasteText = (function () {
     /*
@@ -520,7 +834,7 @@ var pasteText = (function () {
         if (text) {
             sendEvent('action', 'Submitted text');
             // begin app
-            beginApp();
+            App.start();
 
             // add each line
             lines = text.split(/\n/);
@@ -535,13 +849,16 @@ var pasteText = (function () {
         }
     });
 
-    DOMEvent.on(paste_cancel, 'click', function (e) {
-        console.log('cancelled');
+    App.splash_events.push(function () {
         // empty textarea
         form.pasted.value = '';
         // retoggle section visibility
         DOMUtil.removeClass(section2, 'hidden');
         DOMUtil.addClass(section3, 'hidden');
+    });
+
+    DOMEvent.on(paste_cancel, 'click', function () {
+        App.splash();
     });
 
     return function pasteText () {
@@ -551,208 +868,8 @@ var pasteText = (function () {
         DOMUtil.removeClass(section3, 'hidden');
 
         form.pasted.focus();
-
-        sendEvent('button', 'pasteText');
     };
 })();
-
-var beginApp = (function () {
-    /* this should only execute once */
-    var fired = false;
-
-    return function beginApp () {
-        if (fired) {
-            console.error('This should only fire once, b/c there is no way to get back to the splash page ATM');
-            return;
-        }
-        fired = true;
-        addEventHandlers();
-        cursorInput.focus();
-        Cursor.draw();
-
-        document.getElementById('splash').style.display = 'none';
-    };
-})();
-
-function addEventHandlers () {
-
-    /*
-    super messy event handlers for document, input,
-    ranging from mouse|touch start|move|stop events
-    several shared local variables
-
-    todo : cleanup?
-    */
-    var mouseuptimeout,
-        mousemovedelay = 150,
-        mousedowntime,
-        clickdelay = 150,
-        original_pos,
-        zoom_distance,
-        zoom_scale,
-        zoom_center_diff;
-
-    document.addEventListener('mouseup', mouseUp);
-    document.addEventListener('touchend', mouseUp);
-    document.addEventListener('mousedown', mouseDown);
-    document.addEventListener('touchstart', mouseDown);
-
-    if (IS_IOS) {
-        document.addEventListener('touchstart', updateCursor);
-    }
-
-    function updateCursor (e) {
-        var _position = getPositionFromEvent(e),
-            letter_offset = new Vector(letter_width/2, line_height/2),
-            _newpos = _position.subtract(letter_offset);
-        Cursor.update( _newpos );
-        cursorInput.focus();
-    }
-
-    function mousemove (e) {
-        // move holder
-        var _position = getPositionFromEvent(e);
-            
-        _position._subtract( original_pos );
-
-        container.style.left = _position.x + 'px';
-        container.style.top = _position.y + 'px';
-        Cursor.clear();
-    }
-
-    function mouseUp (e) {
-        removeMoveEvent();
-
-        if (e.type === 'touchend' && !e.touches.length) {
-            if (e.changedTouches.length) {
-                e.clientX = e.changedTouches[0].clientX;
-                e.clientY = e.changedTouches[0].clientY;
-            } else {
-                return;
-            }
-        }
-
-        if (original_pos) {
-            var _position = getPositionFromEvent(e);
-            
-            _position._subtract( original_pos );
-
-            TypeWriter.reposition( _position );
-            original_pos = null;
-        } else if (new Date() - mousedowntime <= clickdelay &&
-            !IS_IOS) {
-            // click
-            updateCursor(e);
-        }
-    }
-
-    function mouseDown (e) {
-
-        // ignore right click
-        if (e.button === 2) return;
-
-        if (e.touches && e.touches.length === 2) {
-            // todo: work on zooming
-            e.preventDefault();
-            return false;
-            // two finger zoom
-            removeMoveEvent();
-            removeZoomEvent();
-            zoomStart(e);
-        } else {
-            // single finger or mouse
-            mousedowntime = new Date();
-
-            mouseuptimeout = window.setTimeout(function () {
-                
-                original_pos = original_pos || getPositionFromEvent(e);
-
-                document.addEventListener('mousemove', mousemove);
-                document.addEventListener('touchmove', mousemove);
-                document.addEventListener('mouseup', removeMoveEvent);
-                
-            }, mousemovedelay);
-        }
-    }
-
-    function removeMoveEvent () {
-        window.clearTimeout( mouseuptimeout );
-        document.removeEventListener('mousemove', mousemove);
-        document.removeEventListener('touchmove', mousemove);
-        document.removeEventListener('mouseup', removeMoveEvent);
-    }
-
-    function getFingerPositions (e) {
-        var touches = e.touches,
-            touch1 = touches[0],
-            touch2 = touches[1];
-
-        return [ 
-            new Vector(touch1.clientX, touch1.clientY),
-            new Vector(touch2.clientX, touch2.clientY)
-        ];
-    }
-
-    /*
-    extremely experimental zooming 
-    */
-
-    function zoomStart (e) {
-        var positions = getFingerPositions(e),
-            f1 = positions[0],
-            f2 = positions[1];
-        
-        zoom_distance = f1.distanceTo( f2 );
-        container_origin._add(f1)._add(f2)._divideBy(2);
-
-        container.style.transformOrigin = container_origin.x + 'px ' + container_origin.y + 'px';
-
-        document.addEventListener('touchmove', zoomMove);
-        document.addEventListener('touchend', zoomEnd);
-    }
-
-    function removeZoomEvent () {
-        document.removeEventListener('touchmove', zoomMove);
-        document.removeEventListener('touchend', zoomEnd);
-    }
-
-    function zoomMove (e) {
-        // css resize
-        var positions = getFingerPositions(e),
-            f1 = positions[0],
-            f2 = positions[1],
-            zc = f1.add(f2).divideBy(2);
-
-        zoom_center_diff = zc.subtract(container_origin);
-        
-        zoom_scale = f1.distanceTo(f2) / zoom_distance;
-
-        // scale (impacted by origin in zoomStart)
-        container.style.transform = 'scale(' + zoom_scale + ')';
-
-        // translate
-        container.style.left = zoom_center_diff.x + 'px';
-        container.style.top = zoom_center_diff.y + 'px';
-       
-        e.preventDefault();
-    }
-
-    function zoomEnd (e) {
-
-        // get new offset for canvas to figure out
-        container_scale *= zoom_scale;
-        container_offset = container_origin.multiplyBy(1 - container_scale);
-
-        container.setAttribute('style', '');
-
-        // reposition by zoom_center_diff
-        TypeWriter.reposition( zoom_center_diff );
-
-        removeZoomEvent();
-    }
-
-    simulatorReady();
-}
 
 /*
 *
@@ -766,36 +883,7 @@ function sendEvent() {
     console.log( args );
 
     // send to Google
-    ga.apply(this, ['send','event'].concat( args ));
-}
-
-function simulatorReady () {
-    resetCanvases();
-}
-
-function resetCanvases () {
-    [textCtx, cursorCtx].forEach(function (ctx) {
-        var canvas = ctx.canvas;
-
-        ctx.setTransform(1,0,0,1,0,0);
-
-        canvas.width = innerWidth * DEVICE_PIXEL_RATIO;
-        canvas.height = innerHeight * DEVICE_PIXEL_RATIO;
-        canvas.style.width = innerWidth + 'px';
-        canvas.style.height = innerHeight + 'px';
-
-        ctx.scale(DEVICE_PIXEL_RATIO, DEVICE_PIXEL_RATIO);
-
-        ctx.globalAlpha = GLOBAL_ALPHA;
-    });
-
-    // reset contexts, because resizing wipes them
-    textCtx.font = letter_size + "px Special Elite, serif";
-    textCtx.textBaseline = "top";
-    textCtx.fillStyle = TEXT_COLOR;
-
-    cursorCtx.fillStyle = CURSOR_COLOR;
-    cursorCtx.scale(container_scale, container_scale);
+    window.ga.apply(this, ['send','event'].concat( args ));
 }
 
 function forceSpace () {
@@ -812,12 +900,6 @@ function getPositionFromEvent (e) {
     return new Vector(_x, _y);
 }
 
-function setFontSize (new_size) {
-    letter_size = new_size;
-    letter_width = letter_size * 12 / 20;
-    line_height = letter_size + 8;
-}
-
 /*
 *
 * helper functions
@@ -826,7 +908,8 @@ function setFontSize (new_size) {
 function makeMultiAudio (src, instances) {
     var output = [],
         current = 0,
-        num = instances || 5;
+        num = instances || 5,
+        Audio = window.Audio || function () {};
     for (var i = 0; i < num; i++) {
         output.push(new Audio(src));
     }

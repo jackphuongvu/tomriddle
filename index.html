@@ -57,8 +57,7 @@
 			<div id="splash-section-2" class="flex second">
 				<div class="actions">
 					<div class="flex-column">
-						<button type="button" onclick="startTyping()" role="button">Start Simulator</button>
-						<button type="button" onclick="pasteText()" role="button">Paste Text</button>
+						<a href="#typing">Start Simulator</a><a href="#paste">Paste Text</a>
 					</div>
 				</div>
 			</div>
@@ -77,7 +76,7 @@
 							<button type="submit" role="button">Typewrite It</button>
 						</div>
 						<div class="flex">
-							<button id="paste-cancel" type="button" role="button">Cancel</button>
+							<a href="#">Cancel</a>
 						</div>
 					</div>
 				</form>
@@ -100,12 +99,15 @@
 		</div>
 	</main>
 
-	<script src="script.js"></script>
-
+	<script src="https://cdn.ravenjs.com/3.12.1/raven.min.js"></script>
 	<script>if (document.location.hostname === "typewritesomething.com") {
 		!function(a,b,c,d,e,f,g){a.GoogleAnalyticsObject=e,a[e]=a[e]||function(){(a[e].q=a[e].q||[]).push(arguments)},a[e].l=1*new Date,f=b.createElement(c),g=b.getElementsByTagName(c)[0],f.async=1,f.src=d,g.parentNode.insertBefore(f,g)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-73887811-5","auto"),ga("send","pageview");
+		Raven.config('https://ce393e73e1e74437accc9886f98abb7d@sentry.io/149608', {
+			release : '0.5.0'
+		}).install();
 	} else {
 		function ga () {}
 	}</script>
+	<script src="script.js"></script>
 </body>
 </html>
