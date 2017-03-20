@@ -371,9 +371,9 @@ var options = (function () {
                 this.running = true;
                 this.reset();
                 TypeWriter.reset();
-                console.log('on events');
                 this.events('on');
                 cursorInput.focus();
+                forceSpace.call(cursorInput);
                 Cursor.draw();
 
                 splash_elem.style.display = 'none';
@@ -385,7 +385,6 @@ var options = (function () {
                 this.running = false;
                 
                 // kill events
-                console.log('off events');
                 this.events('off');
                 removeMoveEvent();
             };
@@ -480,7 +479,6 @@ var options = (function () {
             }
 
             function focus () {
-                console.log('event', 'focus');
                 forceSpace.call(this);
             }
 
@@ -889,6 +887,7 @@ function sendEvent() {
 function forceSpace () {
     // firefox allows navigation within input
     // this forces cursor to the end
+    console.trace('force space', this);
     this.value = '';
     this.value = ' ';
 }
