@@ -27,4 +27,4 @@ This project has been made into an app using PhoneGap (see the [:octocat: GitHub
 * GUI for options
 * Hamburger side-sliding menu for settings/options
 * Social Sharing
-* CasperJS test runner with travis-ci
+* ~~CasperJS test runner with travis-ci~~
