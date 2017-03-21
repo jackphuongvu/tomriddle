@@ -47,7 +47,6 @@ h1,h2,h3,h4,h5 {
     background: linear-gradient(to bottom, #f9f6e8 0%, #f6f3e3 30%, #f6f3e3 70%, #f9f6e8 100%);
     box-shadow: inset rgba(109,78,33,0.2) 0em 0em 4em;
     position: absolute;
-    z-index: 1;
     top:0;
     left:0;
     right:0;
