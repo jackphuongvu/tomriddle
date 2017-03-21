@@ -1,6 +1,6 @@
 {
   "name": "typewritesomething",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A minimalistic typewriter simulator to help you write more creatively!",
   "main": "script.js",
   "dependencies": {},
