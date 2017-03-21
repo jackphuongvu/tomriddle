@@ -68,12 +68,14 @@ h1,h2,h3,h4,h5 {
     opacity: 0.8;
 }
 
+#splash a, 
 #splash button {
     margin:0.5em auto;
     width:50%;
     max-width: 300px;
     min-width: 180px;
     font-weight: normal;
+    font-family: arial, sans-serif;
     cursor: pointer;
     border: 1px solid transparent;
     white-space: nowrap;
@@ -90,12 +92,16 @@ h1,h2,h3,h4,h5 {
     background-color: transparent;
     color: rgba(111,94,70,0.8);
     border-color: rgba(109,78,33,0.2);
-    transition:all 0.2s ease-in;
-    box-shadow: rgba(109,78,33,0.2) 0px 2px 0;
+    transition:all 0.2s;
+    box-shadow: rgba(109,78,33,0.2) 0px 1px 0;
+    text-decoration: none;
 }
+
+#splash a:hover,
 #splash button:hover {
     color: rgba(111,94,70,0.9);
-    border-color: rgba(109,78,33,0.3);
+    box-shadow: rgba(109,78,33,0.2) 0px 2px 1px;
+    background-color: rgba(255,255,230,0.1);
 }
 
 .splash-title,
@@ -218,10 +224,12 @@ form#pastetext {
         flex-flow: row-reverse;
         display: flex;
     }
+    .paste-actions .flex a,
     .paste-actions .flex button {
         position: absolute;
         right:0;
     }
+    .paste-actions .flex:first-child a,
     .paste-actions .flex:first-child button {
         right:initial;
         left:0;
