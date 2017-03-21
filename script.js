@@ -418,8 +418,6 @@ var options = (function () {
                     },
                     key, fnc;
 
-                console.warn('events', onoff);
-
                 for (key in document_events) {
                     fnc = document_events[key];
                     DOMEvent[onoff](document, key, fnc);
@@ -887,7 +885,6 @@ function sendEvent() {
 function forceSpace () {
     // firefox allows navigation within input
     // this forces cursor to the end
-    console.trace('force space', this);
     this.value = '';
     this.value = ' ';
 }
