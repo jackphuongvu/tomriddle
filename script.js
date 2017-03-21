@@ -101,23 +101,6 @@ var options = (function () {
         }
         return new DOMEvent();
     })(),
-    DOMUtil = (function () {
-        function DOMUtil () {
-            this.addClass = function (elem, class_str) {
-                var regex = new RegExp('\b' + class_str + '\b', 'g');
-                if (elem.className.match(regex)) {
-                    return;
-                }
-                elem.className += ' ' + class_str;
-            };
-
-            this.removeClass = function (elem, class_str) {
-                elem.className = elem.className.replace(class_str, '');
-            };
-        }
-
-        return new DOMUtil();
-    })(),
     Cursor = (function () {
         function Cursor () {
             /*
@@ -849,8 +832,8 @@ var pasteText = (function () {
         // empty textarea
         form.pasted.value = '';
         // retoggle section visibility
-        DOMUtil.removeClass(section2, 'hidden');
-        DOMUtil.addClass(section3, 'hidden');
+        section2.classList.remove('hidden');
+        section3.classList.add('hidden');
     });
 
     DOMEvent.on(paste_cancel, 'click', function () {
@@ -859,9 +842,9 @@ var pasteText = (function () {
 
     return function pasteText () {
         // hide section 2 action buttons
-        DOMUtil.addClass(section2, 'hidden');
+        section2.classList.add('hidden');
         // show section 3 textbox
-        DOMUtil.removeClass(section3, 'hidden');
+        section3.classList.remove('hidden');
 
         form.pasted.focus();
     };
