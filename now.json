@@ -5,6 +5,26 @@
     {
       "src": "./index.html",
       "use": "@now/static"
+    },
+    {
+      "src": "./style.css",
+      "use": "@now/static"
+    },
+    {
+      "src": "./favicon.ico",
+      "use": "@now/static"
+    },
+    {
+      "src": "./script.js",
+      "use": "@now/static"
+    },
+    {
+      "src": "./img",
+      "use": "@now/static"
+    },
+    {
+      "src": "./inc",
+      "use": "@now/static"
     }
   ],
   "github": {
