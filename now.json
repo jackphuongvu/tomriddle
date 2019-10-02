@@ -19,11 +19,11 @@
       "use": "@now/static"
     },
     {
-      "src": "./img",
+      "src": "./img/*",
       "use": "@now/static"
     },
     {
-      "src": "./inc",
+      "src": "./inc/*",
       "use": "@now/static"
     }
   ],
