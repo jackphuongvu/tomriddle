@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "typewritesomething",
+  "alias": "tws",
+  "builds": [
+    {
+      "src": "./index.html",
+      "use": "@now/static"
+    }
+  ]
+}
