@@ -1,11 +1,13 @@
 {
   "version": 2,
   "name": "typewritesomething",
-  "alias": "tws.bozdoz",
   "builds": [
     {
       "src": "./index.html",
       "use": "@now/static"
     }
-  ]
+  ],
+  "github": {
+    "autoAlias": false
+  }
 }
