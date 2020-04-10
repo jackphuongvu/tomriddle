@@ -1,13 +1,13 @@
 {
-	"undef": true,
-	"unused": true,
-	"eqeqeq": true,
-	"globals": {
-		"Audio" : true,
-		"shake" : true,
-		"window" : true,
-		"console" : true,
-		"document" : true,
-		"navigator" : true
-	}
+  "undef": true,
+  "unused": true,
+  "eqeqeq": true,
+  "globals": {
+    "Audio": true,
+    "shake": true,
+    "window": true,
+    "console": true,
+    "document": true,
+    "navigator": true
+  }
 }
