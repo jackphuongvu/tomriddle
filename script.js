@@ -24,8 +24,9 @@ var options = (function () {
   cursorCtx = cursorCanvas.getContext("2d"),
   cursorInput = document.getElementById("cursor-input"),
   keypress_audio =
-    window.keypress_audio || new MultiAudio("inc/keypress.mp3", 5),
-  newline_audio = window.newline_audio || new MultiAudio("inc/return.mp3", 2),
+    window.keypress_audio || new makeMultiAudio("inc/keypress.mp3", 5),
+  newline_audio =
+    window.newline_audio || new makeMultiAudio("inc/return.mp3", 2),
   IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g),
   DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1,
   TEXT_COLOR = "#150904",
@@ -103,9 +104,9 @@ var options = (function () {
   Cursor = (function () {
     function Cursor() {
       /*
-            Cursor singleton for controlling cursor 
-            position and visibility
-            */
+          Cursor singleton for controlling cursor 
+          position and visibility
+          */
       var _cursor_timeout, _raf, _time, _opacity;
 
       this.clear = function () {
@@ -541,73 +542,73 @@ var options = (function () {
         DOMEvent.off(document, "mouseup", removeMoveEvent);
       }
       /*function getFingerPositions (e) {
-                var touches = e.touches,
-                    touch1 = touches[0],
-                    touch2 = touches[1];
+              var touches = e.touches,
+                  touch1 = touches[0],
+                  touch2 = touches[1];
 
-                return [ 
-                    new Vector(touch1.clientX, touch1.clientY),
-                    new Vector(touch2.clientX, touch2.clientY)
-                ];
-            }*/
+              return [ 
+                  new Vector(touch1.clientX, touch1.clientY),
+                  new Vector(touch2.clientX, touch2.clientY)
+              ];
+          }*/
 
       /*
-            extremely experimental zooming 
-            */
+          extremely experimental zooming 
+          */
 
       /*function zoomStart (e) {
-                var positions = getFingerPositions(e),
-                    f1 = positions[0],
-                    f2 = positions[1];
-                
-                zoom_distance = f1.distanceTo( f2 );
-                container_origin._add(f1)._add(f2)._divideBy(2);
+              var positions = getFingerPositions(e),
+                  f1 = positions[0],
+                  f2 = positions[1];
+              
+              zoom_distance = f1.distanceTo( f2 );
+              container_origin._add(f1)._add(f2)._divideBy(2);
 
-                container.style.transformOrigin = container_origin.x + 'px ' + container_origin.y + 'px';
+              container.style.transformOrigin = container_origin.x + 'px ' + container_origin.y + 'px';
 
-                DOMEvent.on(document, 'touchmove', zoomMove);
-                DOMEvent.on(document, 'touchend', zoomEnd);
-            }
+              DOMEvent.on(document, 'touchmove', zoomMove);
+              DOMEvent.on(document, 'touchend', zoomEnd);
+          }
 
-            function removeZoomEvent () {
-                DOMEvent.off(document, 'touchmove', zoomMove);
-                DOMEvent.off(document, 'touchend', zoomEnd);
-            }
+          function removeZoomEvent () {
+              DOMEvent.off(document, 'touchmove', zoomMove);
+              DOMEvent.off(document, 'touchend', zoomEnd);
+          }
 
-            function zoomMove (e) {
-                // css resize
-                var positions = getFingerPositions(e),
-                    f1 = positions[0],
-                    f2 = positions[1],
-                    zc = f1.add(f2).divideBy(2);
+          function zoomMove (e) {
+              // css resize
+              var positions = getFingerPositions(e),
+                  f1 = positions[0],
+                  f2 = positions[1],
+                  zc = f1.add(f2).divideBy(2);
 
-                zoom_center_diff = zc.subtract(container_origin);
-                
-                zoom_scale = f1.distanceTo(f2) / zoom_distance;
+              zoom_center_diff = zc.subtract(container_origin);
+              
+              zoom_scale = f1.distanceTo(f2) / zoom_distance;
 
-                // scale (impacted by origin in zoomStart)
-                container.style.transform = 'scale(' + zoom_scale + ')';
+              // scale (impacted by origin in zoomStart)
+              container.style.transform = 'scale(' + zoom_scale + ')';
 
-                // translate
-                container.style.left = zoom_center_diff.x + 'px';
-                container.style.top = zoom_center_diff.y + 'px';
-               
-                e.preventDefault();
-            }
+              // translate
+              container.style.left = zoom_center_diff.x + 'px';
+              container.style.top = zoom_center_diff.y + 'px';
+             
+              e.preventDefault();
+          }
 
-            function zoomEnd () {
+          function zoomEnd () {
 
-                // get new offset for canvas to figure out
-                container_scale *= zoom_scale;
-                container_offset = container_origin.multiplyBy(1 - container_scale);
+              // get new offset for canvas to figure out
+              container_scale *= zoom_scale;
+              container_offset = container_origin.multiplyBy(1 - container_scale);
 
-                container.setAttribute('style', '');
+              container.setAttribute('style', '');
 
-                // reposition by zoom_center_diff
-                TypeWriter.reposition( zoom_center_diff );
+              // reposition by zoom_center_diff
+              TypeWriter.reposition( zoom_center_diff );
 
-                removeZoomEvent();
-            }*/
+              removeZoomEvent();
+          }*/
     }
 
     return new App();
@@ -849,6 +850,8 @@ var pasteText = (function () {
 function sendEvent() {
   var args = Array.prototype.slice.call(arguments);
 
+  console.log(args);
+
   // send to Google
   window.ga.apply(this, ["send", "event"].concat(args));
 }
@@ -872,29 +875,14 @@ function getPositionFromEvent(e) {
  * helper functions
  *
  */
-function MultiAudio(src, instances) {
-  var output = [];
-  var current = 0;
-  var num = instances || 5;
-  var Audio = window.Audio || function () {};
-
+function makeMultiAudio(src, instances) {
+  var output = [],
+    current = 0,
+    num = instances || 5,
+    Audio = window.Audio || function () {};
   for (var i = 0; i < num; i++) {
     output.push(new Audio(src));
   }
-
-  (function () {
-    var _count = 0;
-    function pushSource() {
-      if (_count < num) {
-        var _audio = new Audio(src);
-        output.push(_audio);
-
-        _audio.addEventListener("load", pushSource);
-      }
-    }
-    pushSource();
-  })();
-
   this.play = function () {
     var audio = output[current++ % num];
     audio.currentTime = 0;

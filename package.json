@@ -10,12 +10,7 @@
     "gulp": "*",
     "jshint": "*",
     "phantomjs": "*",
-    "minimist": "*",
-    "tunnel-agent": "*",
-    "request": "*",
-    "cryptiles": "*",
-    "tough-cookie": "*",
-    "hoek": "*"
+    "request": "2.68.x"
   },
   "scripts": {
     "start": "gulp",
