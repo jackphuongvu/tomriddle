@@ -24,9 +24,8 @@ var options = (function () {
   cursorCtx = cursorCanvas.getContext("2d"),
   cursorInput = document.getElementById("cursor-input"),
   keypress_audio =
-    window.keypress_audio || new makeMultiAudio("inc/keypress.mp3", 5),
-  newline_audio =
-    window.newline_audio || new makeMultiAudio("inc/return.mp3", 2),
+    window.keypress_audio || new MultiAudio("inc/keypress.mp3", 5),
+  newline_audio = window.newline_audio || new MultiAudio("inc/return.mp3", 2),
   IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g),
   DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1,
   TEXT_COLOR = "#150904",
@@ -850,8 +849,6 @@ var pasteText = (function () {
 function sendEvent() {
   var args = Array.prototype.slice.call(arguments);
 
-  console.log(args);
-
   // send to Google
   window.ga.apply(this, ["send", "event"].concat(args));
 }
@@ -875,14 +872,29 @@ function getPositionFromEvent(e) {
  * helper functions
  *
  */
-function makeMultiAudio(src, instances) {
-  var output = [],
-    current = 0,
-    num = instances || 5,
-    Audio = window.Audio || function () {};
+function MultiAudio(src, instances) {
+  var output = [];
+  var current = 0;
+  var num = instances || 5;
+  var Audio = window.Audio || function () {};
+
   for (var i = 0; i < num; i++) {
     output.push(new Audio(src));
   }
+
+  (function () {
+    var _count = 0;
+    function pushSource() {
+      if (_count < num) {
+        var _audio = new Audio(src);
+        output.push(_audio);
+
+        _audio.addEventListener("load", pushSource);
+      }
+    }
+    pushSource();
+  })();
+
   this.play = function () {
     var audio = output[current++ % num];
     audio.currentTime = 0;

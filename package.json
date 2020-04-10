@@ -9,7 +9,13 @@
     "casperjs": "*",
     "gulp": "*",
     "jshint": "*",
-    "phantomjs": "*"
+    "phantomjs": "*",
+    "minimist": "*",
+    "tunnel-agent": "*",
+    "request": "*",
+    "cryptiles": "*",
+    "tough-cookie": "*",
+    "hoek": "*"
   },
   "scripts": {
     "start": "gulp",
