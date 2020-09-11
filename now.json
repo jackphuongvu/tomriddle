@@ -1,12 +1,9 @@
 {
   "version": 2,
-  "name": "typewritesomething",
-  "builds": [{
+  "builds": [
+    {
       "src": "package.json", 
-      "use": "@now/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "use": "@now/static-build"
     },
     {
       "src": "./index.html",
@@ -18,10 +15,6 @@
     },
     {
       "src": "./favicon.ico",
-      "use": "@now/static"
-    },
-    {
-      "src": "./dist/main.js",
       "use": "@now/static"
     }
   ],
