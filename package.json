@@ -5,23 +5,18 @@
   "main": "script.js",
   "dependencies": {},
   "devDependencies": {
-    "browser-sync": "*",
-    "casperjs": "*",
-    "gulp": "*",
-    "jshint": "*",
-    "phantomjs": "*",
-    "request": "2.68.x",
-    "minimist": "*",
-    "tunnel-agent": "*",
-    "cryptiles": "*",
-    "tough-cookie": "*",
-    "hoek": "*"
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "rollup": "^2.26.11",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-serve": "^1.0.4",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "scripts": {
-    "start": "gulp",
-    "test": "npm run test-hint && npm run test-casper",
-    "test-hint": "jshint ./script.js",
-    "test-casper": "casperjs test ./tests/casper.js"
+    "start": "rollup -c -w",
+    "build": "NODE_ENV=production rollup -c",
+    "lint": "eslint ./src"
   },
   "homepage": "https://typewritesomething.com",
   "repository": {

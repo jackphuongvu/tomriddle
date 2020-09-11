@@ -7,7 +7,7 @@
       "use": "@now/static"
     },
     {
-      "src": "./style.css",
+      "src": "./static/*",
       "use": "@now/static"
     },
     {
@@ -15,15 +15,7 @@
       "use": "@now/static"
     },
     {
-      "src": "./script.js",
-      "use": "@now/static"
-    },
-    {
-      "src": "./img/*",
-      "use": "@now/static"
-    },
-    {
-      "src": "./inc/*",
+      "src": "./dist/main.js",
       "use": "@now/static"
     }
   ],
