@@ -7,19 +7,7 @@
       "use": "@now/static"
     },
     {
-      "src": "./static/*",
-      "use": "@now/static"
-    },
-    {
-      "src": "./static/audio/*",
-      "use": "@now/static"
-    },
-    {
-      "src": "./static/fonts/*",
-      "use": "@now/static"
-    },
-    {
-      "src": "./static/img/*",
+      "src": "./static/**",
       "use": "@now/static"
     },
     {
