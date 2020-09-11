@@ -21,7 +21,7 @@
       "use": "@now/static"
     },
     {
-      "src": "dist/main.js",
+      "src": "./dist/main.js",
       "use": "@now/static"
     }
   ],
