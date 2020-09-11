@@ -24,7 +24,7 @@
     />
     <meta
       itemprop="image"
-      content="https://typewritesomething.com/img/logo-on-bg.png"
+      content="https://typewritesomething.com/static/img/logo-on-bg.png"
     />
 
     <!-- Twitter Card data -->
@@ -38,7 +38,7 @@
     <meta name="twitter:creator" content="@bozdoz" />
     <meta
       name="twitter:image:src"
-      content="https://typewritesomething.com/img/logo-on-bg.png"
+      content="https://typewritesomething.com/static/img/logo-on-bg.png"
     />
     <meta name="twitter:image:alt" content="Typewrite Something" />
 
@@ -48,7 +48,7 @@
     <meta property="og:url" content="https://typewritesomething.com/" />
     <meta
       property="og:image"
-      content="https://typewritesomething.com/img/logo-on-bg.png"
+      content="https://typewritesomething.com/static/img/logo-on-bg.png"
     />
     <meta
       property="og:description"
@@ -64,7 +64,7 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com * ws:;style-src 'self' 'unsafe-inline' data: blob:;media-src *;connect-src ws://localhost:* http://localhost:*;script-src 'unsafe-inline' https://www.google-analytics.com http://localhost:* https://typewritesomething.com * 'unsafe-eval' data: blob:;img-src https://www.google-analytics.com http://localhost:* https://typewritesomething.com 'self' data: content:;"> -->
 
     <link rel="icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
   </head>
 
   <body>
@@ -80,40 +80,9 @@
 				and fixes keyup events -->
         <input id="cursor-input" type="text" autocomplete="nope" />
       </div>
-      <div id="splash" class="flex-column">
-        <div id="splash-section-1" class="flex first">
-          <div class="splash-title">
-            <h1>TYPEWRITE SOMETHING</h1>
-            <h2>A simple typewriter simulator</h2>
-          </div>
-        </div>
-        <div id="splash-section-2" class="flex second">
-          <div class="actions">
-            <div class="flex-column">
-              <a href="#typing">Start Simulator</a
-              ><a href="#paste">Paste Text</a>
-            </div>
-          </div>
-        </div>
-        <div id="splash-section-3" class="flex third hidden">
-          <form id="pastetext" class="flex-column" name="pastetext">
-            <textarea
-              id="text-to-paste"
-              class="flex"
-              name="pasted"
-              placeholder="Type/Paste text here"
-            ></textarea>
-            <div class="flex paste-actions">
-              <div class="flex">
-                <button type="submit" role="button">Typewrite It</button>
-              </div>
-              <div class="flex">
-                <a href="#">Cancel</a>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+      <aside id="splash">
+        <h1>TYPEWRITE SOMETHING</h1>
+      </aside>
     </main>
 
     <script
@@ -152,9 +121,9 @@
             "https://ce393e73e1e74437accc9886f98abb7d@o69899.ingest.sentry.io/149608",
         });
       } else {
-        function ga() {}
+        window.ga = console.log;
       }
     </script>
-    <script src="script.js"></script>
+    <script src="/dist/main.js"></script>
   </body>
 </html>
