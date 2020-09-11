@@ -1,7 +1,10 @@
 {
   "version": 2,
   "name": "typewritesomething",
-  "builds": [
+  "builds": [{
+      "src": "package.json", 
+      "use": "@now/static-build"
+    },
     {
       "src": "./index.html",
       "use": "@now/static"
@@ -15,7 +18,7 @@
       "use": "@now/static"
     },
     {
-      "src": "./dist/main.js",
+      "src": "./dist/**",
       "use": "@now/static"
     }
   ],
