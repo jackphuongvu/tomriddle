@@ -8,6 +8,6 @@ export default () => ({
   plugins,
   input: 'src/main.js',
   output: {
-    file: 'dist/main.js',
+    file: isProduction ? 'dist/dist/main.js' : 'dist/main.js',
   },
 })
