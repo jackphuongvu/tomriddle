@@ -73,12 +73,9 @@
         <canvas id="text-canvas"></canvas>
         <canvas id="cursor-canvas"></canvas>
 
-        <!-- prevent Chrome autocomplete -->
-        <input type="text" style="display: none;" />
-
         <!-- password field disables swiping on mobile
 				and fixes keyup events -->
-        <input id="cursor-input" type="text" autocomplete="nope" />
+        <div id="text-input" contenteditable></div>
       </div>
       <aside id="splash">
         <h1>TYPEWRITE SOMETHING</h1>

@@ -256,8 +256,8 @@ h5 {
   align-items: center;
   -moz-user-select: none;
   -webkit-user-select: none;
-  opacity: 0.8;
-  animation: fadeOut 0.4s linear 1s forwards;
+  opacity: 0;
+  animation: fadeOut 1.5s ease-in-out 0s forwards;
 }
 
 #splash h1,
@@ -278,7 +278,7 @@ canvas {
   bottom: 0;
 }
 
-#cursor-input {
+#text-input {
   width: 1px;
   height: 1px;
   border: none;
@@ -290,7 +290,10 @@ canvas {
 }
 
 @keyframes fadeOut {
-  to {
+  45%, 75% {
+    opacity: 1;
+  }
+  0%, 100% {
     opacity: 0;
   }
 }

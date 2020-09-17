@@ -15,6 +15,7 @@ const options = {
   line_height: null,
 };
 
+const splashAnimTime = 1500;
 const container = document.getElementById('container');
 let containerScale = 1;
 const containerOffset = new Vector(0, 0);
@@ -23,7 +24,7 @@ const textCanvas = document.getElementById('text-canvas');
 const textCtx = textCanvas.getContext('2d', { alpha: true });
 const cursorCanvas = document.getElementById('cursor-canvas');
 const cursorCtx = cursorCanvas.getContext('2d');
-const cursorInput = document.getElementById('cursor-input');
+const textInput = document.getElementById('text-input');
 const keypressAudio = window.keypress_audio || new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = window.newline_audio || new MultiAudio('/static/audio/return.mp3', 2);
 const IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
@@ -74,8 +75,8 @@ const Cursor = (function getCursor() {
       this.clear();
 
       posVec = vec;
-      cursorInput.style.left = `${Math.min(vec.x, window.innerWidth)}px`;
-      cursorInput.style.top = `${Math.min(vec.y, window.innerHeight)}px`;
+      textInput.style.left = `${Math.min(vec.x, window.innerWidth)}px`;
+      textInput.style.top = `${Math.min(vec.y, window.innerHeight)}px`;
       this.draw();
     };
 
@@ -241,7 +242,7 @@ const TypeWriter = (function getTypeWriter() {
 
       this.reposition();
       Cursor.draw();
-      cursorInput.focus();
+      textInput.focus();
     };
   }
 
@@ -273,9 +274,9 @@ const App = (function getApp() {
       this.reset();
       TypeWriter.reset();
       this.events('on');
-      cursorInput.focus();
+      textInput.focus();
       // eslint-disable-next-line no-use-before-define
-      forceSpace.call(cursorInput);
+      forceSpace();
       Cursor.draw();
     };
 
@@ -329,7 +330,7 @@ const App = (function getApp() {
       // eslint-disable-next-line no-restricted-syntax, guard-for-in
       for (key in cursorEvents) {
         fnc = cursorEvents[key];
-        DOMEvent[onoff](cursorInput, key, fnc);
+        DOMEvent[onoff](textInput, key, fnc);
       }
 
       if (IS_IOS) {
@@ -354,7 +355,7 @@ const App = (function getApp() {
       if (noAudio === 'TAB') {
         // refocus
         window.setTimeout(() => {
-          cursorInput.focus();
+          textInput.focus();
         }, 10);
         e.preventDefault();
       }
@@ -367,22 +368,21 @@ const App = (function getApp() {
      */
     function keyup(e) {
       const nav = NAV_BUTTONS[e.which];
-      const value = this.value.substr(1);
-
-      if (!value && !nav) return;
+      const value = e.key;
+      const isLetter = value.length === 1;
 
       if (nav) {
         nav();
-      } else {
+      } else if (isLetter) {
         TypeWriter.addCharacter(value);
       }
       // eslint-disable-next-line no-use-before-define
-      forceSpace.call(this);
+      forceSpace();
     }
 
     function focus() {
       // eslint-disable-next-line no-use-before-define
-      forceSpace.call(this);
+      forceSpace();
     }
 
     function mouseup(e) {
@@ -469,7 +469,7 @@ const App = (function getApp() {
       const letterOffset = new Vector(letterWidth / 2, lineHeight / 2);
       const _newpos = _position.subtract(letterOffset);
       Cursor.update(_newpos);
-      cursorInput.focus();
+      textInput.focus();
     }
 
     function removeMoveEvent() {
@@ -566,7 +566,9 @@ DOMEvent.on(window, 'load', () => {
   if (window.location.hash) {
     window.location.hash = '';
   }
-  App.start();
+
+  // wait for splash transition
+  setTimeout(App.start.bind(App), splashAnimTime);
 });
 
 /**
@@ -582,8 +584,7 @@ DOMEvent.on(window, 'load', () => {
 function forceSpace() {
   // firefox allows navigation within input
   // this forces cursor to the end
-  this.value = '';
-  this.value = ' ';
+  textInput.innerHTML = '';
 }
 
 function getPositionFromEvent(e) {
