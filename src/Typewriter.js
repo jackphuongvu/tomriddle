@@ -35,6 +35,8 @@ export class TypeWriter {
     TypeWriter._instance = this;
 
     this.cursor = new Cursor(this);
+
+    DOMEvent.on(window, 'resize', this.reposition);
   }
 
   addCharacter = (_chars, _x, _y) => {
@@ -127,7 +129,3 @@ export class TypeWriter {
     // s.addRange(r);
   }
 }
-
-DOMEvent.on(window, 'resize', () => {
-  TypeWriter.reposition();
-});

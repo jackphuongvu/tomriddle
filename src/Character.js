@@ -1,4 +1,3 @@
-import { randMargin } from './utils';
 import Vector from './Vector';
 
 const ALPHA_MARGIN = 0.06;
@@ -47,4 +46,11 @@ export class Character extends Vector {
     textCtx.fillText(this.str, 0, 0);
     textCtx.restore();
   };
+}
+
+function randMargin(num, margin) {
+  const min = num - margin;
+  const max = num + margin;
+  const value = Math.random() * (max - min) + min;
+  return value;
 }

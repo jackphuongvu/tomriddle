@@ -141,7 +141,7 @@ class App {
     if (nav) {
       nav();
     } else if (isLetter) {
-      TypeWriter.addCharacter(value);
+      this.typewriter.addCharacter(value);
     }
     this.typewriter.focusText();
   }
@@ -158,7 +158,7 @@ class App {
 
       _position._subtract(this.originalPos);
 
-      TypeWriter.reposition(_position);
+      this.typewriter.reposition(_position);
       this.originalPos = null;
     } else if (new Date() - this.mousedowntime <= this.clickdelay) {
       this.updateCursor(e);
