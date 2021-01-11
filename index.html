@@ -61,8 +61,6 @@
       content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"
     />
 
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com * ws:;style-src 'self' 'unsafe-inline' data: blob:;media-src *;connect-src ws://localhost:* http://localhost:*;script-src 'unsafe-inline' https://www.google-analytics.com http://localhost:* https://typewritesomething.com * 'unsafe-eval' data: blob:;img-src https://www.google-analytics.com http://localhost:* https://typewritesomething.com 'self' data: content:;"> -->
-
     <link rel="icon" href="/favicon.ico" />
     <link rel="stylesheet" href="/static/style.css" />
   </head>
@@ -82,45 +80,6 @@
       </aside>
     </main>
 
-    <script
-      src="https://browser.sentry-cdn.com/5.15.4/bundle.min.js"
-      integrity="sha384-Nrg+xiw+qRl3grVrxJtWazjeZmUwoSt0FAVsbthlJ5OMpx0G08bqIq3b/v0hPjhB"
-      crossorigin="anonymous"
-    ></script>
-
-    <script>
-      if (document.location.hostname === "typewritesomething.com") {
-        !(function (a, b, c, d, e, f, g) {
-          (a.GoogleAnalyticsObject = e),
-            (a[e] =
-              a[e] ||
-              function () {
-                (a[e].q = a[e].q || []).push(arguments);
-              }),
-            (a[e].l = 1 * new Date()),
-            (f = b.createElement(c)),
-            (g = b.getElementsByTagName(c)[0]),
-            (f.async = 1),
-            (f.src = d),
-            g.parentNode.insertBefore(f, g);
-        })(
-          window,
-          document,
-          "script",
-          "https://www.google-analytics.com/analytics.js",
-          "ga"
-        );
-        ga("create", "UA-73887811-5", "auto");
-        ga("send", "pageview");
-
-        Sentry.init({
-          dsn:
-            "https://ce393e73e1e74437accc9886f98abb7d@o69899.ingest.sentry.io/149608",
-        });
-      } else {
-        window.ga = console.log;
-      }
-    </script>
     <script src="/dist/main.js"></script>
   </body>
 </html>
