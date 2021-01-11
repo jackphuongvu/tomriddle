@@ -3,16 +3,25 @@ import MultiAudio from './MultiAudio';
 import NO_AUDIO from './NO_AUDIO';
 import { TypeWriter } from './Typewriter';
 import Vector from './Vector';
+import Debugger from './Debugger';
 
 const ENTER = 13;
-const FONT_SIZE = 26;
 const textInput = document.getElementById('text-input');
-const letterSize = parseInt(Math.min(FONT_SIZE, window.innerWidth / 17), 10);
-const letterWidth = (letterSize * 12) / 20;
-const lineHeight = letterSize + 8;
-const keypressAudio = window.keypress_audio || new MultiAudio('/static/audio/keypress.mp3', 5);
-const newlineAudio = window.newline_audio || new MultiAudio('/static/audio/return.mp3', 2);
+const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
+const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
 const IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
+
+const events = [];
+const eventLog = new Debugger();
+
+eventLog.formatter((message) => {
+  events.push(message);
+  if (events.length > 3) {
+    events.shift();
+  }
+
+  return events.join(', ');
+});
 
 class App {
   mouseuptimeout;
@@ -26,8 +35,6 @@ class App {
   originalPos;
 
   running = false;
-
-  splashEvents = [];
 
   constructor() {
     this.typewriter = new TypeWriter();
@@ -53,7 +60,6 @@ class App {
   };
 
   stop = () => {
-    this.splash();
     if (!this.running) return;
     this.running = false;
 
@@ -62,27 +68,16 @@ class App {
     this.removeMoveEvent();
   };
 
-  splash = () => {
-    // some functions below
-    // should push to this array
-    // to describe tear down events
-    for (let i = 0, len = this.splashEvents.length; i < len; i += 1) {
-      const fnc = this.splashEvents[i];
-      fnc();
-    }
-  };
-
-  events = (_onoff) => {
-    const onoff = _onoff || 'on';
+  events = (onoff = 'on') => {
     const documentEvents = {
-      mouseup: this.mouseup,
-      touchend: this.touchend,
-      mousedown: this.mousedown,
-      touchstart: this.touchstart,
+      mouseup: this.handleMouseUp,
+      touchend: this.handleTouchEnd,
+      mousedown: this.handleMouseDown,
+      touchstart: this.handleTouchStart,
     };
     const cursorEvents = {
-      keydown: this.keydown,
-      keyup: this.keyup,
+      keydown: this.handleKeyDown,
+      keyup: this.handleKeyUp,
       focus: this.focus,
     };
 
@@ -107,7 +102,8 @@ class App {
   };
 
   /** keydown handles audio */
-  keydown = (e) => {
+  handleKeyDown = (e) => {
+    eventLog.log('keydown');
     const noAudio = NO_AUDIO[e.which];
 
     if (!noAudio) {
@@ -128,12 +124,13 @@ class App {
     }
 
     return false;
-  }
+  };
 
   /**
    * keyup handles character input and navigation
    */
-  keyup = (e) => {
+  handleKeyUp = (e) => {
+    eventLog.log('keyup');
     const nav = this.typewriter.cursor.navButtons[e.which];
     const value = e.key;
     const isLetter = value.length === 1;
@@ -144,13 +141,15 @@ class App {
       this.typewriter.addCharacter(value);
     }
     this.typewriter.focusText();
-  }
+  };
 
   focus = () => {
+    eventLog.log('focus');
     this.typewriter.focusText();
-  }
+  };
 
-  mouseup = (e) => {
+  handleMouseUp = (e) => {
+    eventLog.log('mouseup');
     this.removeMoveEvent();
 
     if (this.originalPos) {
@@ -160,12 +159,13 @@ class App {
 
       this.typewriter.reposition(_position);
       this.originalPos = null;
-    } else if (new Date() - this.mousedowntime <= this.clickdelay) {
+    } else if (Date.now() - this.mousedowntime <= this.clickdelay) {
       this.updateCursor(e);
     }
-  }
+  };
 
-  touchend = (e) => {
+  handleTouchEnd = (e) => {
+    eventLog.log('touchend');
     if (!e.touches.length) {
       if (e.changedTouches.length) {
         e.clientX = e.changedTouches[0].clientX;
@@ -176,10 +176,11 @@ class App {
       }
     }
 
-    this.mouseup(e);
-  }
+    this.handleMouseUp(e);
+  };
 
-  mousedown = (e) => {
+  handleMouseDown = (e) => {
+    eventLog.log('mousedown');
     // ignore right click
     if (e.button === 2) return;
 
@@ -189,51 +190,51 @@ class App {
     this.mouseuptimeout = window.setTimeout(() => {
       this.originalPos = this.originalPos || this.getPositionFromEvent(e);
 
-      DOMEvent.on(document, 'mousemove', this.mousemove);
-      DOMEvent.on(document, 'touchmove', this.mousemove);
+      DOMEvent.on(document, 'mousemove', this.handleMouseMove);
+      DOMEvent.on(document, 'touchmove', this.handleMouseMove);
       DOMEvent.on(document, 'mouseup', this.removeMoveEvent);
     }, this.mousemovedelay);
-  }
+  };
 
-  touchstart = (e) => {
+  handleTouchStart = (e) => {
+    eventLog.log('touchstart');
     e.preventDefault();
     if (e.touches && e.touches.length === 2) {
       // todo: work on zooming
       return false;
     }
     e.stopPropagation();
-    return this.mousedown(e);
-  }
+    return this.handleMouseDown(e);
+  };
 
   iosTouchStart = (e) => {
+    eventLog.log('ios touch start');
     this.updateCursor(e);
-  }
+  };
 
-  mousemove = (e) => {
+  handleMouseMove = (e) => {
+    eventLog.log('mouse move');
     if (!this.originalPos) return;
-    const _position = this.getPositionFromEvent(e);
 
-    _position._subtract(this.originalPos);
+    const _position = this.getPositionFromEvent(e)._subtract(this.originalPos);
 
     this.container.style.left = `${_position.x}px`;
     this.container.style.top = `${_position.y}px`;
     this.typewriter.cursor.clear();
-  }
+  };
 
   updateCursor = (e) => {
     const _position = this.getPositionFromEvent(e);
-    const letterOffset = new Vector(letterWidth / 2, lineHeight / 2);
-    const _newpos = _position.subtract(letterOffset);
-    this.typewriter.cursor.update(_newpos);
+    this.typewriter.cursor.moveToClick(_position);
     this.typewriter.focusText();
-  }
+  };
 
   removeMoveEvent = () => {
     window.clearTimeout(this.mouseuptimeout);
-    DOMEvent.off(document, 'mousemove', this.mousemove);
-    DOMEvent.off(document, 'touchmove', this.mousemove);
+    DOMEvent.off(document, 'mousemove', this.handleMouseMove);
+    DOMEvent.off(document, 'touchmove', this.handleMouseMove);
     DOMEvent.off(document, 'mouseup', this.removeMoveEvent);
-  }
+  };
 
   getPositionFromEvent = (e) => {
     const touch = (e.touches && e.touches[0]) || {};
@@ -241,7 +242,7 @@ class App {
     const _x = e.clientX || touch.clientX || position.x;
     const _y = e.clientY || touch.clientY || position.y;
     return new Vector(_x, _y);
-  }
+  };
 }
 
 export default new App();
