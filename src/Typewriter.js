@@ -34,7 +34,7 @@ export class TypeWriter {
 
     TypeWriter._instance = this;
 
-    this.cursor = new Cursor(this);
+    this.cursor = new Cursor();
 
     DOMEvent.on(window, 'resize', this.reposition);
   }
@@ -44,13 +44,15 @@ export class TypeWriter {
       this.cursor.update(new Vector(_x, _y));
     }
     for (let i = 0, len = _chars.length; i < len; i += 1) {
-      const { position: { x, y } } = this.cursor;
+      const {
+        position: { x, y },
+      } = this.cursor;
       const char = _chars[i];
 
       this.chars.push(new Character(this, char, x, y));
       this.cursor.moveright();
     }
-  }
+  };
 
   redraw = () => {
     function processFn(char) {
@@ -58,7 +60,7 @@ export class TypeWriter {
     }
 
     asyncForLoop(this.chars, processFn);
-  }
+  };
 
   resetCanvases = () => {
     [textCtx, cursorCtx].forEach((ctx) => {
@@ -83,7 +85,7 @@ export class TypeWriter {
 
     cursorCtx.fillStyle = CURSOR_COLOR;
     cursorCtx.scale(this.containerScale, this.containerScale);
-  }
+  };
 
   /**
    * offset characters for given x/y
@@ -120,12 +122,5 @@ export class TypeWriter {
   focusText = () => {
     textInput.innerHTML = '';
     textInput.focus();
-    // const p = textInput;
-    // const s = window.getSelection();
-    // const r = document.createRange();
-    // r.setStart(p, p.childElementCount);
-    // r.setEnd(p, p.childElementCount);
-    // s.removeAllRanges();
-    // s.addRange(r);
-  }
+  };
 }

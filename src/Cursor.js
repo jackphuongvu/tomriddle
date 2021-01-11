@@ -15,7 +15,7 @@ const paddingVec = (function getPaddingVec() {
   const _x = Math.min(100, window.innerWidth / 8);
   const _y = Math.min(_x, window.innerHeight / 8);
   return new Vector(_x, _y);
-}());
+})();
 
 // top-left
 const initialPosVec = paddingVec;
@@ -31,25 +31,26 @@ export class Cursor {
 
   position = initialPosVec;
 
-  /**
-   * @param {import('./Typewriter').TypeWriter} typewriter
-   */
-  constructor(typewriter) {
-    this.typewriter = typewriter;
+  constructor() {
     this.reset();
   }
 
   reset = () => {
     this.position = initialPosVec;
-  }
+  };
 
   clear = () => {
     const _pos = this.position.subtract(1).divideBy(containerScale);
 
     // rect appears to have a border on the bottom-right
-    cursorCtx.clearRect(_pos.x, _pos.y, cursorWidth + 2, cursorHeight + 2);
+    const width = cursorWidth + 4;
+    const height = cursorHeight + 4;
+    cursorCtx.clearRect(_pos.x, _pos.y, width, height);
   };
 
+  /**
+   * @param {Vector} vec
+   */
   update = (vec) => {
     this.clear();
 
@@ -66,7 +67,7 @@ export class Cursor {
     const _pos = this.position.divideBy(containerScale);
 
     cursorCtx.fillRect(_pos.x, _pos.y, cursorWidth, cursorHeight);
-  }
+  };
 
   draw = () => {
     this._draw();
@@ -77,26 +78,31 @@ export class Cursor {
     }
     this._opacity = GLOBAL_ALPHA;
     this._cursorTimeout = window.setTimeout(this.fadeOut.bind(this), 2200);
-  }
+  };
 
   nudge = (vec) => {
     this.update(this.position.add(vec.multiplyBy(containerScale)));
   };
 
   moveleft = () => {
-    this.nudge(new Vector(-letterWidth, 0));
+    this.nudge(new Vector(-cursorWidth, 0));
   };
 
   moveright = () => {
-    this.nudge(new Vector(letterWidth, 0));
+    this.nudge(new Vector(cursorWidth, 0));
   };
 
   moveup = () => {
-    this.nudge(new Vector(0, -lineHeight));
+    this.nudge(new Vector(0, -cursorHeight));
   };
 
   movedown = () => {
-    this.nudge(new Vector(0, lineHeight));
+    this.nudge(new Vector(0, cursorHeight));
+  };
+
+  /** centers on mouse click */
+  moveToClick = (vec) => {
+    this.update(vec.subtract(new Vector(cursorWidth / 2, cursorHeight / 2)));
   };
 
   addtab = () => {
@@ -138,5 +144,5 @@ export class Cursor {
     39: this.moveright.bind(this),
     40: this.movedown.bind(this),
     13: this.newline.bind(this),
-  }
+  };
 }
