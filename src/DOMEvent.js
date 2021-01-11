@@ -11,7 +11,7 @@ const stamp = (function getStamp() {
     }
     return obj[stampKey];
   };
-}());
+})();
 
 /**
  * Inspired by LeafletJS

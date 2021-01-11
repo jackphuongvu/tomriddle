@@ -16,7 +16,7 @@ function asyncForLoop(arr, processFn, cb) {
     const start = +new Date();
     do {
       processFn.call(this, arr[i], i);
-    // eslint-disable-next-line no-plusplus
+      // eslint-disable-next-line no-plusplus
     } while (++i < len && +new Date() - start < 50);
 
     if (i < len) {
