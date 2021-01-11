@@ -5,6 +5,8 @@
  */
 import DOMEvent from './DOMEvent';
 import App from './App';
+import './analytics';
+import './sentry';
 
 const splashAnimTime = 1500;
 
