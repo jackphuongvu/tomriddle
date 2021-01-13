@@ -59,6 +59,7 @@ export class TypeWriter {
       char.draw();
     }
 
+    // TODO: this needs to be debounced somehow
     asyncForLoop(this.chars, processFn);
   };
 
@@ -93,11 +94,14 @@ export class TypeWriter {
    * useful for redrawing (b/c needs resetting)
    */
   reposition = (vec) => {
-    this.canvasOffset._add(vec || new Vector(0, 0));
+    if (vec instanceof Vector) {
+      this.canvasOffset._add(vec);
+    }
 
     container.style.left = '0px';
     container.style.top = '0px';
 
+    // TODO: DEBOUNCED
     this.resetCanvases();
     this.redraw();
   };

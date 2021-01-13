@@ -14,13 +14,15 @@ const stamp = (function getStamp() {
 })();
 
 /**
- * Inspired by LeafletJS
+ * TODO: REMOVE
+ * @deprecated
  */
 function DOMEvent() {
   this.getId = function getId(_obj, type, fn, context) {
     return type + stamp(fn) + (context ? `_${stamp(context)}` : '');
   };
 
+  /** @deprecated */
   this.on = function on(obj, type, fn, context) {
     const id = this.getId(obj, type, fn, context);
     const handler = function handler(e) {
@@ -41,6 +43,7 @@ function DOMEvent() {
     obj[eventsKey][id] = handler;
   };
 
+  /** @deprecated */
   this.off = function off(obj, type, fn, context) {
     const id = this.getId.apply(this, [obj, type, fn, context]);
     const handler = obj[eventsKey] && obj[eventsKey][id];
