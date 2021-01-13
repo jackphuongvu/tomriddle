@@ -1,12 +1,12 @@
-import DOMEvent from './DOMEvent';
-import MultiAudio from './MultiAudio';
-import NO_AUDIO from './NO_AUDIO';
+import DOMEvent from './utils/DOMEvent';
+import MultiAudio from './utils/MultiAudio';
+import NO_AUDIO from './helpers/NO_AUDIO';
 import { TypeWriter } from './Typewriter';
-import Vector from './Vector';
-import Debugger from './Debugger';
+import Vector from './utils/Vector';
+import Debugger from './utils/Debugger';
+import { container, textInput } from './helpers/getElements';
 
 const ENTER = 13;
-const textInput = document.getElementById('text-input');
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
 const IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
@@ -218,8 +218,8 @@ class App {
 
     const _position = this.getPositionFromEvent(e)._subtract(this.originalPos);
 
-    this.container.style.left = `${_position.x}px`;
-    this.container.style.top = `${_position.y}px`;
+    container.style.left = `${_position.x}px`;
+    container.style.top = `${_position.y}px`;
     this.typewriter.cursor.clear();
   };
 

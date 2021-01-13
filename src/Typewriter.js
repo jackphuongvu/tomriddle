@@ -1,16 +1,16 @@
-import Vector from './Vector';
-import DOMEvent from './DOMEvent';
-import asyncForLoop from './asyncForLoop';
+import Vector from './utils/Vector';
+import DOMEvent from './utils/DOMEvent';
+import asyncForLoop from './utils/asyncForLoop';
 import { Cursor } from './Cursor';
 import { Character } from './Character';
+import {
+  container,
+  cursorCtx,
+  textCtx,
+  textInput,
+} from './helpers/getElements';
 
 const FONT_SIZE = 26;
-const container = document.getElementById('container');
-const textCanvas = document.getElementById('text-canvas');
-const textCtx = textCanvas.getContext('2d', { alpha: true });
-const cursorCanvas = document.getElementById('cursor-canvas');
-const cursorCtx = cursorCanvas.getContext('2d');
-const textInput = document.getElementById('text-input');
 const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
 const TEXT_COLOR = '#150904';
 const CURSOR_COLOR = '#4787ea';

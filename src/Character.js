@@ -1,11 +1,10 @@
-import Vector from './Vector';
+import { textCtx } from './helpers/getElements';
+import Vector from './utils/Vector';
 
 const ALPHA_MARGIN = 0.06;
 const ROTATE_MARGIN = 0.05;
 const TRANSLATE_MARGIN = 0.2;
 const GLOBAL_ALPHA = 0.72;
-const textCanvas = document.getElementById('text-canvas');
-const textCtx = textCanvas.getContext('2d', { alpha: true });
 
 export class Character extends Vector {
   /**

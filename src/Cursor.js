@@ -1,11 +1,9 @@
-import Vector from './Vector';
+import { cursorCtx, textInput } from './helpers/getElements';
+import Vector from './utils/Vector';
 
 const FONT_SIZE = 26;
 const containerScale = 1;
 const GLOBAL_ALPHA = 0.72;
-const cursorCanvas = document.getElementById('cursor-canvas');
-const textInput = document.getElementById('text-input');
-const cursorCtx = cursorCanvas.getContext('2d');
 const letterSize = parseInt(Math.min(FONT_SIZE, window.innerWidth / 17), 10);
 const letterWidth = (letterSize * 12) / 20;
 const lineHeight = letterSize + 8;

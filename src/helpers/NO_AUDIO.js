@@ -21,12 +21,23 @@ const NO_AUDIO = {
   40: 'DOWN',
   45: 'INSERT',
   46: 'DEL',
+  91: 'WIN',
+  92: 'WIN',
+  112: 'F1',
+  113: 'F2',
+  114: 'F3',
   115: 'F4',
+  116: 'F5',
   117: 'F6',
+  118: 'F7',
   119: 'F8',
   120: 'F9',
   121: 'F10',
+  122: 'F11',
   123: 'F12',
+  144: 'NUMLOCK',
+  145: 'SCROLLLOCK',
+  224: 'CMD',
 };
 
 export default NO_AUDIO;

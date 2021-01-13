@@ -3,10 +3,10 @@
  * Inspired by a girl, Ms. Jayme Bergman
  *
  */
-import DOMEvent from './DOMEvent';
+import DOMEvent from './utils/DOMEvent';
 import App from './App';
-import './analytics';
-import './sentry';
+import './tracking/analytics';
+import './tracking/sentry';
 
 const splashAnimTime = 1500;
 
