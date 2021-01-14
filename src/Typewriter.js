@@ -1,6 +1,5 @@
 import Vector from './utils/Vector';
 import DOMEvent from './utils/DOMEvent';
-import asyncForLoop from './utils/asyncForLoop';
 import { Cursor } from './Cursor';
 import { Character } from './Character';
 import {
@@ -9,6 +8,7 @@ import {
   textCtx,
   textInput,
 } from './helpers/getElements';
+import debounce from './utils/debounce';
 
 const FONT_SIZE = 26;
 const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
@@ -36,7 +36,7 @@ export class TypeWriter {
 
     this.cursor = new Cursor();
 
-    DOMEvent.on(window, 'resize', this.reposition);
+    DOMEvent.on(window, 'resize', this.debouncedReposition);
   }
 
   addCharacter = (_chars, _x, _y) => {
@@ -55,12 +55,7 @@ export class TypeWriter {
   };
 
   redraw = () => {
-    function processFn(char) {
-      char.draw();
-    }
-
-    // TODO: this needs to be debounced somehow
-    asyncForLoop(this.chars, processFn);
+    this.chars.forEach((char) => char.draw());
   };
 
   resetCanvases = () => {
@@ -101,10 +96,11 @@ export class TypeWriter {
     container.style.left = '0px';
     container.style.top = '0px';
 
-    // TODO: DEBOUNCED
     this.resetCanvases();
     this.redraw();
   };
+
+  debouncedReposition = debounce(this.reposition, 100);
 
   /**
    * back to original blank canvas
