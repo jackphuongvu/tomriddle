@@ -1,5 +1,4 @@
 import Vector from './utils/Vector';
-import DOMEvent from './utils/DOMEvent';
 import { Cursor } from './Cursor';
 import { Character } from './Character';
 import {
@@ -36,7 +35,7 @@ export class TypeWriter {
 
     this.cursor = new Cursor();
 
-    DOMEvent.on(window, 'resize', this.debouncedReposition);
+    window.addEventListener('resize', this.debouncedReposition);
   }
 
   addCharacter = (_chars, _x, _y) => {

@@ -1,4 +1,3 @@
-import DOMEvent from './utils/DOMEvent';
 import MultiAudio from './utils/MultiAudio';
 import NO_AUDIO from './helpers/NO_AUDIO';
 import { TypeWriter } from './Typewriter';
@@ -83,21 +82,22 @@ class App {
 
     let key;
     let fnc;
+    const method = onoff === 'on' ? 'addEventListener' : 'removeEventListener';
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (key in documentEvents) {
       fnc = documentEvents[key];
-      DOMEvent[onoff](document, key, fnc);
+      document[method](key, fnc);
     }
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (key in cursorEvents) {
       fnc = cursorEvents[key];
-      DOMEvent[onoff](textInput, key, fnc);
+      textInput[method](key, fnc);
     }
 
     if (IS_IOS) {
-      DOMEvent[onoff](document, 'touchstart', this.iosTouchStart);
+      document[method]('touchstart', this.iosTouchStart);
     }
   };
 
@@ -190,9 +190,9 @@ class App {
     this.mouseuptimeout = window.setTimeout(() => {
       this.originalPos = this.originalPos || this.getPositionFromEvent(e);
 
-      DOMEvent.on(document, 'mousemove', this.handleMouseMove);
-      DOMEvent.on(document, 'touchmove', this.handleMouseMove);
-      DOMEvent.on(document, 'mouseup', this.removeMoveEvent);
+      document.addEventListener('mousemove', this.handleMouseMove);
+      document.addEventListener('touchmove', this.handleMouseMove);
+      document.addEventListener('mouseup', this.removeMoveEvent);
     }, this.mousemovedelay);
   };
 
@@ -231,9 +231,9 @@ class App {
 
   removeMoveEvent = () => {
     window.clearTimeout(this.mouseuptimeout);
-    DOMEvent.off(document, 'mousemove', this.handleMouseMove);
-    DOMEvent.off(document, 'touchmove', this.handleMouseMove);
-    DOMEvent.off(document, 'mouseup', this.removeMoveEvent);
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('touchmove', this.handleMouseMove);
+    document.removeEventListener('mouseup', this.removeMoveEvent);
   };
 
   getPositionFromEvent = (e) => {
