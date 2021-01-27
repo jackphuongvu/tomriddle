@@ -92,8 +92,8 @@ export class TypeWriter {
       this.canvasOffset._add(vec);
     }
 
-    container.style.left = '0px';
-    container.style.top = '0px';
+    // avoid Cumulative Layout Shift: https://web.dev/cls/
+    container.style.transform = 'translate(0, 0)';
 
     this.resetCanvases();
     this.redraw();

@@ -55,8 +55,11 @@ export class Cursor {
     this.position = vec;
 
     setTimeout(() => {
-      textInput.style.left = `${Math.min(vec.x, window.innerWidth)}px`;
-      textInput.style.top = `${Math.min(vec.y, window.innerHeight)}px`;
+      const x = `${Math.min(vec.x, window.innerWidth)}px`;
+      const y = `${Math.min(vec.y, window.innerHeight)}px`;
+
+      // avoid Cumulative Layout Shift: https://web.dev/cls/
+      textInput.style.transform = `translate(${x}, ${y})`;
     }, 0);
     this.draw();
   };
