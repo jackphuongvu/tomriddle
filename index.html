@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title>Typewrite Something</title>
@@ -9,9 +9,9 @@
     />
     <meta
       name="keywords"
-      content="typewriter, online, simulator, writing, poetry, jayme, bergman, jane, porter, bozdoz, creative"
+      content="typewriter, online, simulator, writing, poetry, jane, porter, bozdoz, creative"
     />
-    <meta name="author" content="Benjamin J DeLong" />
+    <meta name="author" content="@bozdoz" />
 
     <!-- Chrome, Firefox OS and Opera -->
     <meta name="theme-color" content="#f6f3e3" />
@@ -61,18 +61,20 @@
       content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"
     />
 
+    <link rel="manifest" href="/manifest.json" />
+
     <link rel="icon" href="/favicon.ico" />
     <link rel="stylesheet" href="/static/style.css" />
   </head>
 
   <body>
-    <main role="main" class="main" id="main">
+    <main class="main" id="main">
+      <noscript>You need to enable JavaScript to run this app.</noscript>
       <div id="container">
         <canvas id="text-canvas"></canvas>
+
         <canvas id="cursor-canvas"></canvas>
 
-        <!-- password field disables swiping on mobile
-				and fixes keyup events -->
         <div id="text-input" contenteditable tabindex="0"></div>
       </div>
       <aside id="splash">
