@@ -1,8 +1,3 @@
-// I don't know why these are here
-// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioCtx = new AudioContext();
-
 function MultiAudio(src, instances = 5) {
   const output = [];
   const Audio = window.Audio || function Audio() {};
