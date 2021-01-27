@@ -1,6 +1,7 @@
 {
-  "short_name": "TypewriteSomething",
-  "name": "TypewriteSomething",
+  "short_name": "typewritesomething",
+  "name": "Typewrite Something",
+  "description": "A minimalist typewriter simulator to help creative writing",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +19,23 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/?source=pwa",
+  "background_color": "#f6f3e3",
   "display": "standalone",
+  "scope": "/",
   "theme_color": "#f6f3e3",
-  "background_color": "#f6f3e3"
+  "shortcuts": [
+    {
+      "name": "Start Typing",
+      "short_name": "Start",
+      "description": "Start typing on the typewriter simulator",
+      "url": "/?source=pwa&shortcut=start",
+      "icons": [
+        {
+          "src": "/static/img/logo-on-bg-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
 }
