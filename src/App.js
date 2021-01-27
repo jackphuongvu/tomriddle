@@ -8,30 +8,29 @@ import { container, textInput } from './helpers/getElements';
 const ENTER = 13;
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
-const IS_IOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
 
 const events = [];
 const eventLog = new Debugger();
 
 eventLog.formatter((message) => {
   events.push(message);
-  if (events.length > 3) {
+  if (events.length > 4) {
     events.shift();
   }
 
   return events.join(', ');
 });
 
+const getPositionFromEvent = (e) => {
+  const touch = (e.touches && e.touches[0]) || {};
+  const _x = e.clientX || touch.clientX;
+  const _y = e.clientY || touch.clientY;
+
+  return new Vector(_x, _y);
+};
+
 class App {
-  mouseuptimeout;
-
-  mousemovedelay;
-
-  mousedowntime;
-
-  clickdelay;
-
-  originalPos;
+  mousemovedelay = 150;
 
   running = false;
 
@@ -39,19 +38,10 @@ class App {
     this.typewriter = new TypeWriter();
   }
 
-  reset = () => {
-    this.mouseuptimeout = 0;
-    this.mousemovedelay = 150;
-    this.mousedowntime = 0;
-    this.clickdelay = 150;
-    this.originalPos = 0;
-  };
-
   start = () => {
     if (this.running) return;
 
     this.running = true;
-    this.reset();
     this.typewriter.reset();
     this.events('on');
     this.typewriter.focusText();
@@ -94,10 +84,6 @@ class App {
     for (key in cursorEvents) {
       fnc = cursorEvents[key];
       textInput[method](key, fnc);
-    }
-
-    if (IS_IOS) {
-      document[method]('touchstart', this.iosTouchStart);
     }
   };
 
@@ -148,100 +134,81 @@ class App {
     this.typewriter.focusText();
   };
 
-  handleMouseUp = (e) => {
-    eventLog.log('mouseup');
-    this.removeMoveEvent();
-
-    if (this.originalPos) {
-      const _position = this.getPositionFromEvent(e);
-
-      _position._subtract(this.originalPos);
-
-      this.typewriter.reposition(_position);
-      this.originalPos = null;
-    } else if (Date.now() - this.mousedowntime <= this.clickdelay) {
-      this.updateCursor(e);
-    }
-  };
-
-  handleTouchEnd = (e) => {
-    eventLog.log('touchend');
-    if (!e.touches.length) {
-      if (e.changedTouches.length) {
-        e.clientX = e.changedTouches[0].clientX;
-        e.clientY = e.changedTouches[0].clientY;
-      } else {
-        this.removeMoveEvent();
-        return;
-      }
-    }
-
-    this.handleMouseUp(e);
-  };
-
   handleMouseDown = (e) => {
     eventLog.log('mousedown');
     // ignore right click
     if (e.button === 2) return;
 
-    // single finger or mouse
-    this.mousedowntime = new Date();
-
+    // mousemove would be expensive, so we add it only after the mouse is down
     this.mouseuptimeout = window.setTimeout(() => {
-      this.originalPos = this.originalPos || this.getPositionFromEvent(e);
+      this.mouseDownStartPos = getPositionFromEvent(e);
 
-      document.addEventListener('mousemove', this.handleMouseMove);
       document.addEventListener('touchmove', this.handleMouseMove);
-      document.addEventListener('mouseup', this.removeMoveEvent);
+      document.addEventListener('mousemove', this.handleMouseMove);
     }, this.mousemovedelay);
   };
 
   handleTouchStart = (e) => {
     eventLog.log('touchstart');
     e.preventDefault();
+    e.stopPropagation();
+
     if (e.touches && e.touches.length === 2) {
       // todo: work on zooming
+      // (https://codepen.io/bozdoz/pen/xxEmJyx?editors=0011)
       return false;
     }
-    e.stopPropagation();
     return this.handleMouseDown(e);
-  };
-
-  iosTouchStart = (e) => {
-    eventLog.log('ios touch start');
-    this.updateCursor(e);
   };
 
   handleMouseMove = (e) => {
     eventLog.log('mouse move');
-    if (!this.originalPos) return;
+    const _position = getPositionFromEvent(e)._subtract(this.mouseDownStartPos);
 
-    const _position = this.getPositionFromEvent(e)._subtract(this.originalPos);
+    // fake canvas moving by cheaply altering css
+    // TODO: move to util function
+    const x = `${_position.x}px`;
+    const y = `${_position.y}px`;
 
-    container.style.left = `${_position.x}px`;
-    container.style.top = `${_position.y}px`;
+    // avoid Cumulative Layout Shift: https://web.dev/cls/
+    container.style.transform = `translate(${x}, ${y})`;
+
     this.typewriter.cursor.clear();
   };
 
+  handleMouseUp = (e) => {
+    eventLog.log('mouseup');
+    this.removeMoveEvent();
+
+    if (this.mouseDownStartPos) {
+      // reposition canvas if mouse moved
+      const _position = getPositionFromEvent(e).subtract(
+        this.mouseDownStartPos
+      );
+
+      this.typewriter.reposition(_position);
+      this.mouseDownStartPos = null;
+    } else {
+      // act as if it were just a click handler
+      this.updateCursor(e);
+    }
+  };
+
+  handleTouchEnd = (e) => {
+    eventLog.log('touchend');
+    this.handleMouseUp(e);
+  };
+
   updateCursor = (e) => {
-    const _position = this.getPositionFromEvent(e);
+    const _position = getPositionFromEvent(e);
     this.typewriter.cursor.moveToClick(_position);
     this.typewriter.focusText();
   };
 
   removeMoveEvent = () => {
     window.clearTimeout(this.mouseuptimeout);
-    document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('touchmove', this.handleMouseMove);
-    document.removeEventListener('mouseup', this.removeMoveEvent);
-  };
-
-  getPositionFromEvent = (e) => {
-    const touch = (e.touches && e.touches[0]) || {};
-    const { position } = this.typewriter.cursor;
-    const _x = e.clientX || touch.clientX || position.x;
-    const _y = e.clientY || touch.clientY || position.y;
-    return new Vector(_x, _y);
+    document.removeEventListener('mousemove', this.handleMouseMove);
   };
 }
 
