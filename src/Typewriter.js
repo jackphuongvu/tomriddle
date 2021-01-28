@@ -8,6 +8,7 @@ import {
   textInput,
 } from './helpers/getElements';
 import debounce from './utils/debounce';
+import positionElem from './utils/positionElem';
 
 const FONT_SIZE = 26;
 const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
@@ -92,8 +93,7 @@ export class TypeWriter {
       this.canvasOffset._add(vec);
     }
 
-    // avoid Cumulative Layout Shift: https://web.dev/cls/
-    container.style.transform = 'translate(0, 0)';
+    positionElem(container, { x: 0, y: 0 });
 
     this.resetCanvases();
     this.redraw();

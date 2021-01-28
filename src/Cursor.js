@@ -1,4 +1,5 @@
 import { cursorCtx, textInput } from './helpers/getElements';
+import positionElem from './utils/positionElem';
 import Vector from './utils/Vector';
 
 const FONT_SIZE = 26;
@@ -55,11 +56,10 @@ export class Cursor {
     this.position = vec;
 
     setTimeout(() => {
-      const x = `${Math.min(vec.x, window.innerWidth)}px`;
-      const y = `${Math.min(vec.y, window.innerHeight)}px`;
-
-      // avoid Cumulative Layout Shift: https://web.dev/cls/
-      textInput.style.transform = `translate(${x}, ${y})`;
+      positionElem(textInput, {
+        x: Math.min(vec.x, window.innerWidth),
+        y: Math.min(vec.y, window.innerHeight),
+      });
     }, 0);
     this.draw();
   };

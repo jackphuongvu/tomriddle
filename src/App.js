@@ -2,7 +2,7 @@ import MultiAudio from './utils/MultiAudio';
 import NO_AUDIO from './helpers/NO_AUDIO';
 import { TypeWriter } from './Typewriter';
 import { container, textInput } from './helpers/getElements';
-import positionElem from './utils/reposition';
+import positionElem from './utils/positionElem';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 
 const ENTER = 13;
