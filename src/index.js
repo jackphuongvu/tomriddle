@@ -24,7 +24,16 @@ window.addEventListener('load', () => {
 // Register service worker to control making site work offline
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then(() => {
-    console.log('Service Worker Registered');
-  });
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(() => {
+      // eslint-disable-next-line no-console
+      console.log('Service Worker Registered');
+    })
+    .catch((e) => {
+      // eslint-disable-next-line no-console
+      console.error('Service Worker failed');
+      // eslint-disable-next-line no-console
+      console.error(e);
+    });
 }
