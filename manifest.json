@@ -21,7 +21,7 @@
   ],
   "start_url": "/?source=pwa",
   "background_color": "#f6f3e3",
-  "display": "standalone",
+  "display": "fullscreen",
   "scope": "/",
   "theme_color": "#f6f3e3",
   "shortcuts": [
