@@ -1,33 +1,13 @@
 import MultiAudio from './utils/MultiAudio';
 import NO_AUDIO from './helpers/NO_AUDIO';
 import { TypeWriter } from './Typewriter';
-import Vector from './utils/Vector';
-import Debugger from './utils/Debugger';
 import { container, textInput } from './helpers/getElements';
+import positionElem from './utils/reposition';
+import getPositionFromEvent from './utils/getPositionFromEvent';
 
 const ENTER = 13;
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
-
-const events = [];
-const eventLog = new Debugger();
-
-eventLog.formatter((message) => {
-  events.push(message);
-  if (events.length > 4) {
-    events.shift();
-  }
-
-  return events.join(', ');
-});
-
-const getPositionFromEvent = (e) => {
-  const touch = (e.touches && e.touches[0]) || {};
-  const _x = e.clientX || touch.clientX;
-  const _y = e.clientY || touch.clientY;
-
-  return new Vector(_x, _y);
-};
 
 class App {
   mousemovedelay = 150;
@@ -60,7 +40,7 @@ class App {
   events = (onoff = 'on') => {
     const documentEvents = {
       mouseup: this.handleMouseUp,
-      touchend: this.handleTouchEnd,
+      touchend: this.handleMouseUp,
       mousedown: this.handleMouseDown,
       touchstart: this.handleTouchStart,
     };
@@ -89,7 +69,6 @@ class App {
 
   /** keydown handles audio */
   handleKeyDown = (e) => {
-    eventLog.log('keydown');
     const noAudio = NO_AUDIO[e.which];
 
     if (!noAudio) {
@@ -116,7 +95,6 @@ class App {
    * keyup handles character input and navigation
    */
   handleKeyUp = (e) => {
-    eventLog.log('keyup');
     const nav = this.typewriter.cursor.navButtons[e.which];
     const value = e.key;
     const isLetter = value.length === 1;
@@ -130,12 +108,10 @@ class App {
   };
 
   focus = () => {
-    eventLog.log('focus');
     this.typewriter.focusText();
   };
 
   handleMouseDown = (e) => {
-    eventLog.log('mousedown');
     // ignore right click
     if (e.button === 2) return;
 
@@ -149,7 +125,6 @@ class App {
   };
 
   handleTouchStart = (e) => {
-    eventLog.log('touchstart');
     e.preventDefault();
     e.stopPropagation();
 
@@ -162,46 +137,38 @@ class App {
   };
 
   handleMouseMove = (e) => {
-    eventLog.log('mouse move');
     const _position = getPositionFromEvent(e)._subtract(this.mouseDownStartPos);
 
     // fake canvas moving by cheaply altering css
     // TODO: move to util function
-    const x = `${_position.x}px`;
-    const y = `${_position.y}px`;
-
-    // avoid Cumulative Layout Shift: https://web.dev/cls/
-    container.style.transform = `translate(${x}, ${y})`;
+    positionElem(container, _position);
 
     this.typewriter.cursor.clear();
   };
 
   handleMouseUp = (e) => {
-    eventLog.log('mouseup');
     this.removeMoveEvent();
+
+    const position = getPositionFromEvent(e);
 
     if (this.mouseDownStartPos) {
       // reposition canvas if mouse moved
-      const _position = getPositionFromEvent(e).subtract(
-        this.mouseDownStartPos
-      );
+      position._subtract(this.mouseDownStartPos);
 
-      this.typewriter.reposition(_position);
+      this.typewriter.reposition(position);
       this.mouseDownStartPos = null;
     } else {
       // act as if it were just a click handler
-      this.updateCursor(e);
+      this.updateCursor(position);
     }
   };
 
-  handleTouchEnd = (e) => {
-    eventLog.log('touchend');
-    this.handleMouseUp(e);
-  };
-
-  updateCursor = (e) => {
-    const _position = getPositionFromEvent(e);
-    this.typewriter.cursor.moveToClick(_position);
+  /**
+   * Updates cursor to a given position
+   * @param {Vector} position
+   */
+  updateCursor = (position) => {
+    this.typewriter.cursor.moveToClick(position);
     this.typewriter.focusText();
   };
 
