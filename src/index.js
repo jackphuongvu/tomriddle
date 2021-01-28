@@ -20,3 +20,11 @@ window.addEventListener('load', () => {
   // wait for splash transition
   setTimeout(App.start.bind(App), splashAnimTime);
 });
+
+// Register service worker to control making site work offline
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(() => {
+    console.log('Service Worker Registered');
+  });
+}
