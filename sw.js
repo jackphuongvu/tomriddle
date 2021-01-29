@@ -1,8 +1,10 @@
+const CACHE_NAME = 'typewritesomething-v1.0.0';
+
 /* eslint-disable no-restricted-globals */
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches
-      .open('typewritesomething')
+      .open(CACHE_NAME)
       .then((cache) =>
         cache.addAll([
           '/',

@@ -24,6 +24,10 @@
     {
       "src": "./robots.txt",
       "use": "@now/static"
+    },
+    {
+      "src": "./sw.js",
+      "use": "@now/static"
     }
   ],
   "github": {
