@@ -102,8 +102,12 @@ class App {
     if (nav) {
       nav();
     } else if (isLetter) {
-      this.typewriter.addCharacter(value);
+      // get letter from text field, so it works like a text field
+      // e.g. press SHIFT, press A, unpress SHIFT, unpress A makes e.key === 'a'
+      const letter = textInput.innerText[0];
+      this.typewriter.addCharacter(letter);
     }
+
     this.typewriter.focusText();
   };
 
