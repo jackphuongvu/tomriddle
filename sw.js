@@ -31,20 +31,35 @@ self.addEventListener('install', function install(e) {
 
 self.addEventListener('fetch', function handleFetch(e) {
   e.respondWith(
-    caches
-      .match(e.request)
-      .then(function getCache(response) {
-        if (response) {
-          console.error('cached');
-          return response;
+    caches.match(e.request).then(function getCache(response) {
+      if (response) {
+        console.error('cached');
+        return response;
+      }
+      console.error('NOT cached');
+      return fetch(e.request).then(function fetched(_resp) {
+        // Check if we received a valid response
+        if (!_resp || _resp.status !== 200 || _resp.type !== 'basic') {
+          console.log('invalid response');
+          return _resp;
         }
-        console.error('NOT cached');
-        return fetch(e.request);
-      })
-      .catch(function fail(err) {
-        console.error(err);
 
-        return fetch(e.request);
-      })
+        // IMPORTANT: Clone the response. A response is a stream
+        // and because we want the browser to consume the response
+        // as well as the cache consuming the response, we need
+        // to clone it so we have two streams.
+        const responseToCache = _resp.clone();
+
+        caches.open(CACHE_NAME).then(function putCache(cache) {
+          console.log('putting the cache');
+          cache.put(e.request, responseToCache);
+          console.log('put the cache');
+        });
+
+        console.log('valid response?', e.request);
+
+        return _resp;
+      });
+    })
   );
 });
