@@ -11,7 +11,6 @@ import debounce from './utils/debounce';
 import positionElem from './utils/positionElem';
 
 const FONT_SIZE = 26;
-const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
 const TEXT_COLOR = '#150904';
 const CURSOR_COLOR = '#4787ea';
 const GLOBAL_ALPHA = 0.72;
@@ -61,15 +60,16 @@ export class TypeWriter {
   resetCanvases = () => {
     [textCtx, cursorCtx].forEach((ctx) => {
       const { canvas } = ctx;
+      const { devicePixelRatio = 1, innerWidth, innerHeight } = window;
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-      canvas.width = window.innerWidth * DEVICE_PIXEL_RATIO;
-      canvas.height = window.innerHeight * DEVICE_PIXEL_RATIO;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+      canvas.width = innerWidth * devicePixelRatio;
+      canvas.height = innerHeight * devicePixelRatio;
+      canvas.style.width = `${innerWidth}px`;
+      canvas.style.height = `${innerHeight}px`;
 
-      ctx.scale(DEVICE_PIXEL_RATIO, DEVICE_PIXEL_RATIO);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
 
       ctx.globalAlpha = GLOBAL_ALPHA;
     });
@@ -113,13 +113,15 @@ export class TypeWriter {
 
     this.reposition();
     this.cursor.draw();
-    // eslint-disable-next-line no-use-before-define
+    this.emptyText();
     this.focusText();
   };
 
-  /** iphone can't focus properly */
-  focusText = () => {
+  emptyText = () => {
     textInput.innerHTML = '';
+  };
+
+  focusText = () => {
     textInput.focus();
   };
 }
