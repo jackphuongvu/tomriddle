@@ -138,12 +138,16 @@ export class Cursor {
 
   /** mapping for keys that move cursor */
   navButtons = {
-    8: this.moveleft.bind(this),
-    9: this.addtab.bind(this),
-    37: this.moveleft.bind(this),
-    38: this.moveup.bind(this),
-    39: this.moveright.bind(this),
-    40: this.movedown.bind(this),
-    13: this.newline.bind(this),
+    Backspace: this.moveleft.bind(this),
+    Tab: this.addtab.bind(this),
+    ArrowLeft: this.moveleft.bind(this),
+    ArrowUp: this.moveup.bind(this),
+    ArrowRight: this.moveright.bind(this),
+    ArrowDown: this.movedown.bind(this),
+    Enter: this.newline.bind(this),
+  };
+
+  ignoreKeys = {
+    Shift: true,
   };
 }
