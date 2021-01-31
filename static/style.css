@@ -238,10 +238,10 @@ h5 {
   background: #f6f3e3;
   background: linear-gradient(
     to bottom,
-    #f9f6e8 0%,
+    #edd9aa 0%,
     #f6f3e3 30%,
-    #f6f3e3 70%,
-    #f9f6e8 100%
+    #f6f3e3 90%,
+    #e9dab4 100%
   );
   box-shadow: inset rgba(109, 78, 33, 0.2) 0em 0em 4em;
   position: absolute;
@@ -251,13 +251,27 @@ h5 {
   bottom: 0;
   text-align: center;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   justify-content: center;
+  margin-top: -20px;
   align-items: center;
   -moz-user-select: none;
   -webkit-user-select: none;
+  opacity: 1;
+}
+
+#splash.hide {
+  animation: fadeOut 0.3s ease-in-out 0s forwards;
   opacity: 0;
-  animation: fadeOut 1.5s ease-in-out 0s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 #splash h1,
@@ -268,6 +282,9 @@ h5 {
 }
 #splash h1 {
   font-size: 2.4em;
+}
+#splash h2 {
+  padding: 1rem;
 }
 
 canvas {
@@ -290,15 +307,4 @@ canvas {
   opacity: 0;
   overflow: hidden;
   white-space: nowrap;
-}
-
-@keyframes fadeOut {
-  45%,
-  75% {
-    opacity: 1;
-  }
-  0%,
-  100% {
-    opacity: 0;
-  }
 }
