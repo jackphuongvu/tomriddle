@@ -24,6 +24,7 @@ class App {
     this.running = true;
     this.typewriter.reset();
     this.events('on');
+    this.typewriter.emptyText();
     this.typewriter.focusText();
     this.typewriter.cursor.draw();
   };
@@ -48,6 +49,7 @@ class App {
       keydown: this.handleKeyDown,
       keyup: this.handleKeyUp,
       focus: this.focus,
+      keypress: this.handleKeyPress,
     };
 
     let key;
@@ -67,9 +69,13 @@ class App {
     }
   };
 
-  /** keydown handles audio */
+  /**
+   * keydown handles audio
+   * @param {KeyboardEvent} e
+   */
   handleKeyDown = (e) => {
-    const noAudio = NO_AUDIO[e.which];
+    const isMeta = e.altKey || e.ctrlKey || e.metaKey;
+    const noAudio = NO_AUDIO[e.which] || isMeta;
 
     if (!noAudio) {
       if (e.which === ENTER) {
@@ -92,22 +98,49 @@ class App {
   };
 
   /**
+   * HandleKeyPress
+   * @param {KeyboardEvent} e
+   */
+  handleKeyPress = (e) => {
+    const isMeta = e.altKey || e.ctrlKey || e.metaKey;
+    const disable = e.key === 'Tab' || e.key === 'Enter';
+
+    if (disable || isMeta) {
+      e.preventDefault();
+    }
+
+    return !disable;
+  };
+
+  /**
    * keyup handles character input and navigation
+   * @param {KeyboardEvent} e
    */
   handleKeyUp = (e) => {
-    const nav = this.typewriter.cursor.navButtons[e.which];
+    const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const value = e.key;
-    const isLetter = value.length === 1;
+    const nav = this.typewriter.cursor.navButtons[value];
+    const ignoreKey = this.typewriter.cursor.ignoreKeys[value];
+    const letters = textInput.innerText;
+
+    if (isMeta) {
+      // ignore if user is refreshing or navigating or something
+      this.typewriter.emptyText();
+
+      return;
+    }
+
+    if (ignoreKey) {
+      return;
+    }
 
     if (nav) {
       nav();
-    } else if (isLetter) {
-      // get letter from text field, so it works like a text field
-      // e.g. press SHIFT, press A, unpress SHIFT, unpress A makes e.key === 'a'
-      const letter = textInput.innerText[0];
-      this.typewriter.addCharacter(letter);
+    } else if (letters) {
+      this.typewriter.addCharacter(letters);
     }
 
+    this.typewriter.emptyText();
     this.typewriter.focusText();
   };
 
@@ -115,6 +148,10 @@ class App {
     this.typewriter.focusText();
   };
 
+  /**
+   * handleMouseDown
+   * @param {MouseEvent} e
+   */
   handleMouseDown = (e) => {
     // ignore right click
     if (e.button === 2) return;
@@ -128,6 +165,10 @@ class App {
     }, this.mousemovedelay);
   };
 
+  /**
+   * handleTouchStart
+   * @param {TouchEvent} e
+   */
   handleTouchStart = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -140,6 +181,10 @@ class App {
     return this.handleMouseDown(e);
   };
 
+  /**
+   * handleMouseMove
+   * @param {MouseEvent} e
+   */
   handleMouseMove = (e) => {
     const _position = getPositionFromEvent(e)._subtract(this.mouseDownStartPos);
 
@@ -150,6 +195,10 @@ class App {
     this.typewriter.cursor.clear();
   };
 
+  /**
+   * handleMouseUp
+   * @param {MouseEvent} e
+   */
   handleMouseUp = (e) => {
     this.removeMoveEvent();
 
