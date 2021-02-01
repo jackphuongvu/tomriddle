@@ -5,7 +5,6 @@ import { container, textInput } from './helpers/getElements';
 import positionElem from './utils/positionElem';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 
-const ENTER = 13;
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
 
@@ -18,7 +17,7 @@ class App {
     this.typewriter = new TypeWriter();
   }
 
-  start = () => {
+  start() {
     if (this.running) return;
 
     this.running = true;
@@ -27,16 +26,16 @@ class App {
     this.typewriter.emptyText();
     this.typewriter.focusText();
     this.typewriter.cursor.draw();
-  };
+  }
 
-  stop = () => {
+  stop() {
     if (!this.running) return;
     this.running = false;
 
     // kill events
     this.events('off');
     this.removeMoveEvent();
-  };
+  }
 
   events = (onoff = 'on') => {
     const documentEvents = {
@@ -78,7 +77,7 @@ class App {
     const noAudio = NO_AUDIO[e.which] || isMeta;
 
     if (!noAudio) {
-      if (e.which === ENTER) {
+      if (e.key === 'Enter') {
         newlineAudio.play();
       } else {
         keypressAudio.play();
@@ -117,15 +116,17 @@ class App {
    * @param {KeyboardEvent} e
    */
   handleKeyUp = (e) => {
+    const { typewriter } = this;
+    const { cursor } = typewriter;
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const value = e.key;
-    const nav = this.typewriter.cursor.navButtons[value];
-    const ignoreKey = this.typewriter.cursor.ignoreKeys[value];
+    const nav = cursor.navButtons[value];
+    const ignoreKey = cursor.ignoreKeys[value];
     const letters = textInput.innerText;
 
     if (isMeta) {
       // ignore if user is refreshing or navigating or something
-      this.typewriter.emptyText();
+      typewriter.emptyText();
 
       return;
     }
@@ -137,11 +138,11 @@ class App {
     if (nav) {
       nav();
     } else if (letters) {
-      this.typewriter.addCharacter(letters);
+      typewriter.addCharacter(letters);
     }
 
-    this.typewriter.emptyText();
-    this.typewriter.focusText();
+    typewriter.emptyText();
+    typewriter.focusText();
   };
 
   focus = () => {
@@ -153,6 +154,7 @@ class App {
    * @param {MouseEvent} e
    */
   handleMouseDown = (e) => {
+    // TODO: add menu somehow somewhere
     // ignore right click
     if (e.button === 2) return;
 
@@ -189,7 +191,6 @@ class App {
     const _position = getPositionFromEvent(e)._subtract(this.mouseDownStartPos);
 
     // fake canvas moving by cheaply altering css
-    // TODO: move to util function
     positionElem(container, _position);
 
     this.typewriter.cursor.clear();
