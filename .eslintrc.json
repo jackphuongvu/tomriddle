@@ -1,19 +1,19 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
-    },
-    "extends": [
-        "airbnb-base"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "rules": {
-        "no-underscore-dangle":"off"
-    },
-    "globals": {
-        "shake": "readonly"
-    }
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["airbnb-base", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-underscore-dangle": "off",
+    "import/prefer-default-export": "off",
+    "prettier/prettier": ["error"],
+    "no-restricted-syntax": "off"
+  },
+  "parser": "babel-eslint",
+  "plugins": ["prettier"]
 }

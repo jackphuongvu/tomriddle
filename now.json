@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json", 
+      "src": "package.json",
       "use": "@now/static-build"
     },
     {
@@ -15,6 +15,18 @@
     },
     {
       "src": "./favicon.ico",
+      "use": "@now/static"
+    },
+    {
+      "src": "./manifest.json",
+      "use": "@now/static"
+    },
+    {
+      "src": "./robots.txt",
+      "use": "@now/static"
+    },
+    {
+      "src": "./sw.js",
       "use": "@now/static"
     }
   ],
