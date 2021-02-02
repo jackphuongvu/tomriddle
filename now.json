@@ -1,13 +1,16 @@
 {
   "version": 2,
-  "name": "typewritesomething",
   "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build"
+    },
     {
       "src": "./index.html",
       "use": "@now/static"
     },
     {
-      "src": "./style.css",
+      "src": "./static/**",
       "use": "@now/static"
     },
     {
@@ -15,15 +18,15 @@
       "use": "@now/static"
     },
     {
-      "src": "./script.js",
+      "src": "./manifest.json",
       "use": "@now/static"
     },
     {
-      "src": "./img/*",
+      "src": "./robots.txt",
       "use": "@now/static"
     },
     {
-      "src": "./inc/*",
+      "src": "./sw.js",
       "use": "@now/static"
     }
   ],

@@ -1,27 +1,37 @@
 {
   "name": "typewritesomething",
-  "version": "0.5.2",
-  "description": "A minimalist typewriter simulator to help you write more creatively!",
-  "main": "script.js",
-  "dependencies": {},
+  "version": "1.0.0",
+  "description": "A minimalist typewriter simulator to help creative writing",
+  "private": true,
+  "dependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.12.11",
+    "@rollup/plugin-babel": "^5.2.2",
+    "@rollup/plugin-node-resolve": "^11.0.1",
+    "@rollup/plugin-replace": "^2.3.4",
+    "@sentry/browser": "^5.29.2",
+    "@sentry/tracing": "^5.29.2",
+    "rollup": "^2.36.1",
+    "rollup-plugin-terser": "^7.0.2"
+  },
   "devDependencies": {
-    "browser-sync": "*",
-    "casperjs": "*",
-    "gulp": "*",
-    "jshint": "*",
-    "phantomjs": "*",
-    "request": "2.68.x",
-    "minimist": "*",
-    "tunnel-agent": "*",
-    "cryptiles": "*",
-    "tough-cookie": "*",
-    "hoek": "*"
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "prettier": "^2.2.1",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-serve": "^1.0.4"
   },
   "scripts": {
-    "start": "gulp",
-    "test": "npm run test-hint && npm run test-casper",
-    "test-hint": "jshint ./script.js",
-    "test-casper": "casperjs test ./tests/casper.js"
+    "start": "rollup -c -w",
+    "build": "NODE_ENV=production rollup -c",
+    "lint": "eslint ./src"
   },
   "homepage": "https://typewritesomething.com",
   "repository": {

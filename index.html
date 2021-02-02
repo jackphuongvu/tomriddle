@@ -9,12 +9,11 @@
     />
     <meta
       name="keywords"
-      content="typewriter, online, simulator, writing, poetry, jayme, bergman, jane, porter, bozdoz, creative"
+      content="typewriter, online, simulator, writing, poetry, jane, porter, bozdoz, creative"
     />
-    <meta name="author" content="Benjamin J DeLong" />
+    <meta name="author" content="@bozdoz" />
 
-    <!-- Chrome, Firefox OS and Opera -->
-    <meta name="theme-color" content="#f6f3e3" />
+    <meta name="theme-color" content="#150904" />
 
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="Typewrite Something" />
@@ -24,7 +23,7 @@
     />
     <meta
       itemprop="image"
-      content="https://typewritesomething.com/img/logo-on-bg.png"
+      content="https://typewritesomething.com/static/img/logo-on-bg.png"
     />
 
     <!-- Twitter Card data -->
@@ -38,7 +37,7 @@
     <meta name="twitter:creator" content="@bozdoz" />
     <meta
       name="twitter:image:src"
-      content="https://typewritesomething.com/img/logo-on-bg.png"
+      content="https://typewritesomething.com/static/img/logo-on-bg.png"
     />
     <meta name="twitter:image:alt" content="Typewrite Something" />
 
@@ -48,7 +47,7 @@
     <meta property="og:url" content="https://typewritesomething.com/" />
     <meta
       property="og:image"
-      content="https://typewritesomething.com/img/logo-on-bg.png"
+      content="https://typewritesomething.com/static/img/logo-on-bg.png"
     />
     <meta
       property="og:description"
@@ -56,105 +55,66 @@
     />
     <meta property="og:site_name" content="Typewrite Something" />
 
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="https://typewritesomething.com/static/img/logo-on-bg-72.png"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="96x96"
+      href="https://typewritesomething.com/static/img/logo-on-bg-96.png"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="https://typewritesomething.com/static/img/logo-on-bg-144.png"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="192x192"
+      href="https://typewritesomething.com/static/img/logo-on-bg-192.png"
+    />
+
     <meta
       name="viewport"
       content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"
     />
 
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com * ws:;style-src 'self' 'unsafe-inline' data: blob:;media-src *;connect-src ws://localhost:* http://localhost:*;script-src 'unsafe-inline' https://www.google-analytics.com http://localhost:* https://typewritesomething.com * 'unsafe-eval' data: blob:;img-src https://www.google-analytics.com http://localhost:* https://typewritesomething.com 'self' data: content:;"> -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <link rel="manifest" href="/manifest.json" />
 
     <link rel="icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
   </head>
 
   <body>
-    <main role="main" class="main" id="main">
+    <main class="main" id="main">
+      <noscript>You need to enable JavaScript to run this app.</noscript>
       <div id="container">
         <canvas id="text-canvas"></canvas>
+
         <canvas id="cursor-canvas"></canvas>
 
-        <!-- prevent Chrome autocomplete -->
-        <input type="text" style="display: none;" />
-
-        <!-- password field disables swiping on mobile
-				and fixes keyup events -->
-        <input id="cursor-input" type="text" autocomplete="nope" />
+        <div id="text-input" contenteditable tabindex="0"></div>
       </div>
-      <div id="splash" class="flex-column">
-        <div id="splash-section-1" class="flex first">
-          <div class="splash-title">
-            <h1>TYPEWRITE SOMETHING</h1>
-            <h2>A simple typewriter simulator</h2>
-          </div>
-        </div>
-        <div id="splash-section-2" class="flex second">
-          <div class="actions">
-            <div class="flex-column">
-              <a href="#typing">Start Simulator</a
-              ><a href="#paste">Paste Text</a>
-            </div>
-          </div>
-        </div>
-        <div id="splash-section-3" class="flex third hidden">
-          <form id="pastetext" class="flex-column" name="pastetext">
-            <textarea
-              id="text-to-paste"
-              class="flex"
-              name="pasted"
-              placeholder="Type/Paste text here"
-            ></textarea>
-            <div class="flex paste-actions">
-              <div class="flex">
-                <button type="submit" role="button">Typewrite It</button>
-              </div>
-              <div class="flex">
-                <a href="#">Cancel</a>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+      <aside id="splash">
+        <h1>TYPEWRITE SOMETHING</h1>
+        <h2>Press any key to start...</h2>
+      </aside>
     </main>
 
-    <script
-      src="https://browser.sentry-cdn.com/5.15.4/bundle.min.js"
-      integrity="sha384-Nrg+xiw+qRl3grVrxJtWazjeZmUwoSt0FAVsbthlJ5OMpx0G08bqIq3b/v0hPjhB"
-      crossorigin="anonymous"
-    ></script>
+    <audio
+      preload="auto"
+      id="keypress"
+      src="/static/audio/keypress.mp3"
+    ></audio>
+    <audio preload="auto" id="return" src="/static/audio/return.mp3"></audio>
 
-    <script>
-      if (document.location.hostname === "typewritesomething.com") {
-        !(function (a, b, c, d, e, f, g) {
-          (a.GoogleAnalyticsObject = e),
-            (a[e] =
-              a[e] ||
-              function () {
-                (a[e].q = a[e].q || []).push(arguments);
-              }),
-            (a[e].l = 1 * new Date()),
-            (f = b.createElement(c)),
-            (g = b.getElementsByTagName(c)[0]),
-            (f.async = 1),
-            (f.src = d),
-            g.parentNode.insertBefore(f, g);
-        })(
-          window,
-          document,
-          "script",
-          "https://www.google-analytics.com/analytics.js",
-          "ga"
-        );
-        ga("create", "UA-73887811-5", "auto");
-        ga("send", "pageview");
-
-        Sentry.init({
-          dsn:
-            "https://ce393e73e1e74437accc9886f98abb7d@o69899.ingest.sentry.io/149608",
-        });
-      } else {
-        function ga() {}
-      }
-    </script>
-    <script src="script.js"></script>
+    <script src="/dist/main.js"></script>
   </body>
 </html>
