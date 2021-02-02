@@ -24,6 +24,7 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.3.0",
+    "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-serve": "^1.0.4"
@@ -31,7 +32,11 @@
   "scripts": {
     "start": "rollup -c -w",
     "build": "NODE_ENV=production rollup -c",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "test:jest": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test": "npm run test:jest --"
   },
   "homepage": "https://typewritesomething.com",
   "repository": {

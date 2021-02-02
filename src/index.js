@@ -7,6 +7,8 @@ import App from './App';
 import './tracking/analytics';
 import './tracking/sentry';
 
+const app = new App();
+
 const startApp = (e) => {
   // wait for splash transition
   const splashAnimTime = 300;
@@ -20,7 +22,7 @@ const startApp = (e) => {
   document.body.removeEventListener('click', startApp);
   document.body.removeEventListener('keydown', startApp);
 
-  setTimeout(App.start.bind(App), splashAnimTime);
+  setTimeout(app.start.bind(app), splashAnimTime);
 
   splash.classList.add('hide');
 };
