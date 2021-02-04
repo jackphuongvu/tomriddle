@@ -2,11 +2,14 @@ name: build-test
 
 on:
   pull_request:
-    paths-ignore:
-      - '**.md'    
+    paths:
+      - '**.js'    
   push:
-    paths-ignore:
-      - '**.md'
+    branches:
+      - master
+      - staging
+    paths:
+      - '**.js'    
       
 jobs:
   build:
@@ -23,3 +26,4 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run lint
+      - run: npm test
