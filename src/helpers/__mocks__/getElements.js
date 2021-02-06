@@ -1,19 +1,18 @@
-HTMLCanvasElement.prototype.getContext = () => {
-  const canvas = this;
-
-  return {
-    canvas,
-    // TODO test that these mocks are called
-    scale() {},
-    clearRect() {},
-    fillRect() {},
-    save() {},
-    translate() {},
-    rotate() {},
-    fillText() {},
-    restore() {},
-  };
-};
+HTMLCanvasElement.prototype.getContext = () => ({
+  canvas: {
+    style: {},
+  },
+  // TODO test that these mocks are called
+  scale() {},
+  clearRect() {},
+  fillRect() {},
+  save() {},
+  translate() {},
+  rotate() {},
+  fillText() {},
+  restore() {},
+  setTransform() {},
+});
 
 export const container = document.createElement('div');
 export const textInput = document.createElement('div');
