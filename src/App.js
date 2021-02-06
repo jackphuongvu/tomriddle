@@ -68,6 +68,11 @@ class App {
     }
   };
 
+  /** @type Record<string, boolean> */
+  pressedKeys = {};
+
+  keyDownCount = 0;
+
   /**
    * keydown handles audio
    * @param {KeyboardEvent} e
@@ -75,14 +80,22 @@ class App {
   handleKeyDown = (e) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const noAudio = NO_AUDIO[e.which] || isMeta;
+    const isPressed = this.pressedKeys[e.code];
+
+    if (isPressed) {
+      return;
+    }
 
     if (!noAudio) {
+      this.pressedKeys[e.code] = true;
+      this.keyDownCount += 1;
+
       if (e.key === 'Enter') {
         newlineAudio.play();
       } else {
         keypressAudio.play();
       }
-      return true;
+      return;
     }
 
     if (noAudio === 'TAB') {
@@ -92,8 +105,6 @@ class App {
       }, 10);
       e.preventDefault();
     }
-
-    return false;
   };
 
   /**
@@ -119,10 +130,21 @@ class App {
     const { typewriter } = this;
     const { cursor } = typewriter;
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
-    const value = e.key;
-    const nav = cursor.navButtons[value];
-    const ignoreKey = cursor.ignoreKeys[value];
+    const { key, code } = e;
+    const nav = cursor.navButtons[key];
+    // TODO: move this to app property
+    const ignoreKey = cursor.ignoreKeys[key];
     const letters = textInput.innerText;
+
+    if (this.pressedKeys[code]) {
+      delete this.pressedKeys[code];
+      this.keyDownCount -= 1;
+    }
+
+    if (this.keyDownCount !== 0) {
+      // wait until all keys are unpressed to type
+      return;
+    }
 
     if (isMeta) {
       // ignore if user is refreshing or navigating or something
