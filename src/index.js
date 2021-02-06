@@ -11,7 +11,6 @@ const app = new App();
 
 const startApp = (e) => {
   // wait for splash transition
-  const splashAnimTime = 300;
   const splash = document.getElementById('splash');
 
   if (e.altKey || e.ctrlKey || e.metaKey) {
@@ -19,12 +18,16 @@ const startApp = (e) => {
     return;
   }
 
+  splash.classList.add('hide');
+
   document.body.removeEventListener('click', startApp);
   document.body.removeEventListener('keydown', startApp);
 
-  setTimeout(app.start.bind(app), splashAnimTime);
+  app.start();
 
-  splash.classList.add('hide');
+  // should be able to focus on ios so long as this
+  // is called from within a click handler
+  app.focus();
 };
 
 const onload = () => {
