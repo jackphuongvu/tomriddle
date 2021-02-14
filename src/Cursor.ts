@@ -23,7 +23,7 @@ const paddingVec = (function getPaddingVec() {
 const initialPosVec = paddingVec;
 
 export class Cursor {
-  _cursorTimeout?: NodeJS.Timeout;
+  _cursorTimeout?: number;
 
   _raf?: number;
 
@@ -77,7 +77,7 @@ export class Cursor {
       window.cancelAnimationFrame(this._raf);
     }
     this._opacity = GLOBAL_ALPHA;
-    this._cursorTimeout = setTimeout(this.fadeOut.bind(this), 2200);
+    this._cursorTimeout = window.setTimeout(this.fadeOut.bind(this), 2200);
   };
 
   nudge = (vec: Vector) => {

@@ -168,7 +168,7 @@ class App {
     this.typewriter.focusText();
   };
 
-  mouseuptimeout?: NodeJS.Timeout;
+  mouseuptimeout?: number;
 
   mouseDownStartPos: Vector | null = null;
 
@@ -182,7 +182,7 @@ class App {
     if ('button' in e && e.button === 2) return;
 
     // mousemove would be expensive, so we add it only after the mouse is down
-    this.mouseuptimeout = setTimeout(() => {
+    this.mouseuptimeout = window.setTimeout(() => {
       this.mouseDownStartPos = getPositionFromEvent(e);
 
       document.addEventListener('touchmove', this.handleMouseMove);
