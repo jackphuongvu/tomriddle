@@ -11,9 +11,8 @@ window.Audio.prototype.play = mockPlay;
 
 /**
  * Simulate keydown event
- * @param {string} char
  */
-function getEvent(char) {
+function getEvent(char: string) {
   return {
     key: char,
     which: char.toLowerCase().charCodeAt(0) - 32,
@@ -21,8 +20,7 @@ function getEvent(char) {
 }
 
 describe('Character', () => {
-  /** @type {App} */
-  let app;
+  let app: App;
 
   beforeEach(() => {
     app = new App();

@@ -4,6 +4,7 @@ import { TypeWriter } from './Typewriter';
 import { container, textInput } from './helpers/getElements';
 import positionElem from './utils/positionElem';
 import getPositionFromEvent from './utils/getPositionFromEvent';
+import Vector from './utils/Vector';
 
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
@@ -13,9 +14,7 @@ class App {
 
   running = false;
 
-  constructor() {
-    this.typewriter = new TypeWriter();
-  }
+  typewriter = new TypeWriter();
 
   start() {
     if (this.running) return;
@@ -43,13 +42,13 @@ class App {
       touchend: this.handleMouseUp,
       mousedown: this.handleMouseDown,
       touchstart: this.handleTouchStart,
-    };
+    } as any;
     const cursorEvents = {
       keydown: this.handleKeyDown,
       keyup: this.handleKeyUp,
       focus: this.focus,
       keypress: this.handleKeyPress,
-    };
+    } as any;
 
     let key;
     let fnc;
@@ -64,12 +63,11 @@ class App {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (key in cursorEvents) {
       fnc = cursorEvents[key];
-      textInput[method](key, fnc);
+      textInput![method](key, fnc);
     }
   };
 
-  /** @type Record<string, boolean> */
-  pressedKeys = {};
+  pressedKeys: Record<string, boolean> = {};
 
   keyDownCount = 0;
 
@@ -77,9 +75,9 @@ class App {
    * keydown handles audio
    * @param {KeyboardEvent} e
    */
-  handleKeyDown = (e) => {
+  handleKeyDown = (e: KeyboardEvent) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
-    const noAudio = NO_AUDIO[e.which] || isMeta;
+    const noAudio = (NO_AUDIO as any)[e.which] || isMeta;
     const isPressed = this.pressedKeys[e.code];
 
     if (isPressed) {
@@ -101,7 +99,7 @@ class App {
     if (noAudio === 'TAB') {
       // refocus
       window.setTimeout(() => {
-        textInput.focus();
+        textInput!.focus();
       }, 10);
       e.preventDefault();
     }
@@ -111,7 +109,7 @@ class App {
    * HandleKeyPress
    * @param {KeyboardEvent} e
    */
-  handleKeyPress = (e) => {
+  handleKeyPress = (e: KeyboardEvent) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const disable = e.key === 'Tab' || e.key === 'Enter';
 
@@ -126,15 +124,14 @@ class App {
    * keyup handles character input and navigation
    * @param {KeyboardEvent} e
    */
-  handleKeyUp = (e) => {
+  handleKeyUp = (e: KeyboardEvent) => {
     const { typewriter } = this;
     const { cursor } = typewriter;
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const { key, code } = e;
     const nav = cursor.navButtons[key];
-    // TODO: move this to app property
-    const ignoreKey = cursor.ignoreKeys[key];
-    const letters = textInput.innerText;
+    const ignoreKey = key === 'Shift';
+    const letters = textInput!.innerText;
 
     if (this.pressedKeys[code]) {
       delete this.pressedKeys[code];
@@ -171,17 +168,21 @@ class App {
     this.typewriter.focusText();
   };
 
+  mouseuptimeout?: NodeJS.Timeout;
+
+  mouseDownStartPos: Vector | null = null;
+
   /**
    * handleMouseDown
    * @param {MouseEvent} e
    */
-  handleMouseDown = (e) => {
+  handleMouseDown = (e: MouseEvent | TouchEvent) => {
     // TODO: add menu somehow somewhere
     // ignore right click
-    if (e.button === 2) return;
+    if ('button' in e && e.button === 2) return;
 
     // mousemove would be expensive, so we add it only after the mouse is down
-    this.mouseuptimeout = window.setTimeout(() => {
+    this.mouseuptimeout = setTimeout(() => {
       this.mouseDownStartPos = getPositionFromEvent(e);
 
       document.addEventListener('touchmove', this.handleMouseMove);
@@ -193,7 +194,7 @@ class App {
    * handleTouchStart
    * @param {TouchEvent} e
    */
-  handleTouchStart = (e) => {
+  handleTouchStart = (e: TouchEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -209,11 +210,15 @@ class App {
    * handleMouseMove
    * @param {MouseEvent} e
    */
-  handleMouseMove = (e) => {
+  handleMouseMove = (e: MouseEvent | TouchEvent) => {
+    if (!this.mouseDownStartPos) {
+      return;
+    }
+
     const _position = getPositionFromEvent(e)._subtract(this.mouseDownStartPos);
 
     // fake canvas moving by cheaply altering css
-    positionElem(container, _position);
+    positionElem(container!, _position);
 
     this.typewriter.cursor.clear();
   };
@@ -222,8 +227,10 @@ class App {
    * handleMouseUp
    * @param {MouseEvent} e
    */
-  handleMouseUp = (e) => {
+  handleMouseUp = (e: MouseEvent) => {
     this.removeMoveEvent();
+
+    // TODO: remove right click
 
     const position = getPositionFromEvent(e);
 
@@ -243,13 +250,13 @@ class App {
    * Updates cursor to a given position
    * @param {Vector} position
    */
-  updateCursor = (position) => {
+  updateCursor = (position: Vector) => {
     this.typewriter.cursor.moveToClick(position);
     this.typewriter.focusText();
   };
 
   removeMoveEvent = () => {
-    window.clearTimeout(this.mouseuptimeout);
+    window.clearTimeout(this.mouseuptimeout!);
     document.removeEventListener('touchmove', this.handleMouseMove);
     document.removeEventListener('mousemove', this.handleMouseMove);
   };

@@ -1,4 +1,5 @@
 import { Character } from './Character';
+import Vector from './utils/Vector';
 
 jest.mock('./helpers/getElements');
 
@@ -6,10 +7,7 @@ jest.useFakeTimers();
 
 describe('Character', () => {
   const mockTypewriter = {
-    canvasOffset: {
-      x: 0,
-      y: 0,
-    },
+    canvasOffset: new Vector(0, 0),
   };
 
   it('has a position, but is not exact', () => {

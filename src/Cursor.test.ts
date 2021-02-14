@@ -8,8 +8,7 @@ describe('Cursor', () => {
   const cursorWidth = 15.6;
   const cursorHeight = 28;
   const initialXY = [100, 96];
-  /** @type {Cursor} */
-  let cursor;
+  let cursor: Cursor;
 
   beforeEach(() => {
     cursor = new Cursor();
