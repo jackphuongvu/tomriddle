@@ -63,7 +63,7 @@ class App {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (key in cursorEvents) {
       fnc = cursorEvents[key];
-      textInput![method](key, fnc);
+      textInput[method](key, fnc);
     }
   };
 
@@ -99,7 +99,7 @@ class App {
     if (noAudio === 'TAB') {
       // refocus
       window.setTimeout(() => {
-        textInput!.focus();
+        textInput.focus();
       }, 10);
       e.preventDefault();
     }
@@ -131,7 +131,7 @@ class App {
     const { key, code } = e;
     const nav = cursor.navButtons[key];
     const ignoreKey = key === 'Shift';
-    const letters = textInput!.innerText;
+    const letters = textInput.innerText;
 
     if (this.pressedKeys[code]) {
       delete this.pressedKeys[code];
@@ -218,7 +218,7 @@ class App {
     const _position = getPositionFromEvent(e)._subtract(this.mouseDownStartPos);
 
     // fake canvas moving by cheaply altering css
-    positionElem(container!, _position);
+    positionElem(container, _position);
 
     this.typewriter.cursor.clear();
   };
@@ -227,10 +227,14 @@ class App {
    * handleMouseUp
    * @param {MouseEvent} e
    */
-  handleMouseUp = (e: MouseEvent) => {
+  handleMouseUp = (e: MouseEvent | TouchEvent) => {
     this.removeMoveEvent();
 
-    // TODO: remove right click
+    if ('button' in e && e.button === 2) return;
+
+    if ('touches' in e && e.touches.length > 0) {
+      return;
+    }
 
     const position = getPositionFromEvent(e);
 
@@ -256,7 +260,7 @@ class App {
   };
 
   removeMoveEvent = () => {
-    window.clearTimeout(this.mouseuptimeout!);
+    window.clearTimeout(this.mouseuptimeout);
     document.removeEventListener('touchmove', this.handleMouseMove);
     document.removeEventListener('mousemove', this.handleMouseMove);
   };

@@ -94,8 +94,8 @@ export class TypeWriter implements TypeWriterClass {
     textCtx!.textBaseline = 'top';
     textCtx!.fillStyle = TEXT_COLOR;
 
-    cursorCtx!.fillStyle = CURSOR_COLOR;
-    cursorCtx!.scale(this.containerScale, this.containerScale);
+    cursorCtx.fillStyle = CURSOR_COLOR;
+    cursorCtx.scale(this.containerScale, this.containerScale);
   };
 
   /**
@@ -108,7 +108,7 @@ export class TypeWriter implements TypeWriterClass {
       this.canvasOffset._add(vec);
     }
 
-    positionElem(container!, { x: 0, y: 0 });
+    positionElem(container, { x: 0, y: 0 });
 
     this.resetCanvases();
     this.redraw();
@@ -124,7 +124,7 @@ export class TypeWriter implements TypeWriterClass {
     this.cursor.reset();
     this.canvasOffset = new Vector(0, 0);
     this.containerScale = 1;
-    container!.setAttribute('style', '');
+    container.setAttribute('style', '');
 
     this.reposition();
     this.cursor.draw();
@@ -133,10 +133,10 @@ export class TypeWriter implements TypeWriterClass {
   };
 
   emptyText = () => {
-    textInput!.innerHTML = '';
+    textInput.innerHTML = '';
   };
 
   focusText = () => {
-    textInput!.focus();
+    textInput.focus();
   };
 }

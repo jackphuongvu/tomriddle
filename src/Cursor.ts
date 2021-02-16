@@ -43,7 +43,7 @@ export class Cursor {
     // rect appears to have a border on the bottom-right
     const width = cursorWidth + 4;
     const height = cursorHeight + 4;
-    cursorCtx!.clearRect(_pos.x, _pos.y, width, height);
+    cursorCtx.clearRect(_pos.x, _pos.y, width, height);
   };
 
   /**
@@ -55,7 +55,7 @@ export class Cursor {
     this.position = vec;
 
     setTimeout(() => {
-      positionElem(textInput!, {
+      positionElem(textInput, {
         x: Math.min(vec.x, window.innerWidth),
         y: Math.min(vec.y, window.innerHeight),
       });
@@ -66,7 +66,7 @@ export class Cursor {
   _draw = () => {
     const _pos = this.position.divideBy(containerScale);
 
-    cursorCtx!.fillRect(_pos.x, _pos.y, cursorWidth, cursorHeight);
+    cursorCtx.fillRect(_pos.x, _pos.y, cursorWidth, cursorHeight);
   };
 
   draw = () => {
@@ -125,12 +125,12 @@ export class Cursor {
     if (newOpacity <= 0) {
       this.clear();
     } else {
-      cursorCtx!.save();
+      cursorCtx.save();
       this.clear();
       this._opacity = newOpacity;
-      cursorCtx!.globalAlpha = this._opacity;
+      cursorCtx.globalAlpha = this._opacity;
       this._draw();
-      cursorCtx!.restore();
+      cursorCtx.restore();
       this._raf = window.requestAnimationFrame(this._fadeanim.bind(this));
     }
   };
