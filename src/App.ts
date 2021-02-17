@@ -1,13 +1,14 @@
 import MultiAudio from './utils/MultiAudio';
 import NO_AUDIO from './helpers/NO_AUDIO';
 import { TypeWriter } from './Typewriter';
-import { container, textInput } from './helpers/getElements';
+import { container, textInput, cursorCanvas } from './helpers/getElements';
 import positionElem from './utils/positionElem';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 import Vector from './utils/Vector';
 
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
+const eventTarget = cursorCanvas;
 
 class App {
   mousemovedelay = 150;
@@ -38,10 +39,10 @@ class App {
 
   events = (onoff = 'on') => {
     const documentEvents = {
-      mouseup: this.handleMouseUp,
-      touchend: this.handleMouseUp,
       mousedown: this.handleMouseDown,
       touchstart: this.handleTouchStart,
+      mouseup: this.handleMouseUp,
+      touchend: this.handleMouseUp,
     } as any;
     const cursorEvents = {
       keydown: this.handleKeyDown,
@@ -57,7 +58,7 @@ class App {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (key in documentEvents) {
       fnc = documentEvents[key];
-      document[method](key, fnc);
+      eventTarget[method](key, fnc);
     }
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
@@ -185,8 +186,8 @@ class App {
     this.mouseuptimeout = window.setTimeout(() => {
       this.mouseDownStartPos = getPositionFromEvent(e);
 
-      document.addEventListener('touchmove', this.handleMouseMove);
-      document.addEventListener('mousemove', this.handleMouseMove);
+      eventTarget.addEventListener('touchmove', this.handleMouseMove);
+      eventTarget.addEventListener('mousemove', this.handleMouseMove);
     }, this.mousemovedelay);
   };
 
@@ -201,8 +202,10 @@ class App {
     if (e.touches && e.touches.length === 2) {
       // todo: work on zooming
       // (https://codepen.io/bozdoz/pen/xxEmJyx?editors=0011)
-      return false;
+
+      return true;
     }
+
     return this.handleMouseDown(e);
   };
 
@@ -211,6 +214,10 @@ class App {
    * @param {MouseEvent} e
    */
   handleMouseMove = (e: MouseEvent | TouchEvent) => {
+    // probably prevents browser zoom
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!this.mouseDownStartPos) {
       return;
     }
@@ -228,13 +235,12 @@ class App {
    * @param {MouseEvent} e
    */
   handleMouseUp = (e: MouseEvent | TouchEvent) => {
+    const rightClick = 'button' in e && e.button === 2;
+    const stillTouches = 'touches' in e && e.touches.length > 0;
+
+    if (rightClick || stillTouches) return;
+
     this.removeMoveEvent();
-
-    if ('button' in e && e.button === 2) return;
-
-    if ('touches' in e && e.touches.length > 0) {
-      return;
-    }
 
     const position = getPositionFromEvent(e);
 
@@ -261,8 +267,8 @@ class App {
 
   removeMoveEvent = () => {
     window.clearTimeout(this.mouseuptimeout);
-    document.removeEventListener('touchmove', this.handleMouseMove);
-    document.removeEventListener('mousemove', this.handleMouseMove);
+    eventTarget.removeEventListener('touchmove', this.handleMouseMove);
+    eventTarget.removeEventListener('mousemove', this.handleMouseMove);
   };
 }
 
