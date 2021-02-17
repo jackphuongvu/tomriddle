@@ -5,7 +5,10 @@ import Vector from './utils/Vector';
 const FONT_SIZE = 26;
 const containerScale = 1;
 const GLOBAL_ALPHA = 0.72;
-const letterSize = parseInt(Math.min(FONT_SIZE, window.innerWidth / 17), 10);
+const letterSize = parseInt(
+  String(Math.min(FONT_SIZE, window.innerWidth / 17)),
+  10
+);
 const letterWidth = (letterSize * 12) / 20;
 const lineHeight = letterSize + 8;
 const cursorWidth = letterWidth;
@@ -20,19 +23,15 @@ const paddingVec = (function getPaddingVec() {
 const initialPosVec = paddingVec;
 
 export class Cursor {
-  _cursorTimeout;
+  _cursorTimeout?: number;
 
-  _raf;
+  _raf?: number;
 
-  _time;
+  _time?: Date;
 
-  _opacity;
+  _opacity?: number;
 
   position = initialPosVec;
-
-  constructor() {
-    this.reset();
-  }
 
   reset = () => {
     this.position = initialPosVec;
@@ -50,7 +49,7 @@ export class Cursor {
   /**
    * @param {Vector} vec
    */
-  update = (vec) => {
+  update = (vec: Vector) => {
     this.clear();
 
     this.position = vec;
@@ -73,7 +72,7 @@ export class Cursor {
   draw = () => {
     this._draw();
 
-    window.clearTimeout(this._cursorTimeout);
+    window.clearTimeout(this._cursorTimeout!);
     if (this._raf) {
       window.cancelAnimationFrame(this._raf);
     }
@@ -81,7 +80,7 @@ export class Cursor {
     this._cursorTimeout = window.setTimeout(this.fadeOut.bind(this), 2200);
   };
 
-  nudge = (vec) => {
+  nudge = (vec: Vector) => {
     this.update(this.position.add(vec.multiplyBy(containerScale)));
   };
 
@@ -102,7 +101,7 @@ export class Cursor {
   };
 
   /** centers on mouse click */
-  moveToClick = (vec) => {
+  moveToClick = (vec: Vector) => {
     this.update(vec.subtract(new Vector(cursorWidth / 2, cursorHeight / 2)));
   };
 
@@ -110,18 +109,18 @@ export class Cursor {
     this.nudge(new Vector(letterWidth * 4, 0));
   };
 
-  newline = function newline() {
+  newline = () => {
     this.update(new Vector(paddingVec.x, this.position.y + lineHeight));
   };
 
-  fadeOut = function fadeOut() {
+  fadeOut = () => {
     this._time = new Date();
     this._raf = window.requestAnimationFrame(this._fadeanim.bind(this));
   };
 
-  _fadeanim = function _fadeanim() {
-    const dt = new Date() - this._time;
-    const newOpacity = this._opacity - (0.1 * dt) / 300;
+  _fadeanim = () => {
+    const dt = Date.now() - this._time!.valueOf();
+    const newOpacity = this._opacity! - (0.1 * dt) / 300;
 
     if (newOpacity <= 0) {
       this.clear();
@@ -137,7 +136,7 @@ export class Cursor {
   };
 
   /** mapping for keys that move cursor */
-  navButtons = {
+  navButtons: Record<string, () => void> = {
     Backspace: this.moveleft.bind(this),
     Tab: this.addtab.bind(this),
     ArrowLeft: this.moveleft.bind(this),
@@ -145,9 +144,5 @@ export class Cursor {
     ArrowRight: this.moveright.bind(this),
     ArrowDown: this.movedown.bind(this),
     Enter: this.newline.bind(this),
-  };
-
-  ignoreKeys = {
-    Shift: true,
   };
 }

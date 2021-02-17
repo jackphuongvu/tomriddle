@@ -9,7 +9,7 @@ import './tracking/sentry';
 
 const app = new App();
 
-const startApp = (e) => {
+const startApp = (e: KeyboardEvent | MouseEvent): void => {
   // wait for splash transition
   const splash = document.getElementById('splash');
 
@@ -18,7 +18,7 @@ const startApp = (e) => {
     return;
   }
 
-  splash.classList.add('hide');
+  splash!.classList.add('hide');
 
   document.body.removeEventListener('click', startApp);
   document.body.removeEventListener('keydown', startApp);
@@ -30,7 +30,7 @@ const startApp = (e) => {
   app.focus();
 };
 
-const onload = () => {
+const onload = (): void => {
   if (window.location.hash) {
     window.location.hash = '';
   }
@@ -51,11 +51,11 @@ window.addEventListener('load', onload);
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('/sw.js')
-    .then(() => {
+    .then((): void => {
       // eslint-disable-next-line no-console
       console.log('Service Worker Registered');
     })
-    .catch((e) => {
+    .catch((e): void => {
       // eslint-disable-next-line no-console
       console.error('Service Worker failed');
       // eslint-disable-next-line no-console

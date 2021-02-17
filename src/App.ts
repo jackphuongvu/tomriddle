@@ -1,21 +1,21 @@
 import MultiAudio from './utils/MultiAudio';
 import NO_AUDIO from './helpers/NO_AUDIO';
 import { TypeWriter } from './Typewriter';
-import { container, textInput } from './helpers/getElements';
+import { container, textInput, cursorCanvas } from './helpers/getElements';
 import positionElem from './utils/positionElem';
 import getPositionFromEvent from './utils/getPositionFromEvent';
+import Vector from './utils/Vector';
 
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
+const eventTarget = cursorCanvas;
 
 class App {
   mousemovedelay = 150;
 
   running = false;
 
-  constructor() {
-    this.typewriter = new TypeWriter();
-  }
+  typewriter = new TypeWriter();
 
   start() {
     if (this.running) return;
@@ -39,17 +39,17 @@ class App {
 
   events = (onoff = 'on') => {
     const documentEvents = {
-      mouseup: this.handleMouseUp,
-      touchend: this.handleMouseUp,
       mousedown: this.handleMouseDown,
       touchstart: this.handleTouchStart,
-    };
+      mouseup: this.handleMouseUp,
+      touchend: this.handleMouseUp,
+    } as any;
     const cursorEvents = {
       keydown: this.handleKeyDown,
       keyup: this.handleKeyUp,
       focus: this.focus,
       keypress: this.handleKeyPress,
-    };
+    } as any;
 
     let key;
     let fnc;
@@ -58,7 +58,7 @@ class App {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (key in documentEvents) {
       fnc = documentEvents[key];
-      document[method](key, fnc);
+      eventTarget[method](key, fnc);
     }
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
@@ -68,8 +68,7 @@ class App {
     }
   };
 
-  /** @type Record<string, boolean> */
-  pressedKeys = {};
+  pressedKeys: Record<string, boolean> = {};
 
   keyDownCount = 0;
 
@@ -77,9 +76,9 @@ class App {
    * keydown handles audio
    * @param {KeyboardEvent} e
    */
-  handleKeyDown = (e) => {
+  handleKeyDown = (e: KeyboardEvent) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
-    const noAudio = NO_AUDIO[e.which] || isMeta;
+    const noAudio = (NO_AUDIO as any)[e.which] || isMeta;
     const isPressed = this.pressedKeys[e.code];
 
     if (isPressed) {
@@ -111,7 +110,7 @@ class App {
    * HandleKeyPress
    * @param {KeyboardEvent} e
    */
-  handleKeyPress = (e) => {
+  handleKeyPress = (e: KeyboardEvent) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const disable = e.key === 'Tab' || e.key === 'Enter';
 
@@ -126,14 +125,13 @@ class App {
    * keyup handles character input and navigation
    * @param {KeyboardEvent} e
    */
-  handleKeyUp = (e) => {
+  handleKeyUp = (e: KeyboardEvent) => {
     const { typewriter } = this;
     const { cursor } = typewriter;
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const { key, code } = e;
     const nav = cursor.navButtons[key];
-    // TODO: move this to app property
-    const ignoreKey = cursor.ignoreKeys[key];
+    const ignoreKey = key === 'Shift';
     const letters = textInput.innerText;
 
     if (this.pressedKeys[code]) {
@@ -171,21 +169,25 @@ class App {
     this.typewriter.focusText();
   };
 
+  mouseuptimeout?: number;
+
+  mouseDownStartPos: Vector | null = null;
+
   /**
    * handleMouseDown
    * @param {MouseEvent} e
    */
-  handleMouseDown = (e) => {
+  handleMouseDown = (e: MouseEvent | TouchEvent) => {
     // TODO: add menu somehow somewhere
     // ignore right click
-    if (e.button === 2) return;
+    if ('button' in e && e.button === 2) return;
 
     // mousemove would be expensive, so we add it only after the mouse is down
     this.mouseuptimeout = window.setTimeout(() => {
       this.mouseDownStartPos = getPositionFromEvent(e);
 
-      document.addEventListener('touchmove', this.handleMouseMove);
-      document.addEventListener('mousemove', this.handleMouseMove);
+      eventTarget.addEventListener('touchmove', this.handleMouseMove);
+      eventTarget.addEventListener('mousemove', this.handleMouseMove);
     }, this.mousemovedelay);
   };
 
@@ -193,15 +195,17 @@ class App {
    * handleTouchStart
    * @param {TouchEvent} e
    */
-  handleTouchStart = (e) => {
+  handleTouchStart = (e: TouchEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (e.touches && e.touches.length === 2) {
       // todo: work on zooming
       // (https://codepen.io/bozdoz/pen/xxEmJyx?editors=0011)
-      return false;
+
+      return true;
     }
+
     return this.handleMouseDown(e);
   };
 
@@ -209,7 +213,15 @@ class App {
    * handleMouseMove
    * @param {MouseEvent} e
    */
-  handleMouseMove = (e) => {
+  handleMouseMove = (e: MouseEvent | TouchEvent) => {
+    // probably prevents browser zoom
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!this.mouseDownStartPos) {
+      return;
+    }
+
     const _position = getPositionFromEvent(e)._subtract(this.mouseDownStartPos);
 
     // fake canvas moving by cheaply altering css
@@ -222,7 +234,12 @@ class App {
    * handleMouseUp
    * @param {MouseEvent} e
    */
-  handleMouseUp = (e) => {
+  handleMouseUp = (e: MouseEvent | TouchEvent) => {
+    const rightClick = 'button' in e && e.button === 2;
+    const stillTouches = 'touches' in e && e.touches.length > 0;
+
+    if (rightClick || stillTouches) return;
+
     this.removeMoveEvent();
 
     const position = getPositionFromEvent(e);
@@ -243,15 +260,15 @@ class App {
    * Updates cursor to a given position
    * @param {Vector} position
    */
-  updateCursor = (position) => {
+  updateCursor = (position: Vector) => {
     this.typewriter.cursor.moveToClick(position);
     this.typewriter.focusText();
   };
 
   removeMoveEvent = () => {
     window.clearTimeout(this.mouseuptimeout);
-    document.removeEventListener('touchmove', this.handleMouseMove);
-    document.removeEventListener('mousemove', this.handleMouseMove);
+    eventTarget.removeEventListener('touchmove', this.handleMouseMove);
+    eventTarget.removeEventListener('mousemove', this.handleMouseMove);
   };
 }
 

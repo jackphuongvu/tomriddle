@@ -258,6 +258,7 @@ h5 {
   -moz-user-select: none;
   -webkit-user-select: none;
   opacity: 1;
+  pointer-events: none;
 }
 
 #splash.hide {

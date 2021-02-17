@@ -14,17 +14,36 @@ const FONT_SIZE = 26;
 const TEXT_COLOR = '#150904';
 const CURSOR_COLOR = '#4787ea';
 const GLOBAL_ALPHA = 0.72;
-const letterSize = parseInt(Math.min(FONT_SIZE, window.innerWidth / 17), 10);
+const letterSize = parseInt(
+  String(Math.min(FONT_SIZE, window.innerWidth / 17)),
+  10
+);
 
-export class TypeWriter {
-  /** @type {TypeWriter} */
-  static _instance;
+interface TypeWriterClass {
+  canvasOffset: Vector;
+  containerScale: number;
+  chars: Character[];
+  addCharacter(_chars: string): void;
+  redraw(): void;
+  resetCanvases(): void;
+  reposition(vec?: Vector | UIEvent): void;
+  debouncedReposition(this: unknown, vec?: Vector | UIEvent): void;
+  reset(): void;
+  emptyText(): void;
+  focusText(): void;
+  cursor: Cursor;
+}
+
+export class TypeWriter implements TypeWriterClass {
+  static _instance: TypeWriterClass;
 
   canvasOffset = new Vector(0, 0);
 
   containerScale = 1;
 
-  chars = [];
+  chars: Character[] = [];
+
+  cursor = new Cursor();
 
   constructor() {
     if (TypeWriter._instance) {
@@ -33,15 +52,11 @@ export class TypeWriter {
 
     TypeWriter._instance = this;
 
-    this.cursor = new Cursor();
-
+    // add events
     window.addEventListener('resize', this.debouncedReposition);
   }
 
-  addCharacter = (_chars, _x, _y) => {
-    if (_x && _y) {
-      this.cursor.update(new Vector(_x, _y));
-    }
+  addCharacter = (_chars: string): void => {
     for (let i = 0, len = _chars.length; i < len; i += 1) {
       const {
         position: { x, y },
@@ -53,31 +68,31 @@ export class TypeWriter {
     }
   };
 
-  redraw = () => {
+  redraw = (): void => {
     this.chars.forEach((char) => char.draw());
   };
 
-  resetCanvases = () => {
+  resetCanvases = (): void => {
     [textCtx, cursorCtx].forEach((ctx) => {
-      const { canvas } = ctx;
+      const { canvas } = ctx!;
       const { devicePixelRatio = 1, innerWidth, innerHeight } = window;
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx!.setTransform(1, 0, 0, 1, 0, 0);
 
       canvas.width = innerWidth * devicePixelRatio;
       canvas.height = innerHeight * devicePixelRatio;
       canvas.style.width = `${innerWidth}px`;
       canvas.style.height = `${innerHeight}px`;
 
-      ctx.scale(devicePixelRatio, devicePixelRatio);
+      ctx!.scale(devicePixelRatio, devicePixelRatio);
 
-      ctx.globalAlpha = GLOBAL_ALPHA;
+      ctx!.globalAlpha = GLOBAL_ALPHA;
     });
 
     // reset contexts, because resizing wipes them
-    textCtx.font = `${letterSize}px Special Elite, serif`;
-    textCtx.textBaseline = 'top';
-    textCtx.fillStyle = TEXT_COLOR;
+    textCtx!.font = `${letterSize}px Special Elite, serif`;
+    textCtx!.textBaseline = 'top';
+    textCtx!.fillStyle = TEXT_COLOR;
 
     cursorCtx.fillStyle = CURSOR_COLOR;
     cursorCtx.scale(this.containerScale, this.containerScale);
@@ -88,7 +103,7 @@ export class TypeWriter {
    * useful for moving/dragging
    * useful for redrawing (b/c needs resetting)
    */
-  reposition = (vec) => {
+  reposition = (vec?: Vector | UIEvent): void => {
     if (vec instanceof Vector) {
       this.canvasOffset._add(vec);
     }
