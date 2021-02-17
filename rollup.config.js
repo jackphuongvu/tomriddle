@@ -26,13 +26,7 @@ const commonPlugins = [
 
 const plugins = isProduction
   ? [...commonPlugins, require('rollup-plugin-terser').terser()]
-  : [
-      ...commonPlugins,
-      require('rollup-plugin-serve')({
-        open: true,
-      }),
-      require('rollup-plugin-livereload')(),
-    ];
+  : commonPlugins;
 
 export default () => ({
   plugins,
