@@ -23,8 +23,8 @@ class App {
     this.running = true;
     this.typewriter.reset();
     this.events('on');
-    this.typewriter.emptyText();
-    this.typewriter.focusText();
+    this.emptyText();
+    this.focusText();
     this.typewriter.cursor.draw();
   }
 
@@ -106,10 +106,6 @@ class App {
     }
   };
 
-  /**
-   * HandleKeyPress
-   * @param {KeyboardEvent} e
-   */
   handleKeyPress = (e: KeyboardEvent) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const disable = e.key === 'Tab' || e.key === 'Enter';
@@ -132,21 +128,18 @@ class App {
     const { key, code } = e;
     const nav = cursor.navButtons[key];
     const ignoreKey = key === 'Shift';
-    const letters = textInput.innerText;
+    // TODO: add test for first character being space
+    // ignores first character, which should always be a space
+    const letters = textInput.value.substr(1);
 
     if (this.pressedKeys[code]) {
       delete this.pressedKeys[code];
       this.keyDownCount -= 1;
     }
 
-    if (this.keyDownCount !== 0) {
-      // wait until all keys are unpressed to type
-      return;
-    }
-
     if (isMeta) {
       // ignore if user is refreshing or navigating or something
-      typewriter.emptyText();
+      this.emptyText();
 
       return;
     }
@@ -161,12 +154,12 @@ class App {
       typewriter.addCharacter(letters);
     }
 
-    typewriter.emptyText();
-    typewriter.focusText();
+    this.emptyText();
+    this.focusText();
   };
 
   focus = () => {
-    this.typewriter.focusText();
+    this.focusText();
   };
 
   mouseuptimeout?: number;
@@ -262,13 +255,22 @@ class App {
    */
   updateCursor = (position: Vector) => {
     this.typewriter.cursor.moveToClick(position);
-    this.typewriter.focusText();
+    this.focusText();
   };
 
   removeMoveEvent = () => {
     window.clearTimeout(this.mouseuptimeout);
     eventTarget.removeEventListener('touchmove', this.handleMouseMove);
     eventTarget.removeEventListener('mousemove', this.handleMouseMove);
+  };
+
+  emptyText = () => {
+    // leaves a space to disable automatic ProperCase in mobile
+    textInput.value = '-';
+  };
+
+  focusText = () => {
+    textInput.focus();
   };
 }
 

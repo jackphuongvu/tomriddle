@@ -1,12 +1,7 @@
 import Vector from './utils/Vector';
 import { Cursor } from './Cursor';
 import { Character } from './Character';
-import {
-  container,
-  cursorCtx,
-  textCtx,
-  textInput,
-} from './helpers/getElements';
+import { container, cursorCtx, textCtx } from './helpers/getElements';
 import debounce from './utils/debounce';
 import positionElem from './utils/positionElem';
 
@@ -29,8 +24,6 @@ interface TypeWriterClass {
   reposition(vec?: Vector | UIEvent): void;
   debouncedReposition(this: unknown, vec?: Vector | UIEvent): void;
   reset(): void;
-  emptyText(): void;
-  focusText(): void;
   cursor: Cursor;
 }
 
@@ -128,15 +121,5 @@ export class TypeWriter implements TypeWriterClass {
 
     this.reposition();
     this.cursor.draw();
-    this.emptyText();
-    this.focusText();
-  };
-
-  emptyText = () => {
-    textInput.innerHTML = '';
-  };
-
-  focusText = () => {
-    textInput.focus();
   };
 }

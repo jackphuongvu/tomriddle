@@ -1,5 +1,7 @@
 export const container = document.getElementById('container') as HTMLElement;
-export const textInput = document.getElementById('text-input') as HTMLElement;
+export const textInput = document.getElementById(
+  'text-input'
+) as HTMLInputElement;
 export const textCanvas = document.getElementById(
   'text-canvas'
 ) as HTMLCanvasElement;
