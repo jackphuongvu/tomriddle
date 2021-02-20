@@ -298,9 +298,22 @@ canvas {
   outline: none;
   padding: 0;
   margin: 0;
-  position: absolute;
   z-index: -1;
   opacity: 0;
   overflow: hidden;
+  position: absolute;
   white-space: nowrap;
+}
+
+body.debug #text-input {
+  width: initial;
+  height: initial;
+  border: initial;
+  outline: initial;
+  padding: initial;
+  margin: initial;
+  z-index: initial;
+  opacity: initial;
+  overflow: initial;
+  font-size: 30pt;
 }

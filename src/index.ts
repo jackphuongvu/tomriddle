@@ -27,7 +27,7 @@ const startApp = (e: KeyboardEvent | MouseEvent): void => {
 
   // should be able to focus on ios so long as this
   // is called from within a click handler
-  app.focus();
+  app.focusText();
 };
 
 const onload = (): void => {
@@ -61,4 +61,23 @@ if ('serviceWorker' in navigator) {
       // eslint-disable-next-line no-console
       console.error(e);
     });
+}
+
+// add a debug mode
+const { search } = window.location;
+const query = search
+  ? search
+      .substr(1)
+      .split('&')
+      .reduce((prev: Record<string, any>, cur) => {
+        const [key, val] = cur.split('=');
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = val;
+
+        return prev;
+      }, {})
+  : {};
+
+if ('debug' in query) {
+  document.body.classList.add('debug');
 }
