@@ -142,7 +142,7 @@ class App {
     const nav = typewriter.cursor.navButtons[key];
     // TODO: add test for first character being set
     // ignores first character, which should always be a single character
-    const letters = textInput.value.substr(1);
+    const letters = textInput.innerText.substr(1);
 
     if (nav) {
       nav();
@@ -262,12 +262,13 @@ class App {
 
   emptyText = () => {
     // leaves a character to disable automatic ProperCase in mobile
-    textInput.value = '';
-    textInput.value = '|';
+    textInput.innerText = '';
+    textInput.innerText = '|';
   };
 
   focusText = () => {
     textInput.focus();
+    window.getSelection()!.collapse(textInput, 1);
   };
 }
 
