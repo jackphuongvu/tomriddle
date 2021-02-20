@@ -38,32 +38,30 @@ class App {
   }
 
   events = (onoff = 'on') => {
-    const documentEvents = {
+    const documentEvents: Record<string, any> = {
       mousedown: this.handleMouseDown,
       touchstart: this.handleTouchStart,
       mouseup: this.handleMouseUp,
       touchend: this.handleMouseUp,
-    } as any;
-    const cursorEvents = {
+    };
+    const cursorEvents: Record<string, any> = {
       keydown: this.handleKeyDown,
       keyup: this.handleKeyUp,
-      focus: this.focus,
+      focus: this.handleFocus,
       keypress: this.handleKeyPress,
-    } as any;
+    };
 
-    let key;
-    let fnc;
     const method = onoff === 'on' ? 'addEventListener' : 'removeEventListener';
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (key in documentEvents) {
-      fnc = documentEvents[key];
+    for (const key in documentEvents) {
+      const fnc = documentEvents[key];
       eventTarget[method](key, fnc);
     }
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (key in cursorEvents) {
-      fnc = cursorEvents[key];
+    for (const key in cursorEvents) {
+      const fnc = cursorEvents[key];
       textInput[method](key, fnc);
     }
   };
@@ -122,19 +120,22 @@ class App {
    * @param {KeyboardEvent} e
    */
   handleKeyUp = (e: KeyboardEvent) => {
-    const { typewriter } = this;
-    const { cursor } = typewriter;
-    const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const { key, code } = e;
-    const nav = cursor.navButtons[key];
     const ignoreKey = key === 'Shift';
-    // TODO: add test for first character being space
-    // ignores first character, which should always be a space
-    const letters = textInput.value.substr(1);
+    const isMeta = e.altKey || e.ctrlKey || e.metaKey;
+
+    if (ignoreKey) {
+      return;
+    }
 
     if (this.pressedKeys[code]) {
       delete this.pressedKeys[code];
       this.keyDownCount -= 1;
+    }
+
+    if (this.keyDownCount !== 0) {
+      // wait until all keys are unpressed to type
+      return;
     }
 
     if (isMeta) {
@@ -144,9 +145,11 @@ class App {
       return;
     }
 
-    if (ignoreKey) {
-      return;
-    }
+    const { typewriter } = this;
+    const nav = typewriter.cursor.navButtons[key];
+    // TODO: add test for first character being set
+    // ignores first character, which should always be a single character
+    const letters = textInput.value.substr(1);
 
     if (nav) {
       nav();
@@ -158,7 +161,7 @@ class App {
     this.focusText();
   };
 
-  focus = () => {
+  handleFocus = () => {
     this.focusText();
   };
 
@@ -265,8 +268,9 @@ class App {
   };
 
   emptyText = () => {
-    // leaves a space to disable automatic ProperCase in mobile
-    textInput.value = '-';
+    // leaves a character to disable automatic ProperCase in mobile
+    textInput.value = '';
+    textInput.value = '|';
   };
 
   focusText = () => {
