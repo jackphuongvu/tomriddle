@@ -68,8 +68,6 @@ class App {
 
   pressedKeys: Record<string, boolean> = {};
 
-  keyDownCount = 0;
-
   /**
    * keydown handles audio
    * @param {KeyboardEvent} e
@@ -80,19 +78,18 @@ class App {
     const isPressed = this.pressedKeys[e.code];
 
     if (isPressed) {
-      return;
+      return false;
     }
 
     if (!noAudio) {
       this.pressedKeys[e.code] = true;
-      this.keyDownCount += 1;
 
       if (e.key === 'Enter') {
         newlineAudio.play();
       } else {
         keypressAudio.play();
       }
-      return;
+      return true;
     }
 
     if (noAudio === 'TAB') {
@@ -102,6 +99,8 @@ class App {
       }, 10);
       e.preventDefault();
     }
+
+    return true;
   };
 
   handleKeyPress = (e: KeyboardEvent) => {
@@ -130,12 +129,6 @@ class App {
 
     if (this.pressedKeys[code]) {
       delete this.pressedKeys[code];
-      this.keyDownCount -= 1;
-    }
-
-    if (this.keyDownCount !== 0) {
-      // wait until all keys are unpressed to type
-      return;
     }
 
     if (isMeta) {
