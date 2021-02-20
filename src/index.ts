@@ -4,6 +4,7 @@
  *
  */
 import App from './App';
+import { textInput } from './helpers/getElements';
 import './tracking/analytics';
 import './tracking/sentry';
 
@@ -80,4 +81,12 @@ const query = search
 
 if ('debug' in query) {
   document.body.classList.add('debug');
+}
+
+// android devices are INSANE with autocomplete
+// need to force input to be a password input
+const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
+if (isAndroid) {
+  textInput.type = 'password';
 }

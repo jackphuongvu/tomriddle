@@ -100,15 +100,20 @@
 
         <canvas id="cursor-canvas"></canvas>
 
-        <!-- prevent Chrome autocomplete -->
-        <input type="text" style="display: none" />
+        <form autocomplete="off" action="">
+          <!-- prevent autocomplete -->
+          <input type="password" style="display: none" readonly="readonly" />
+          <input type="text" style="display: none" readonly="readonly" />
 
-        <div
-          id="text-input"
-          contenteditable="true"
-          tabindex="0"
-          autocomplete="off"
-        ></div>
+          <input
+            type="text"
+            id="text-input"
+            tabindex="0"
+            autocomplete="off"
+            autocorrect="off"
+            name="hidden"
+          />
+        </form>
       </div>
       <aside id="splash">
         <h1>TYPEWRITE SOMETHING</h1>
