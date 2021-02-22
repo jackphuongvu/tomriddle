@@ -100,18 +100,24 @@
 
         <canvas id="cursor-canvas"></canvas>
 
-        <form autocomplete="off" action="">
+        <form
+          id="search"
+          aria-hidden="true"
+          autocomplete="off"
+          action=""
+          role="search"
+        >
           <!-- prevent autocomplete -->
           <input type="password" style="display: none" readonly="readonly" />
           <input type="text" style="display: none" readonly="readonly" />
+          <input type="search" style="display: none" readonly="readonly" />
 
           <input
             type="text"
             id="text-input"
             tabindex="0"
-            autocomplete="off"
+            autocomplete="one-time-code"
             autocorrect="off"
-            name="hidden"
           />
         </form>
       </div>
