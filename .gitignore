@@ -3,4 +3,3 @@ dist
 .vercel
 coverage/
 .eslintcache
-sw.js
