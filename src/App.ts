@@ -151,6 +151,8 @@ class App {
     }
 
     this.emptyText();
+    // android needs to blur to remove autocomplete double-type
+    textInput.blur();
     this.focusText();
   };
 

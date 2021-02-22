@@ -1,6 +1,6 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-restricted-globals */
-const CACHE_NAME = 'typewritesomething-v1.0.0';
+const CACHE_NAME = 'typewritesomething-v1.0.0-beta';
 
 self.addEventListener('install', function install(e) {
   e.waitUntil(
