@@ -1,8 +1,8 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-restricted-globals */
-const CACHE_NAME = 'typewritesomething-v1.0.0-beta.1';
+const CACHE_NAME = `typewritesomething@${process.env.npm_package_version}`;
 
-self.addEventListener('install', function install(e) {
+self.addEventListener('install', function install(e: any) {
   e.waitUntil(
     caches.open(CACHE_NAME).then(function caching(cache) {
       return cache.addAll([
@@ -33,7 +33,7 @@ self.addEventListener('install', function install(e) {
   );
 });
 
-self.addEventListener('fetch', function handleFetch(e) {
+self.addEventListener('fetch', function handleFetch(e: any) {
   e.respondWith(
     caches.match(e.request).then(function getCache(cached) {
       if (cached) {
@@ -43,6 +43,7 @@ self.addEventListener('fetch', function handleFetch(e) {
       console.log(e.request.url, 'NOT cached');
 
       // let's force caching
+      // TODO: maybe this is silly in the long run
       return null;
     })
   );

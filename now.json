@@ -20,14 +20,6 @@
     {
       "src": "./manifest.json",
       "use": "@now/static"
-    },
-    {
-      "src": "./robots.txt",
-      "use": "@now/static"
-    },
-    {
-      "src": "./sw.js",
-      "use": "@now/static"
     }
   ],
   "github": {
