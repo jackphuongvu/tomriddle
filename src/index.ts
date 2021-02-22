@@ -50,7 +50,7 @@ window.addEventListener('load', onload);
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
-    .register('/dist/sw.js')
+    .register('/sw.js')
     .then((): void => {
       // eslint-disable-next-line no-console
       console.log('Service Worker Registered');
