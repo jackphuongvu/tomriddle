@@ -38,6 +38,7 @@ const NO_AUDIO = {
   144: 'NUMLOCK',
   145: 'SCROLLLOCK',
   224: 'CMD',
+  229: 'ANDROID_BACKSPACE',
 };
 
 export default NO_AUDIO;

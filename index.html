@@ -100,12 +100,26 @@
 
         <canvas id="cursor-canvas"></canvas>
 
-        <div
-          id="text-input"
-          contenteditable
-          tabindex="0"
+        <form
+          id="search"
+          aria-hidden="true"
           autocomplete="off"
-        ></div>
+          action=""
+          role="search"
+        >
+          <!-- prevent autocomplete -->
+          <input type="password" style="display: none" readonly="readonly" />
+          <input type="text" style="display: none" readonly="readonly" />
+          <input type="search" style="display: none" readonly="readonly" />
+
+          <input
+            type="text"
+            id="text-input"
+            tabindex="0"
+            autocomplete="one-time-code"
+            autocorrect="off"
+          />
+        </form>
       </div>
       <aside id="splash">
         <h1>TYPEWRITE SOMETHING</h1>

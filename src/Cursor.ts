@@ -137,6 +137,8 @@ export class Cursor {
 
   /** mapping for keys that move cursor */
   navButtons: Record<string, () => void> = {
+    // Backspace for android
+    Process: this.moveleft.bind(this),
     Backspace: this.moveleft.bind(this),
     Tab: this.addtab.bind(this),
     ArrowLeft: this.moveleft.bind(this),

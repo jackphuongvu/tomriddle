@@ -23,8 +23,8 @@ class App {
     this.running = true;
     this.typewriter.reset();
     this.events('on');
-    this.typewriter.emptyText();
-    this.typewriter.focusText();
+    this.emptyText();
+    this.focusText();
     this.typewriter.cursor.draw();
   }
 
@@ -38,39 +38,35 @@ class App {
   }
 
   events = (onoff = 'on') => {
-    const documentEvents = {
+    const documentEvents: Record<string, any> = {
       mousedown: this.handleMouseDown,
       touchstart: this.handleTouchStart,
       mouseup: this.handleMouseUp,
       touchend: this.handleMouseUp,
-    } as any;
-    const cursorEvents = {
+    };
+    const cursorEvents: Record<string, any> = {
       keydown: this.handleKeyDown,
       keyup: this.handleKeyUp,
-      focus: this.focus,
+      focus: this.handleFocus,
       keypress: this.handleKeyPress,
-    } as any;
+    };
 
-    let key;
-    let fnc;
     const method = onoff === 'on' ? 'addEventListener' : 'removeEventListener';
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (key in documentEvents) {
-      fnc = documentEvents[key];
+    for (const key in documentEvents) {
+      const fnc = documentEvents[key];
       eventTarget[method](key, fnc);
     }
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (key in cursorEvents) {
-      fnc = cursorEvents[key];
+    for (const key in cursorEvents) {
+      const fnc = cursorEvents[key];
       textInput[method](key, fnc);
     }
   };
 
   pressedKeys: Record<string, boolean> = {};
-
-  keyDownCount = 0;
 
   /**
    * keydown handles audio
@@ -82,19 +78,18 @@ class App {
     const isPressed = this.pressedKeys[e.code];
 
     if (isPressed) {
-      return;
+      return false;
     }
 
     if (!noAudio) {
       this.pressedKeys[e.code] = true;
-      this.keyDownCount += 1;
 
       if (e.key === 'Enter') {
         newlineAudio.play();
       } else {
         keypressAudio.play();
       }
-      return;
+      return true;
     }
 
     if (noAudio === 'TAB') {
@@ -104,12 +99,10 @@ class App {
       }, 10);
       e.preventDefault();
     }
+
+    return true;
   };
 
-  /**
-   * HandleKeyPress
-   * @param {KeyboardEvent} e
-   */
   handleKeyPress = (e: KeyboardEvent) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const disable = e.key === 'Tab' || e.key === 'Enter';
@@ -126,34 +119,30 @@ class App {
    * @param {KeyboardEvent} e
    */
   handleKeyUp = (e: KeyboardEvent) => {
-    const { typewriter } = this;
-    const { cursor } = typewriter;
-    const isMeta = e.altKey || e.ctrlKey || e.metaKey;
     const { key, code } = e;
-    const nav = cursor.navButtons[key];
     const ignoreKey = key === 'Shift';
-    const letters = textInput.innerText;
-
-    if (this.pressedKeys[code]) {
-      delete this.pressedKeys[code];
-      this.keyDownCount -= 1;
-    }
-
-    if (this.keyDownCount !== 0) {
-      // wait until all keys are unpressed to type
-      return;
-    }
-
-    if (isMeta) {
-      // ignore if user is refreshing or navigating or something
-      typewriter.emptyText();
-
-      return;
-    }
+    const isMeta = e.altKey || e.ctrlKey || e.metaKey;
 
     if (ignoreKey) {
       return;
     }
+
+    if (this.pressedKeys[code]) {
+      delete this.pressedKeys[code];
+    }
+
+    if (isMeta) {
+      // ignore if user is refreshing or navigating or something
+      this.emptyText();
+
+      return;
+    }
+
+    const { typewriter } = this;
+    const nav = typewriter.cursor.navButtons[key];
+    // TODO: add test for first character being set
+    // ignores first character, which should always be a single character
+    const letters = textInput.value.substr(1);
 
     if (nav) {
       nav();
@@ -161,12 +150,14 @@ class App {
       typewriter.addCharacter(letters);
     }
 
-    typewriter.emptyText();
-    typewriter.focusText();
+    this.emptyText();
+    // android needs to blur to remove autocomplete double-type
+    textInput.blur();
+    this.focusText();
   };
 
-  focus = () => {
-    this.typewriter.focusText();
+  handleFocus = () => {
+    this.focusText();
   };
 
   mouseuptimeout?: number;
@@ -262,13 +253,24 @@ class App {
    */
   updateCursor = (position: Vector) => {
     this.typewriter.cursor.moveToClick(position);
-    this.typewriter.focusText();
+    this.focusText();
   };
 
   removeMoveEvent = () => {
     window.clearTimeout(this.mouseuptimeout);
     eventTarget.removeEventListener('touchmove', this.handleMouseMove);
     eventTarget.removeEventListener('mousemove', this.handleMouseMove);
+  };
+
+  emptyText = () => {
+    // sets value to empty first to adjust for cursor location
+    textInput.value = '';
+    // leaves a character to disable automatic ProperCase in mobile
+    textInput.value = '=';
+  };
+
+  focusText = () => {
+    textInput.focus();
   };
 }
 
