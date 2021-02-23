@@ -5,6 +5,7 @@ import { container, textInput, cursorCanvas } from './helpers/getElements';
 import positionElem from './utils/positionElem';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 import Vector from './utils/Vector';
+import Menu from './Menu';
 
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
@@ -17,6 +18,8 @@ class App {
 
   typewriter = new TypeWriter();
 
+  menu: Menu | null = null;
+
   start() {
     if (this.running) return;
 
@@ -26,6 +29,18 @@ class App {
     this.emptyText();
     this.focusText();
     this.typewriter.cursor.draw();
+
+    this.menu = new Menu();
+
+    this.menu.addMenuItem('Typewrite Something');
+
+    this.menu.addMenuItem('🤖 Report a Problem', {
+      href: 'https://github.com/bozdoz/typewritesomething/issues/new',
+    });
+
+    this.menu.addMenuItem('🥰 Sponsor Me', {
+      href: 'https://www.paypal.com/paypalme/bozdoz',
+    });
   }
 
   stop() {
@@ -35,6 +50,10 @@ class App {
     // kill events
     this.events('off');
     this.removeMoveEvent();
+
+    if (this.menu) {
+      this.menu.destroy();
+    }
   }
 
   events = (onoff = 'on') => {
