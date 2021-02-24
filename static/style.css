@@ -325,15 +325,28 @@ body.debug #text-input {
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+#menu-backdrop.exit {
+  animation: fadeOut 0.2s ease-in-out forwards;
 }
 
 @keyframes fadeIn {
-  0% {
+  from {
     opacity: 0;
   }
-  100% {
+  to {
     opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
@@ -342,12 +355,16 @@ body.debug #text-input {
   min-width: 200px;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.2) 3px 3px 6px;
-  animation: popup 0.1s ease-out forwards;
   background-color: white;
   border: 1px solid #aabed7;
   font-size: 12pt;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  animation: popup 0.2s linear forwards;
+}
+
+#menu-backdrop.exit #menu {
+  animation: popdown 0.1s linear forwards;
 }
 
 .menu-item {
@@ -366,10 +383,21 @@ body.debug #text-input {
 @keyframes popup {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(1.5em);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes popdown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(1.5em);
   }
 }

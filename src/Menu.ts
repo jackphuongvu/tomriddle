@@ -99,10 +99,25 @@ class Menu {
     this.menu.style.left = `${x}px`;
   }
 
-  handleClose = (e: MouseEvent) => {
-    if (!this.menu.contains(e.target as Node)) {
-      this.menuBackdrop.parentNode?.removeChild(this.menuBackdrop);
+  handleClose = ({ target }: MouseEvent) => {
+    if (!this.menu.contains(target as Node)) {
+      const elem = this.menuBackdrop;
+
+      // don't listen for more close events
       document.body.removeEventListener('click', this.handleClose);
+
+      // actually remove things after exit animation
+      const onExit = (e: AnimationEvent) => {
+        if (e.target !== elem) return;
+        elem.removeEventListener('animationend', onExit);
+        elem.classList.remove('exit');
+        elem.parentNode?.removeChild(elem);
+      };
+
+      elem.addEventListener('animationend', onExit);
+
+      // trigger exit animation
+      elem.classList.add('exit');
     }
   };
 }
