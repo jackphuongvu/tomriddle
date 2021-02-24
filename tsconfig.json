@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["ES2019", "dom"],
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": true,
@@ -15,7 +15,7 @@
     "pretty": true,
     "rootDir": ".",
     "strict": true,
-    "target": "ES2019",
+    "target": "esnext",
     "types": ["jest", "node"]
   },
   "include": ["src/**/*.ts"],
