@@ -24,6 +24,8 @@ class Menu {
       id: 'menu',
     });
 
+    this.menu.setAttribute('role', 'list');
+
     this.menuBackdrop = createElement('div', {
       className: 'menu-backdrop',
       id: 'menu-backdrop',
@@ -57,6 +59,8 @@ class Menu {
       menuItem.classList.add('clickable');
     }
 
+    menuItem.setAttribute('role', 'listitem');
+
     this.menu.appendChild(menuItem);
   }
 
@@ -85,7 +89,7 @@ class Menu {
     this.openMenu({ x, y });
   };
 
-  openMenu = ({ x, y }: { x: number; y: number }) => {
+  openMenu({ x, y }: { x: number; y: number }) {
     if (this.menuBackdrop.parentNode == null) {
       document.body.appendChild(this.menuBackdrop);
       document.body.addEventListener('click', this.handleClose);
@@ -93,7 +97,7 @@ class Menu {
 
     this.menu.style.top = `${y}px`;
     this.menu.style.left = `${x}px`;
-  };
+  }
 
   handleClose = (e: MouseEvent) => {
     if (!this.menu.contains(e.target as Node)) {
