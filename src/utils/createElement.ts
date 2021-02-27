@@ -1,6 +1,6 @@
 const createElement = (
   tagname = 'div',
-  params: Partial<Record<WritableKeys<HTMLElement>, any>>
+  params: Partial<Writable<HTMLElement>>
 ): HTMLElement => {
   const elem = document.createElement(tagname);
 
