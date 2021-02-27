@@ -135,10 +135,8 @@ export class Cursor {
     }
   };
 
-  /** mapping for keys that move cursor */
-  navButtons: Record<string, () => void> = {
-    // Backspace for android
-    Process: this.moveleft.bind(this),
+  /** mapping for keys that move cursor; disallow ridiculous Android 'Process' */
+  navButtons: Record<string, () => void> & Partial<Record<'Process', never>> = {
     Backspace: this.moveleft.bind(this),
     Tab: this.addtab.bind(this),
     ArrowLeft: this.moveleft.bind(this),
