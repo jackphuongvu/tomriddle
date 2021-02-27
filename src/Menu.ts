@@ -1,5 +1,6 @@
 import createElement from './utils/createElement';
 import getPositionFromEvent from './utils/getPositionFromEvent';
+import positionElem from './utils/positionElem';
 
 type AnyFunction = (...args: any[]) => void;
 
@@ -89,14 +90,13 @@ class Menu {
     this.openMenu({ x, y });
   };
 
-  openMenu({ x, y }: { x: number; y: number }) {
+  openMenu(position: { x: number; y: number }) {
     if (this.menuBackdrop.parentNode == null) {
       document.body.appendChild(this.menuBackdrop);
       document.body.addEventListener('click', this.handleClose);
     }
 
-    this.menu.style.top = `${y}px`;
-    this.menu.style.left = `${x}px`;
+    positionElem(this.menu, position);
   }
 
   handleClose = ({ target }: MouseEvent) => {

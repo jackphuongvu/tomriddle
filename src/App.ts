@@ -6,6 +6,7 @@ import positionElem from './utils/positionElem';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 import Vector from './utils/Vector';
 import Menu from './Menu';
+import addLongTouch from './utils/addLongTouch';
 
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
@@ -19,6 +20,8 @@ class App {
   typewriter = new TypeWriter();
 
   menu: Menu | null = null;
+
+  removeLongTouch = () => {};
 
   start() {
     if (this.running) return;
@@ -83,6 +86,11 @@ class App {
       const fnc = cursorEvents[key];
       textInput[method](key, fnc);
     }
+
+    this.removeLongTouch = addLongTouch(eventTarget, (e) => {
+      const position = getPositionFromEvent(e);
+      this.menu?.openMenu(position);
+    });
   };
 
   pressedKeys: Record<string, boolean> = {};
@@ -93,7 +101,7 @@ class App {
    */
   handleKeyDown = (e: KeyboardEvent) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
-    const noAudio = (NO_AUDIO as any)[e.which] || isMeta;
+    const noAudio: boolean | string = (NO_AUDIO as any)[e.which] || isMeta;
     const isPressed = this.pressedKeys[e.code];
 
     if (isPressed) {
