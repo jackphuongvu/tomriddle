@@ -8,21 +8,20 @@ import isDebugMode from './helpers/isDebugMode';
 import './tracking/analytics';
 import './tracking/sentry';
 
-const app = new App();
+const splash = document.getElementById('splash')!;
 
-const startApp = (e: KeyboardEvent | MouseEvent): void => {
-  // wait for splash transition
-  const splash = document.getElementById('splash');
-
+const startApp = (e: KeyboardEvent | MouseEvent | TouchEvent): void => {
   if (e.altKey || e.ctrlKey || e.metaKey) {
     // user might be trying to do something else
     return;
   }
 
-  splash!.classList.add('hide');
+  splash.classList.add('hide');
 
-  document.body.removeEventListener('click', startApp);
-  document.body.removeEventListener('keydown', startApp);
+  splash.removeEventListener('click', startApp);
+  splash.removeEventListener('keydown', startApp);
+
+  const app = new App();
 
   app.start();
 
@@ -36,8 +35,8 @@ const onload = (): void => {
     window.location.hash = '';
   }
 
-  document.body.addEventListener('click', startApp);
-  document.body.addEventListener('keydown', startApp);
+  splash.addEventListener('click', startApp);
+  splash.addEventListener('keydown', startApp);
 
   window.removeEventListener('load', onload);
 };
