@@ -89,6 +89,10 @@ class App {
 
     this.removeLongTouch = addLongTouch(eventTarget, (e) => {
       const position = getPositionFromEvent(e);
+
+      // remove mobile keyboard for css positioning of menu
+      textInput.blur();
+
       this.menu?.openMenu(position);
     });
   };
