@@ -37,6 +37,26 @@ class App {
 
     this.menu.addMenuItem('Typewrite Something');
 
+    this.menu.addMenuItem('💾 Save', {
+      callback: () => {
+        // save and prompt edit modal
+        localStorage.setItem('tws', this.typewriter.export());
+        this.menu?.closeMenu();
+      },
+    });
+
+    this.menu.addMenuItem('🕊 Load', {
+      callback: () => {
+        // prompt saved modal with load/edit/delete options
+        const saved = localStorage.getItem('tws');
+
+        if (saved) {
+          this.typewriter.import(saved);
+        }
+        this.menu?.closeMenu();
+      },
+    });
+
     this.menu.addMenuItem('🤖 Report a Problem', {
       href: 'https://github.com/bozdoz/typewritesomething/issues/new',
     });
