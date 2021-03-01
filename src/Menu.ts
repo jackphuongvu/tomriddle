@@ -2,8 +2,6 @@ import createElement from './utils/createElement';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 import positionElem from './utils/positionElem';
 
-type AnyFunction = (...args: any[]) => void;
-
 interface MenuItem {
   callback?: AnyFunction;
   href?: string;
@@ -13,9 +11,9 @@ const isAnchorElement = (a: HTMLElement): a is HTMLAnchorElement =>
   a.tagName === 'A';
 
 class Menu {
-  menu: HTMLElement;
+  menu: HTMLElement | null;
 
-  menuBackdrop: HTMLElement;
+  menuBackdrop: HTMLElement | null;
 
   constructor() {
     this.events('on');
@@ -28,7 +26,7 @@ class Menu {
     this.menu.setAttribute('role', 'list');
 
     this.menuBackdrop = createElement('div', {
-      className: 'menu-backdrop',
+      className: 'backdrop menu-backdrop',
       id: 'menu-backdrop',
     });
 
@@ -37,6 +35,9 @@ class Menu {
 
   destroy() {
     this.events('off');
+    this.menuBackdrop?.parentNode?.removeChild(this.menuBackdrop);
+    this.menu = null;
+    this.menuBackdrop = null;
   }
 
   addMenuItem(innerText: string, { callback, href }: MenuItem = {}) {
@@ -62,7 +63,7 @@ class Menu {
 
     menuItem.setAttribute('role', 'listitem');
 
-    this.menu.appendChild(menuItem);
+    this.menu?.appendChild(menuItem);
   }
 
   events(onoff = 'on') {
@@ -79,7 +80,7 @@ class Menu {
   }
 
   handleContextMenu = (e: MouseEvent) => {
-    if (this.menu.contains(e.target as Node)) return;
+    if (this.menu?.contains(e.target as Node)) return;
 
     // open menu at position
     const buffer = 5;
@@ -91,33 +92,41 @@ class Menu {
   };
 
   openMenu(position: { x: number; y: number }) {
-    if (this.menuBackdrop.parentNode == null) {
-      document.body.appendChild(this.menuBackdrop);
+    if (this.menuBackdrop?.parentNode == null) {
+      document.body.appendChild(this.menuBackdrop!);
       document.body.addEventListener('click', this.handleClose);
     }
 
-    positionElem(this.menu, position);
+    positionElem(this.menu!, position);
+  }
+
+  closeMenu() {
+    const elem = this.menuBackdrop;
+
+    if (!elem) {
+      return;
+    }
+
+    // don't listen for more close events
+    document.body.removeEventListener('click', this.handleClose);
+
+    // actually remove things after exit animation
+    const onExit = (e: AnimationEvent) => {
+      if (e.target !== elem) return;
+      elem.removeEventListener('animationend', onExit);
+      elem.classList.remove('exit');
+      elem.parentNode?.removeChild(elem);
+    };
+
+    elem.addEventListener('animationend', onExit);
+
+    // trigger exit animation
+    elem.classList.add('exit');
   }
 
   handleClose = ({ target }: MouseEvent) => {
-    if (!this.menu.contains(target as Node)) {
-      const elem = this.menuBackdrop;
-
-      // don't listen for more close events
-      document.body.removeEventListener('click', this.handleClose);
-
-      // actually remove things after exit animation
-      const onExit = (e: AnimationEvent) => {
-        if (e.target !== elem) return;
-        elem.removeEventListener('animationend', onExit);
-        elem.classList.remove('exit');
-        elem.parentNode?.removeChild(elem);
-      };
-
-      elem.addEventListener('animationend', onExit);
-
-      // trigger exit animation
-      elem.classList.add('exit');
+    if (!this.menu?.contains(target as Node)) {
+      this.closeMenu();
     }
   };
 }

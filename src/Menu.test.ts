@@ -36,18 +36,24 @@ describe('Menu', () => {
     expect(menu.events).toHaveBeenCalledWith('off');
   });
 
+  it('destroys elements', () => {
+    menu.destroy();
+    expect(menu.menu).toBeNull();
+    expect(menu.menuBackdrop).toBeNull();
+  });
+
   it('creates menu elements', () => {
     expect(menu.menu).toBeTruthy();
-    expect(menu.menu.parentNode).toBe(menu.menuBackdrop);
-    expect(menu.menuBackdrop.parentNode).toBeNull();
+    expect(menu.menu?.parentNode).toBe(menu.menuBackdrop);
+    expect(menu.menuBackdrop?.parentNode).toBeNull();
   });
 
   it('can add menu items', () => {
     menu.addMenuItem('text');
 
-    expect(menu.menu.children).toHaveLength(1);
+    expect(menu.menu?.children).toHaveLength(1);
 
-    expect((menu.menu.children[0] as HTMLElement).innerText).toBe('text');
+    expect((menu.menu?.children[0] as HTMLElement).innerText).toBe('text');
   });
 
   it('can add clickable menu items', () => {
@@ -55,7 +61,7 @@ describe('Menu', () => {
 
     menu.addMenuItem('text', { callback: onClick });
 
-    (menu.menu.children[0] as HTMLElement).click();
+    (menu.menu?.children[0] as HTMLElement).click();
 
     expect(onClick).toHaveBeenCalledTimes(1);
   });
