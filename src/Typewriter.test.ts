@@ -47,4 +47,50 @@ describe('Typewriter', () => {
       y,
     });
   });
+
+  it('can export characters', () => {
+    typewriter.addCharacter('A');
+    typewriter.addCharacter('B');
+
+    const output = typewriter.export();
+
+    expect(typeof output).toBe('string');
+    expect(JSON.parse(output)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          s: 'A',
+          x: expect.any(Number),
+          y: expect.any(Number),
+        }),
+        expect.objectContaining({
+          s: 'B',
+          x: expect.any(Number),
+          y: expect.any(Number),
+        }),
+      ])
+    );
+  });
+
+  it('can load characters', () => {
+    const characters = [
+      {
+        s: 'A',
+        x: 0,
+        y: 0,
+      },
+      {
+        s: 'B',
+        x: 10,
+        y: 0,
+      },
+    ];
+    typewriter.import(JSON.stringify(characters));
+
+    expect(typewriter.chars).toHaveLength(characters.length);
+    // last character position
+    expect(typewriter.cursor.position).toEqual({
+      x: 10,
+      y: 0,
+    });
+  });
 });
