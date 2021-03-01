@@ -19,7 +19,7 @@ type CharacterTypewriter = Pick<
 >;
 
 export class Character extends Vector {
-  str: string;
+  s: string;
 
   rotate: number;
 
@@ -36,7 +36,7 @@ export class Character extends Vector {
     // save vector position
     super(randMargin(_x, TRANSLATE_MARGIN), randMargin(_y, TRANSLATE_MARGIN));
 
-    this.str = charStr;
+    this.s = charStr;
     this.rotate = randMargin(0, ROTATE_MARGIN);
     this.alpha = randMargin(GLOBAL_ALPHA, ALPHA_MARGIN);
     this.typewriter = typewriter;
@@ -58,7 +58,7 @@ export class Character extends Vector {
       textCtx.translate(vec.x, vec.y);
       textCtx.rotate(this.rotate);
       textCtx.globalAlpha = this.alpha;
-      textCtx.fillText(this.str, 0, 0);
+      textCtx.fillText(this.s, 0, 0);
       textCtx.restore();
     }
   };
