@@ -13,3 +13,5 @@ type WritableKeys<T> = {
 }[keyof T];
 
 type Writable<T> = Pick<T, WritableKeys<T>>;
+
+type AnyFunction = (...args: any[]) => void;
