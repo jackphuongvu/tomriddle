@@ -3,6 +3,7 @@ import { babel } from '@rollup/plugin-babel';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
+import commonjs from '@rollup/plugin-commonjs';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -15,6 +16,7 @@ const commonPlugins = [
       process.env.npm_package_version
     ),
   }),
+  commonjs(),
   typescript(),
   nodeResolve(),
   babel({
