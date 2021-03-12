@@ -162,7 +162,7 @@ body.debug #text-input {
   font-size: 30pt;
 }
 
-#menu-backdrop {
+.backdrop {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -172,7 +172,7 @@ body.debug #text-input {
   animation: fadeIn 0.3s ease-in-out forwards;
 }
 
-#menu-backdrop.exit {
+.backdrop.exit {
   animation: fadeOut 0.2s ease-in-out forwards;
 }
 
@@ -194,7 +194,7 @@ body.debug #text-input {
   }
 }
 
-#menu {
+.popup {
   position: absolute;
   min-width: 200px;
   border-radius: 5px;
@@ -208,18 +208,18 @@ body.debug #text-input {
 }
 
 @media only screen and (max-width: 600px) {
-  #menu-backdrop {
+  .backdrop {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  #menu {
+  .popup {
     transform: none !important;
   }
 }
 
-#menu-backdrop.exit #menu {
+.backdrop.exit .popup {
   animation: popdown 0.1s linear forwards;
 }
 
@@ -256,4 +256,134 @@ body.debug #text-input {
     opacity: 0;
     margin-top: 1.5em;
   }
+}
+
+.dialog-backdrop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog {
+  border-radius: 5px;
+  overflow: hidden;
+  max-height: 80%;
+  min-width: 40vw;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.dialog .dialog-header {
+  height: 48px;
+  display: flex;
+  flex: 0 0 48px;
+  align-items: center;
+  padding: 0 1em;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #f4f5f6;
+}
+
+.dialog .dialog-body {
+  padding: 1em;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.dialog.saved-list .dialog-body {
+  padding: 1em 0;
+}
+
+.dialog label {
+  display: block;
+}
+
+.dialog input {
+  display: block;
+  min-height: 48px;
+  padding: 1em;
+  font-size: 12pt;
+  margin: 1em 0;
+  border-radius: 5px;
+  border: 1px solid rgb(207, 222, 231);
+}
+
+.dialog .dialog-footer {
+  border-top: 1px solid #f0f0f0;
+  background-color: #f4f5f6;
+  padding: 0.4em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.dialog-footer .button {
+  min-height: 48px;
+  min-width: 48px;
+  font-size: 11pt;
+  padding: 0.8em 1.2em;
+  border-radius: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-color: rgb(228, 228, 228);
+  border-style: solid;
+}
+
+.dialog-footer .button:hover {
+  box-shadow: inset rgba(0, 0, 0, 0.05) -1000px 0;
+}
+
+.dialog-footer .button-primary {
+  background: rgb(96, 147, 255);
+  border-color: rgb(87, 133, 231);
+  border-style: solid;
+  color: white;
+}
+
+.saved-list {
+  list-style-type: none;
+  padding-bottom: 1em;
+}
+
+.saved-item {
+  transition: background-color 0.2s;
+  padding: 1.2em 1em;
+  cursor: pointer;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: transparent;
+}
+
+.saved-item:hover {
+  background-color: rgb(223, 240, 255);
+}
+
+.saved-item button {
+  box-sizing: border-box;
+  font-size: 14pt;
+  height: 48px;
+  width: 48px;
+  flex: 0 0 48px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgb(237, 247, 255);
+  border-radius: 5px;
+}
+.saved-item button:hover {
+  background-color: rgb(195, 220, 244);
+}
+
+.saved-title-container {
+  width: 100%;
+  justify-self: flex-start;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+}
+
+.saved-date-created {
+  font-size: 9pt;
+  color: #abc;
 }
