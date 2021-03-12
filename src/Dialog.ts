@@ -2,16 +2,22 @@ import createElement from './utils/createElement';
 
 let inputCount = 0;
 
+// TODO: add click on backdrop to close
 class Dialog {
   backdrop = createElement('div', {
     className: 'backdrop dialog-backdrop',
   });
 
   dialog = createElement('div', {
-    className: 'dialog',
+    className: 'popup dialog',
   });
 
-  dialogForm = createElement('form');
+  dialogForm = createElement('form', {
+    onsubmit: (e: Event) => {
+      e.preventDefault();
+      this.handleSubmit();
+    },
+  });
 
   dialogFooter = createElement('div', {
     className: 'dialog-footer',
@@ -23,9 +29,20 @@ class Dialog {
 
   submitCallback: (a: Record<string, any>) => void | boolean = () => {};
 
+  cancelCallback: () => void | boolean = () => {};
+
   closeCallback: () => void = () => {};
 
-  constructor(title: string) {
+  constructor(
+    title: string,
+    {
+      submit = 'OK',
+      cancel = 'Cancel',
+    }: {
+      submit?: string;
+      cancel?: string;
+    } = { submit: 'OK', cancel: 'Cancel' }
+  ) {
     this.dialog.setAttribute('role', 'dialog');
 
     this.dialog.appendChild(
@@ -46,19 +63,19 @@ class Dialog {
     this.submitButton = createElement('button', {
       className: 'button button-primary',
       type: 'button',
-      innerHTML: 'OK',
-      onclick: () => {
-        if (this.submitCallback(this.formData) !== false) {
-          this.close();
-        }
-      },
+      innerHTML: submit,
+      onclick: this.handleSubmit,
     });
 
     this.cancelButton = createElement('button', {
       className: 'button',
       type: 'button',
-      innerHTML: 'Cancel',
-      onclick: () => this.close(),
+      innerHTML: cancel,
+      onclick: () => {
+        // TODO: test this is called
+        this.cancelCallback();
+        this.close();
+      },
     });
 
     this.dialogFooter.appendChild(this.cancelButton);
@@ -79,7 +96,10 @@ class Dialog {
     return obj;
   }
 
-  addInput = (label: string, atts: Partial<Writable<HTMLInputElement>>) => {
+  addInput = (
+    label: string,
+    atts: Partial<Writable<HTMLInputElement>>
+  ): this => {
     const input = createElement('input', atts);
 
     inputCount += 1;
@@ -92,21 +112,40 @@ class Dialog {
 
     this.dialogForm?.appendChild(labelElem);
     this.dialogForm?.appendChild(input);
+
+    return this;
   };
 
-  onSubmit = (cb: () => void) => {
-    // do something with inputs
-    // maybe serialize the inputs
-    // add cb to onsubmit functions
+  handleSubmit = () => {
+    if (this.submitCallback(this.formData) !== false) {
+      this.close();
+    }
+  };
+
+  onSubmit = (cb: this['submitCallback']): this => {
     this.submitCallback = cb;
+
+    return this;
   };
 
-  onClose = (cb: () => void) => {
+  onCancel = (cb: this['cancelCallback']): this => {
+    this.cancelCallback = cb;
+
+    return this;
+  };
+
+  onClose = (cb: () => void): this => {
     this.closeCallback = cb;
+
+    return this;
   };
 
   open() {
-    document.body.appendChild(this.backdrop!);
+    document.body.appendChild(this.backdrop);
+
+    const firstInput = this.dialogForm.querySelector('input');
+    firstInput?.focus();
+    firstInput?.select();
   }
 
   close() {
