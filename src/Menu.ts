@@ -1,3 +1,4 @@
+import { cursorCanvas } from './helpers/getElements';
 import createElement from './utils/createElement';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 import positionElem from './utils/positionElem';
@@ -10,25 +11,23 @@ interface MenuItem {
 const isAnchorElement = (a: HTMLElement): a is HTMLAnchorElement =>
   a.tagName === 'A';
 
-class Menu {
-  menu: HTMLElement | null;
+const eventTarget = cursorCanvas;
 
-  menuBackdrop: HTMLElement | null;
+class Menu {
+  menu = createElement('div', {
+    className: 'popup menu',
+    id: 'menu',
+  });
+
+  menuBackdrop = createElement('div', {
+    className: 'backdrop menu-backdrop',
+    id: 'menu-backdrop',
+  });
 
   constructor() {
     this.events('on');
 
-    this.menu = createElement('div', {
-      className: 'menu',
-      id: 'menu',
-    });
-
     this.menu.setAttribute('role', 'list');
-
-    this.menuBackdrop = createElement('div', {
-      className: 'backdrop menu-backdrop',
-      id: 'menu-backdrop',
-    });
 
     this.menuBackdrop.appendChild(this.menu);
   }
@@ -36,8 +35,6 @@ class Menu {
   destroy() {
     this.events('off');
     this.menuBackdrop?.parentNode?.removeChild(this.menuBackdrop);
-    this.menu = null;
-    this.menuBackdrop = null;
   }
 
   addMenuItem(innerText: string, { callback, href }: MenuItem = {}) {
@@ -75,7 +72,7 @@ class Menu {
 
     // eslint-disable-next-line guard-for-in
     for (const key in events) {
-      document.body[method](key, events[key]);
+      eventTarget[method](key, events[key]);
     }
   }
 
@@ -103,7 +100,8 @@ class Menu {
   closeMenu() {
     const elem = this.menuBackdrop;
 
-    if (!elem) {
+    // TODO: add test for this
+    if (!elem || elem.parentNode == null) {
       return;
     }
 
