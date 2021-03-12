@@ -1,5 +1,8 @@
+import { cursorCanvas } from './helpers/getElements';
 import Menu from './Menu';
 import Vector from './utils/Vector';
+
+jest.mock('./helpers/getElements');
 
 jest.mock('./utils/getPositionFromEvent', () => ({
   default: jest.fn(
@@ -38,8 +41,7 @@ describe('Menu', () => {
 
   it('destroys elements', () => {
     menu.destroy();
-    expect(menu.menu).toBeNull();
-    expect(menu.menuBackdrop).toBeNull();
+    expect(menu.menuBackdrop.parentNode).toBeNull();
   });
 
   it('creates menu elements', () => {
@@ -76,7 +78,7 @@ describe('Menu', () => {
 
     expect(menu.openMenu).not.toHaveBeenCalled();
 
-    document.body.dispatchEvent(rightClick);
+    cursorCanvas.dispatchEvent(rightClick);
 
     expect(menu.openMenu).toHaveBeenCalledTimes(1);
     expect(menu.openMenu).toHaveBeenCalledWith(
