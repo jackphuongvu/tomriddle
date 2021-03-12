@@ -1,8 +1,9 @@
 import lzString from 'lz-string';
 
-interface SavedItem {
+export interface SavedItem {
   name: string;
-  date: number;
+  created: number;
+  lastModified: number;
   key: string;
 }
 
@@ -21,27 +22,35 @@ export const setInfo = (info: SavedInfo) => {
   localStorage.setItem(KEY, JSON.stringify(info));
 };
 
-export const create = (str: string) => {
+export const updateWriting = (key: string, str: string) => {
+  // save data (might need try/catch)
+  localStorage.setItem(key, lzString.compress(str));
+};
+
+export const create = (str: string): string => {
   const info = getInfo();
   const numCreated = info.numCreated + 1;
   const key = `tws-${numCreated}`;
 
-  // save new data
-  localStorage.setItem(key, lzString.compress(str));
+  updateWriting(key, str);
 
   // update info
   info.numCreated = numCreated;
 
   info.data.push({
     key,
-    date: Date.now(),
+    created: Date.now(),
+    lastModified: Date.now(),
     name: `Writing #${numCreated}`,
   });
 
   setInfo(info);
+
+  return key;
 };
 
-const getDataById = (key: string): [SavedItem | null, number] => {
+/** Gets details about a saved piece */
+export const getDataById = (key: string): [SavedItem | null, number] => {
   const info = getInfo();
 
   for (let i = 0, len = info.data.length; i < len; i += 1) {
@@ -54,12 +63,27 @@ const getDataById = (key: string): [SavedItem | null, number] => {
   return [null, -1];
 };
 
-export const get = (key: string): string => {
+/** Gets saved writing */
+export const get = (key: string): string | null => {
+  // TODO: test when get returns null
   const [data] = getDataById(key);
 
-  return (data && localStorage.getItem(data.key)) || '';
+  if (data) {
+    try {
+      const stored = localStorage.getItem(data.key) || '';
+      const uncompressed = lzString.decompress(stored);
+
+      return uncompressed;
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+    }
+  }
+
+  return null;
 };
 
+/** update details */
 export const update = (key: string, updated: Pick<SavedItem, 'name'>): void => {
   const [data, index] = getDataById(key);
   if (data) {
