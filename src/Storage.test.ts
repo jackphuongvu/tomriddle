@@ -3,8 +3,10 @@ import * as Storage from './Storage';
 
 jest.mock('lz-string', () => ({
   default: {
-    compress: jest.fn((str: string) => str),
-    decompress: jest.fn((str: string) => str),
+    // fake compress
+    compress: jest.fn((str: string) => `_____${str}`),
+    // fake decompress
+    decompress: jest.fn((str: string) => str.substr(5)),
   },
 }));
 
@@ -24,7 +26,8 @@ describe('Storage', () => {
     const info: ReturnType<typeof Storage.getInfo> = {
       data: [
         {
-          date: 123,
+          created: 123,
+          lastModified: 123,
           name: 'Undefined',
           key: 'tws-4',
         },
@@ -55,9 +58,20 @@ describe('Storage', () => {
 
     expect(info.data).toHaveLength(1);
     expect(info.numCreated).toBe(1);
-    expect(Number(info.data[0].date)).not.toBeNaN();
+    expect(Number(info.data[0].created)).not.toBeNaN();
+    expect(Number(info.data[0].lastModified)).not.toBeNaN();
     expect(info.data[0].name).toBe('Writing #1');
     expect(info.data[0].key).toBe('tws-1');
+  });
+
+  it('can get info for created item by id', () => {
+    const str = '[JSON data]';
+    const id = Storage.create(str);
+    const [item, index] = Storage.getDataById(id);
+
+    expect(item).not.toBeNull();
+    expect(index).toBe(0);
+    expect(item?.name).toBe(`Writing #1`);
   });
 
   it('can get saved data', () => {
@@ -97,5 +111,12 @@ describe('Storage', () => {
     expect(info.numCreated).toBe(1);
     // clears saved item
     expect(localStorage.getItem('tws-1')).not.toBeTruthy();
+  });
+
+  it('returns id from create method', () => {
+    const str = '[JSON data]';
+    const id = Storage.create(str);
+
+    expect(id).toBe('tws-1');
   });
 });
