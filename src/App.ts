@@ -7,6 +7,9 @@ import getPositionFromEvent from './utils/getPositionFromEvent';
 import Vector from './utils/Vector';
 import Menu from './Menu';
 import addLongTouch from './utils/addLongTouch';
+import * as Storage from './Storage';
+import Dialog from './Dialog';
+import SavedList from './SavedList';
 
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
@@ -23,41 +26,136 @@ class App {
 
   removeLongTouch = () => {};
 
-  start() {
-    if (this.running) return;
-
+  reset() {
     this.running = true;
     this.typewriter.reset();
     this.events('on');
     this.emptyText();
     this.focusText();
     this.typewriter.cursor.draw();
+  }
+
+  start() {
+    if (this.running) return;
+
+    this.reset();
 
     this.menu = new Menu();
 
     this.menu.addMenuItem('Typewrite Something');
 
-    this.menu.addMenuItem('💾 Save', {
+    let lastLoadedId: string;
+
+    this.menu.addMenuItem('📃 New', {
+      callback: () => {
+        lastLoadedId = '';
+        this.menu?.closeMenu();
+        this.reset();
+      },
+    });
+
+    this.menu.addMenuItem('📝 Save / Overwrite', {
       callback: () => {
         // save and prompt edit modal
-        localStorage.setItem('tws', this.typewriter.export());
-        this.menu?.closeMenu();
-      },
-    });
+        const exported = this.typewriter.export();
+        const id = lastLoadedId || Storage.create(exported);
+        let submit = 'Save Writing';
+        let cancel = 'Delete';
 
-    this.menu.addMenuItem('🕊 Load', {
-      callback: () => {
-        // prompt saved modal with load/edit/delete options
-        const saved = localStorage.getItem('tws');
-
-        if (saved) {
-          this.typewriter.import(saved);
+        if (lastLoadedId) {
+          submit = 'Update Writing';
+          cancel = 'Discard Changes';
         }
+
+        const [item] = Storage.getDataById(id);
+
         this.menu?.closeMenu();
+
+        new Dialog('Save', { submit, cancel })
+          .addInput('Name', {
+            type: 'text',
+            name: 'name',
+            value: item?.name,
+          })
+          .onSubmit(({ name }) => {
+            if (!name) {
+              // TODO: should return validation errors
+              return false;
+            }
+
+            if (lastLoadedId) {
+              // actually update
+              Storage.updateWriting(lastLoadedId, exported);
+            }
+
+            Storage.update(id, {
+              name,
+            });
+
+            return true;
+          })
+          .onCancel(() => {
+            // TODO: make sure you can't exit from clicking the backdrop
+            if (!lastLoadedId) {
+              // newly created should delete the writing
+              Storage.deleteById(id);
+            }
+          })
+          .open();
       },
     });
 
-    this.menu.addMenuItem('🤖 Report a Problem', {
+    this.menu.addMenuItem('🗂 My Saved Writings', {
+      callback: () => {
+        this.menu?.closeMenu();
+
+        const savedList = new SavedList('Saved Writings');
+        savedList
+          .onClick(({ key }) => {
+            const writing = Storage.get(key);
+
+            if (writing) {
+              this.typewriter.import(writing);
+              // handle save as if it may be update instead
+              lastLoadedId = key;
+            } else {
+              // empty writings got no reason to live
+              Storage.deleteById(key);
+            }
+          })
+          .onDelete(({ key }) => {
+            Storage.deleteById(key);
+            // refresh list
+            savedList.refreshList();
+          })
+          .onEdit(({ name, key }) => {
+            new Dialog('Update', { submit: 'Update Writing' })
+              .addInput('Name', {
+                type: 'text',
+                name: 'name',
+                value: name,
+              })
+              .onSubmit(({ name: newName }) => {
+                if (!newName) {
+                  // TODO: should return validation errors
+                  return false;
+                }
+
+                Storage.update(key, {
+                  name: newName,
+                });
+
+                savedList.refreshList();
+
+                return true;
+              })
+              .open();
+          })
+          .open();
+      },
+    });
+
+    this.menu.addMenuItem('☎️ Report a Problem', {
       href: 'https://github.com/bozdoz/typewritesomething/issues/new',
     });
 
