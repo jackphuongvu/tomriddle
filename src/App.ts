@@ -7,9 +7,7 @@ import getPositionFromEvent from './utils/getPositionFromEvent';
 import Vector from './utils/Vector';
 import Menu from './Menu';
 import addLongTouch from './utils/addLongTouch';
-import * as Storage from './Storage';
-import Dialog from './Dialog';
-import SavedList from './SavedList';
+import getAppMenu from './getAppMenu';
 
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
@@ -40,128 +38,7 @@ class App {
 
     this.reset();
 
-    this.menu = new Menu();
-
-    this.menu.addMenuItem('Typewrite Something');
-
-    let lastLoadedId: string;
-
-    this.menu.addMenuItem('📃 New', {
-      callback: () => {
-        lastLoadedId = '';
-        this.menu?.closeMenu();
-        this.reset();
-      },
-    });
-
-    this.menu.addMenuItem('📝 Save / Overwrite', {
-      callback: () => {
-        // save and prompt edit modal
-        const exported = this.typewriter.export();
-        const id = lastLoadedId || Storage.create(exported);
-        let submit = 'Save Writing';
-        let cancel = 'Delete';
-
-        if (lastLoadedId) {
-          submit = 'Update Writing';
-          cancel = 'Discard Changes';
-        }
-
-        const [item] = Storage.getDataById(id);
-
-        this.menu?.closeMenu();
-
-        new Dialog('Save', { submit, cancel })
-          .addInput('Name', {
-            type: 'text',
-            name: 'name',
-            value: item?.name,
-          })
-          .onSubmit(({ name }) => {
-            if (!name) {
-              // TODO: should return validation errors
-              return false;
-            }
-
-            if (lastLoadedId) {
-              // actually update
-              Storage.updateWriting(lastLoadedId, exported);
-            }
-
-            Storage.update(id, {
-              name,
-            });
-
-            return true;
-          })
-          .onCancel(() => {
-            // TODO: make sure you can't exit from clicking the backdrop
-            if (!lastLoadedId) {
-              // newly created should delete the writing
-              Storage.deleteById(id);
-            }
-          })
-          .open();
-      },
-    });
-
-    this.menu.addMenuItem('🗂 My Saved Writings', {
-      callback: () => {
-        this.menu?.closeMenu();
-
-        const savedList = new SavedList('Saved Writings');
-        savedList
-          .onClick(({ key }) => {
-            const writing = Storage.get(key);
-
-            if (writing) {
-              this.typewriter.import(writing);
-              // handle save as if it may be update instead
-              lastLoadedId = key;
-            } else {
-              // empty writings got no reason to live
-              Storage.deleteById(key);
-            }
-          })
-          .onDelete(({ key }) => {
-            Storage.deleteById(key);
-            // refresh list
-            savedList.refreshList();
-          })
-          .onEdit(({ name, key }) => {
-            new Dialog('Update', { submit: 'Update Writing' })
-              .addInput('Name', {
-                type: 'text',
-                name: 'name',
-                value: name,
-              })
-              .onSubmit(({ name: newName }) => {
-                if (!newName) {
-                  // TODO: should return validation errors
-                  return false;
-                }
-
-                Storage.update(key, {
-                  name: newName,
-                });
-
-                savedList.refreshList();
-
-                return true;
-              })
-              .open();
-          })
-          .open();
-      },
-    });
-
-    this.menu.addMenuItem('☎️ Report a Problem', {
-      href: 'https://github.com/bozdoz/typewritesomething/issues/new',
-    });
-
-    this.menu.addMenuItem('🥰 Sponsor Me', {
-      href: 'https://www.paypal.com/paypalme/bozdoz',
-    });
+    this.menu = getAppMenu(this);
   }
 
   stop() {
@@ -172,9 +49,9 @@ class App {
     this.events('off');
     this.removeMoveEvent();
 
-    if (this.menu) {
-      this.menu.destroy();
-    }
+    this.menu?.destroy();
+
+    this.menu = null;
   }
 
   events = (onoff = 'on') => {
@@ -205,14 +82,19 @@ class App {
       textInput[method](key, fnc);
     }
 
-    this.removeLongTouch = addLongTouch(eventTarget, (e) => {
-      const position = getPositionFromEvent(e);
+    if (onoff === 'on') {
+      this.removeLongTouch = addLongTouch(eventTarget, (e) => {
+        const position = getPositionFromEvent(e);
 
-      // remove mobile keyboard for css positioning of menu
-      textInput.blur();
+        // remove mobile keyboard for css positioning of menu
+        textInput.blur();
 
-      this.menu?.openMenu(position);
-    });
+        this.menu?.openMenu(position);
+      });
+    } else {
+      this.removeLongTouch();
+      this.removeLongTouch = () => {};
+    }
   };
 
   pressedKeys: Record<string, boolean> = {};

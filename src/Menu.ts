@@ -54,7 +54,6 @@ class Menu {
     }
 
     if (callback || href) {
-      // is clickable
       menuItem.classList.add('clickable');
     }
 
