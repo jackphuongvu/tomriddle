@@ -1,8 +1,7 @@
+import { cursorCanvas } from './helpers/getElements';
 import createElement from './utils/createElement';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 import positionElem from './utils/positionElem';
-
-type AnyFunction = (...args: any[]) => void;
 
 interface MenuItem {
   callback?: AnyFunction;
@@ -12,31 +11,30 @@ interface MenuItem {
 const isAnchorElement = (a: HTMLElement): a is HTMLAnchorElement =>
   a.tagName === 'A';
 
-class Menu {
-  menu: HTMLElement;
+const eventTarget = cursorCanvas;
 
-  menuBackdrop: HTMLElement;
+class Menu {
+  menu = createElement('div', {
+    className: 'popup menu',
+    id: 'menu',
+  });
+
+  menuBackdrop = createElement('div', {
+    className: 'backdrop menu-backdrop',
+    id: 'menu-backdrop',
+  });
 
   constructor() {
     this.events('on');
 
-    this.menu = createElement('div', {
-      className: 'menu',
-      id: 'menu',
-    });
-
     this.menu.setAttribute('role', 'list');
-
-    this.menuBackdrop = createElement('div', {
-      className: 'menu-backdrop',
-      id: 'menu-backdrop',
-    });
 
     this.menuBackdrop.appendChild(this.menu);
   }
 
   destroy() {
     this.events('off');
+    this.menuBackdrop.parentNode?.removeChild(this.menuBackdrop);
   }
 
   addMenuItem(innerText: string, { callback, href }: MenuItem = {}) {
@@ -56,13 +54,18 @@ class Menu {
     }
 
     if (callback || href) {
-      // is clickable
       menuItem.classList.add('clickable');
     }
 
     menuItem.setAttribute('role', 'listitem');
 
     this.menu.appendChild(menuItem);
+  }
+
+  addDivider() {
+    const hr = createElement('hr');
+
+    this.menu.appendChild(hr);
   }
 
   events(onoff = 'on') {
@@ -74,7 +77,7 @@ class Menu {
 
     // eslint-disable-next-line guard-for-in
     for (const key in events) {
-      document.body[method](key, events[key]);
+      eventTarget[method](key, events[key]);
     }
   }
 
@@ -96,28 +99,37 @@ class Menu {
       document.body.addEventListener('click', this.handleClose);
     }
 
-    positionElem(this.menu, position);
+    positionElem(this.menu!, position);
+  }
+
+  closeMenu() {
+    const elem = this.menuBackdrop;
+
+    // TODO: add test for this
+    if (!elem || elem.parentNode == null) {
+      return;
+    }
+
+    // don't listen for more close events
+    document.body.removeEventListener('click', this.handleClose);
+
+    // actually remove things after exit animation
+    const onExit = (e: AnimationEvent) => {
+      if (e.target !== elem) return;
+      elem.removeEventListener('animationend', onExit);
+      elem.classList.remove('exit');
+      elem.parentNode?.removeChild(elem);
+    };
+
+    elem.addEventListener('animationend', onExit);
+
+    // trigger exit animation
+    elem.classList.add('exit');
   }
 
   handleClose = ({ target }: MouseEvent) => {
     if (!this.menu.contains(target as Node)) {
-      const elem = this.menuBackdrop;
-
-      // don't listen for more close events
-      document.body.removeEventListener('click', this.handleClose);
-
-      // actually remove things after exit animation
-      const onExit = (e: AnimationEvent) => {
-        if (e.target !== elem) return;
-        elem.removeEventListener('animationend', onExit);
-        elem.classList.remove('exit');
-        elem.parentNode?.removeChild(elem);
-      };
-
-      elem.addEventListener('animationend', onExit);
-
-      // trigger exit animation
-      elem.classList.add('exit');
+      this.closeMenu();
     }
   };
 }
