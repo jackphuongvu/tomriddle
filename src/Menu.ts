@@ -28,6 +28,7 @@ class Menu {
     this.events('on');
 
     this.menu.setAttribute('role', 'list');
+    this.menu.tabIndex = -1;
 
     this.menuBackdrop.appendChild(this.menu);
   }
@@ -99,7 +100,9 @@ class Menu {
       document.body.addEventListener('click', this.handleClose);
     }
 
-    positionElem(this.menu!, position);
+    positionElem(this.menu, position);
+
+    this.menu.focus();
   }
 
   closeMenu() {

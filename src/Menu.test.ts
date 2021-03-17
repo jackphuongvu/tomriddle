@@ -88,4 +88,15 @@ describe('Menu', () => {
       })
     );
   });
+
+  it('should have focus after opening', () => {
+    expect(document.activeElement).toBe(document.body);
+
+    menu.openMenu({
+      x: 0,
+      y: 0,
+    });
+
+    expect(document.activeElement).toBe(menu.menu);
+  });
 });
