@@ -34,7 +34,7 @@ class Menu {
 
   destroy() {
     this.events('off');
-    this.menuBackdrop?.parentNode?.removeChild(this.menuBackdrop);
+    this.menuBackdrop.parentNode?.removeChild(this.menuBackdrop);
   }
 
   addMenuItem(innerText: string, { callback, href }: MenuItem = {}) {
@@ -59,7 +59,13 @@ class Menu {
 
     menuItem.setAttribute('role', 'listitem');
 
-    this.menu?.appendChild(menuItem);
+    this.menu.appendChild(menuItem);
+  }
+
+  addDivider() {
+    const hr = createElement('hr');
+
+    this.menu.appendChild(hr);
   }
 
   events(onoff = 'on') {
@@ -76,7 +82,7 @@ class Menu {
   }
 
   handleContextMenu = (e: MouseEvent) => {
-    if (this.menu?.contains(e.target as Node)) return;
+    if (this.menu.contains(e.target as Node)) return;
 
     // open menu at position
     const buffer = 5;
@@ -88,8 +94,8 @@ class Menu {
   };
 
   openMenu(position: { x: number; y: number }) {
-    if (this.menuBackdrop?.parentNode == null) {
-      document.body.appendChild(this.menuBackdrop!);
+    if (this.menuBackdrop.parentNode == null) {
+      document.body.appendChild(this.menuBackdrop);
       document.body.addEventListener('click', this.handleClose);
     }
 
@@ -122,7 +128,7 @@ class Menu {
   }
 
   handleClose = ({ target }: MouseEvent) => {
-    if (!this.menu?.contains(target as Node)) {
+    if (!this.menu.contains(target as Node)) {
       this.closeMenu();
     }
   };

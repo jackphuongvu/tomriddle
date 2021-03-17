@@ -17,13 +17,18 @@ const getAppMenu = (app: import('./App').default) => {
     },
   });
 
-  menu.addMenuItem('📝 Save / Overwrite', {
+  menu.addMenuItem('💾 Save', {
     callback: () => {
       // save and prompt edit modal
       const exported = app.typewriter.export();
       const id = lastLoadedId || Storage.create(exported);
       let submit = 'Save Writing';
       let cancel = 'Delete';
+
+      if (exported === '[]') {
+        // empty should not be saved
+        return;
+      }
 
       if (lastLoadedId) {
         submit = 'Update Writing';
@@ -68,7 +73,7 @@ const getAppMenu = (app: import('./App').default) => {
     },
   });
 
-  menu.addMenuItem('🗂 My Saved Writings', {
+  menu.addMenuItem('👀 View Saved', {
     callback: () => {
       menu.closeMenu();
 
@@ -117,6 +122,8 @@ const getAppMenu = (app: import('./App').default) => {
         .open();
     },
   });
+
+  menu.addDivider();
 
   menu.addMenuItem('☎️ Report a Problem', {
     href: 'https://github.com/bozdoz/typewritesomething/issues/new',

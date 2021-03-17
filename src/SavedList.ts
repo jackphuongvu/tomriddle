@@ -58,14 +58,14 @@ class SavedList {
     const { name, created } = savedItem;
     const listitem = createElement('li', {
       className: 'saved-item',
-    });
-
-    const loadButton = createElement('span', {
-      className: 'saved-title-container',
       onclick: () => {
         this.clickCallback(savedItem);
         this.close();
       },
+    });
+
+    const loadButton = createElement('span', {
+      className: 'saved-title-container',
     });
 
     const title = createElement('span', {
@@ -93,7 +93,9 @@ class SavedList {
     const deleteItem = createElement('button', {
       className: 'delete-saved',
       innerHTML: '🗑',
-      onclick: () => {
+      onclick: (e) => {
+        // delete button is inside of view button :D
+        e.stopImmediatePropagation();
         this.deleteCallback(savedItem);
       },
     });
