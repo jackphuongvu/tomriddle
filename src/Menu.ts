@@ -1,4 +1,4 @@
-import { cursorCanvas } from './helpers/getElements';
+import { cursorCanvas, textInput } from './helpers/getElements';
 import createElement from './utils/createElement';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 import positionElem from './utils/positionElem';
@@ -56,6 +56,7 @@ class Menu {
 
     if (callback || href) {
       menuItem.classList.add('clickable');
+      menuItem.tabIndex = 0;
     }
 
     menuItem.setAttribute('role', 'listitem');
@@ -102,11 +103,19 @@ class Menu {
 
     positionElem(this.menu, position);
 
+    // remove tabIndex from textInput
+    textInput.tabIndex = -1;
+    textInput.disabled = true;
+
     this.menu.focus();
   }
 
   closeMenu() {
     const elem = this.menuBackdrop;
+
+    // re-adds tabIndex for textInput
+    textInput.tabIndex = 0;
+    textInput.disabled = false;
 
     // TODO: add test for this
     if (!elem || elem.parentNode == null) {

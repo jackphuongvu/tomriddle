@@ -83,6 +83,7 @@ class App {
     }
 
     if (onoff === 'on') {
+      // TODO: maybe move this event to Menu
       this.removeLongTouch = addLongTouch(eventTarget, (e) => {
         const position = getPositionFromEvent(e);
 

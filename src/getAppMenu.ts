@@ -3,7 +3,6 @@ import * as Storage from './Storage';
 import Dialog from './Dialog';
 import SavedList from './SavedList';
 
-/** extract menu out of App */
 const getAppMenu = (app: import('./App').default) => {
   const menu = new Menu();
 

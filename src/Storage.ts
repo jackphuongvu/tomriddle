@@ -27,7 +27,14 @@ export const updateWriting = (key: string, str: string) => {
   localStorage.setItem(key, lzString.compress(str));
 };
 
-export const create = (str: string): string => {
+export const create = (
+  str: string,
+  {
+    created = Date.now(),
+    lastModified = Date.now(),
+    name: givenName,
+  }: Partial<Pick<SavedItem, 'created' | 'lastModified' | 'name'>> = {}
+): string => {
   const info = getInfo();
   const numCreated = info.numCreated + 1;
   const key = `tws-${numCreated}`;
@@ -39,9 +46,9 @@ export const create = (str: string): string => {
 
   info.data.push({
     key,
-    created: Date.now(),
-    lastModified: Date.now(),
-    name: `Writing #${numCreated}`,
+    created,
+    lastModified,
+    name: givenName || `Writing #${numCreated}`,
   });
 
   setInfo(info);
