@@ -1,2 +1,5 @@
-github: [bozdoz]
-custom: ["https://www.paypal.me/bozdoz"]
+# These are supported funding model platforms
+
+github: bozdoz
+custom: 
+  - https://www.paypal.com/paypalme/bozdoz
