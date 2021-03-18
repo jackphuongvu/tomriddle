@@ -29,7 +29,7 @@ class Dialog {
   /** used for tests */
   cancelButton: HTMLButtonElement;
 
-  submitCallback: (a: Record<string, any>) => void | boolean = () => {};
+  submitCallback: (a: any) => void | boolean = () => {};
 
   cancelCallback: () => void | boolean = () => {};
 
@@ -98,25 +98,35 @@ class Dialog {
     return obj;
   }
 
-  addInput = (
-    label: string,
-    atts: Partial<Writable<HTMLInputElement>>
-  ): this => {
-    const input = createElement('input', atts);
-
+  addFormElement = (label: string, elem: HTMLElement): this => {
     inputCount += 1;
-    input.id = `dialog-input-${inputCount}`;
+    elem.setAttribute('id', `dialog-input-${inputCount}`);
 
     const labelElem = createElement('label', {
-      htmlFor: input.id,
+      htmlFor: elem.id,
       innerHTML: label,
     });
 
-    this.dialogForm?.appendChild(labelElem);
-    this.dialogForm?.appendChild(input);
+    this.dialogForm.appendChild(labelElem);
+    this.dialogForm.appendChild(elem);
 
     return this;
   };
+
+  addInput(label: string, atts?: Partial<Writable<HTMLInputElement>>): this {
+    const input = createElement('input', atts);
+
+    return this.addFormElement(label, input);
+  }
+
+  addTextArea(
+    label: string,
+    atts?: Partial<Writable<HTMLTextAreaElement>>
+  ): this {
+    const textarea = createElement('textarea', atts);
+
+    return this.addFormElement(label, textarea);
+  }
 
   handleSubmit = () => {
     if (this.submitCallback(this.formData) !== false) {
@@ -124,7 +134,9 @@ class Dialog {
     }
   };
 
-  onSubmit = (cb: this['submitCallback']): this => {
+  onSubmit = <T extends Record<string, any>>(
+    cb: (arg: T) => boolean | void
+  ): this => {
     this.submitCallback = cb;
 
     return this;
@@ -145,7 +157,10 @@ class Dialog {
   open() {
     document.body.appendChild(this.backdrop);
 
-    const firstInput = this.dialogForm.querySelector('input');
+    const firstInput = this.dialogForm.querySelector('input, textarea') as
+      | HTMLInputElement
+      | HTMLTextAreaElement;
+
     firstInput?.focus();
     firstInput?.select();
   }

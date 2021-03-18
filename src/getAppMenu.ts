@@ -105,7 +105,7 @@ const getAppMenu = (app: import('./App').default) => {
               name: 'name',
               value: name,
             })
-            .onSubmit(({ name: newName }) => {
+            .onSubmit<{ name: string }>(({ name: newName }) => {
               if (!newName) {
                 // TODO: should return validation errors
                 return false;
@@ -120,6 +120,32 @@ const getAppMenu = (app: import('./App').default) => {
               return true;
             })
             .open();
+        })
+        .open();
+    },
+  });
+
+  menu.addMenuItem('📋 Paste Text', {
+    callback: () => {
+      const pasteDialog = new Dialog('Paste Text');
+
+      menu.closeMenu();
+
+      pasteDialog
+        .addTextArea('Text', {
+          name: 'content',
+        })
+        .onSubmit<{ content: string }>(({ content }) => {
+          const lines = content.split(/[\r\n]/);
+          const { typewriter } = app;
+          const { cursor } = typewriter;
+
+          typewriter.reset();
+
+          for (const line of lines) {
+            typewriter.addCharacter(line);
+            cursor.newline();
+          }
         })
         .open();
     },
