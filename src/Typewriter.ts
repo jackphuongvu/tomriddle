@@ -25,6 +25,8 @@ interface TypeWriterClass {
   debouncedReposition(this: unknown, vec?: Vector | UIEvent): void;
   reset(): void;
   cursor: Cursor;
+  export(): string;
+  import(str: string): void;
 }
 
 export class TypeWriter implements TypeWriterClass {
@@ -49,7 +51,14 @@ export class TypeWriter implements TypeWriterClass {
     window.addEventListener('resize', this.debouncedReposition);
   }
 
-  addCharacter = (_chars: string): void => {
+  addCharacter = (_chars: string, _x?: number, _y?: number): void => {
+    // manually set position and update cursor
+    if (_x !== undefined && _y !== undefined) {
+      this.chars.push(new Character(this, _chars, _x, _y));
+      this.cursor.update(new Vector(_x, _y));
+      return;
+    }
+    // iterate characters and move cursor right
     for (let i = 0, len = _chars.length; i < len; i += 1) {
       const {
         position: { x, y },
@@ -122,4 +131,30 @@ export class TypeWriter implements TypeWriterClass {
     this.reposition();
     this.cursor.draw();
   };
+
+  export() {
+    // just save x,y,str and re-instantiate classes in import
+    return JSON.stringify(
+      this.chars.map(({ x, y, s }: Character) => ({ x, y, s }))
+    );
+  }
+
+  import(str: string) {
+    try {
+      const chars: Pick<Character, 'x' | 'y' | 's'>[] = JSON.parse(str);
+
+      if (!Array.isArray(chars)) {
+        return;
+      }
+
+      this.reset();
+
+      for (const { s, x, y } of chars) {
+        this.addCharacter(s, x, y);
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('failed to import');
+    }
+  }
 }

@@ -11,7 +11,7 @@ class Vector {
     this.y = y;
   }
 
-  add(vector: Vector): Vector {
+  add(vector: Vector | number): Vector {
     if (typeof vector === 'number') {
       return new Vector(this.x + vector, this.y + vector);
     }

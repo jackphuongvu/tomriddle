@@ -5,6 +5,9 @@ import { container, textInput, cursorCanvas } from './helpers/getElements';
 import positionElem from './utils/positionElem';
 import getPositionFromEvent from './utils/getPositionFromEvent';
 import Vector from './utils/Vector';
+import Menu from './Menu';
+import addLongTouch from './utils/addLongTouch';
+import getAppMenu from './getAppMenu';
 
 const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
@@ -17,15 +20,25 @@ class App {
 
   typewriter = new TypeWriter();
 
-  start() {
-    if (this.running) return;
+  menu: Menu | null = null;
 
+  removeLongTouch = () => {};
+
+  reset() {
     this.running = true;
     this.typewriter.reset();
     this.events('on');
     this.emptyText();
     this.focusText();
     this.typewriter.cursor.draw();
+  }
+
+  start() {
+    if (this.running) return;
+
+    this.reset();
+
+    this.menu = getAppMenu(this);
   }
 
   stop() {
@@ -35,6 +48,10 @@ class App {
     // kill events
     this.events('off');
     this.removeMoveEvent();
+
+    this.menu?.destroy();
+
+    this.menu = null;
   }
 
   events = (onoff = 'on') => {
@@ -64,6 +81,21 @@ class App {
       const fnc = cursorEvents[key];
       textInput[method](key, fnc);
     }
+
+    if (onoff === 'on') {
+      // TODO: maybe move this event to Menu
+      this.removeLongTouch = addLongTouch(eventTarget, (e) => {
+        const position = getPositionFromEvent(e);
+
+        // remove mobile keyboard for css positioning of menu
+        textInput.blur();
+
+        this.menu?.openMenu(position);
+      });
+    } else {
+      this.removeLongTouch();
+      this.removeLongTouch = () => {};
+    }
   };
 
   pressedKeys: Record<string, boolean> = {};
@@ -74,7 +106,7 @@ class App {
    */
   handleKeyDown = (e: KeyboardEvent) => {
     const isMeta = e.altKey || e.ctrlKey || e.metaKey;
-    const noAudio = (NO_AUDIO as any)[e.which] || isMeta;
+    const noAudio: boolean | string = (NO_AUDIO as any)[e.which] || isMeta;
     const isPressed = this.pressedKeys[e.code];
 
     if (isPressed) {

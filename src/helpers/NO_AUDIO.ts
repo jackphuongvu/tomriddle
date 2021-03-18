@@ -1,7 +1,8 @@
 /**
  * mapping for soundless keys
+ * Don't ever allow Android's ridiculous 229 code
  */
-const NO_AUDIO = {
+const NO_AUDIO: Record<number, string> & Partial<Record<229, never>> = {
   0: 'PRTSCR',
   8: 'BACKSPACE',
   9: 'TAB',
@@ -38,7 +39,6 @@ const NO_AUDIO = {
   144: 'NUMLOCK',
   145: 'SCROLLLOCK',
   224: 'CMD',
-  229: 'ANDROID_BACKSPACE',
 };
 
 export default NO_AUDIO;

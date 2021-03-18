@@ -4,7 +4,7 @@ module.exports = {
   },
   files: ['dist', 'static', 'index.html'],
   watchEvents: ['change'],
-  watch: true,
+  watch: false,
   ignore: [],
   single: false,
   watchOptions: {
