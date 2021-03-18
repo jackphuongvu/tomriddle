@@ -4,6 +4,7 @@ import prettyDate from './utils/prettyDate';
 import { exportSaved, importSaved } from './utils/importExportSaved';
 
 // TODO: add search
+// TODO: add cancel button
 class SavedList {
   // TODO: might need to separate these backdrops into a new class
   backdrop = createElement('div', {

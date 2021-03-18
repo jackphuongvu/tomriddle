@@ -17,17 +17,20 @@ const getAppMenu = (app: import('./App').default) => {
   });
 
   menu.addMenuItem('💾 Save', {
+    // TODO: maybe should export all of these callbacks for testing
     callback: () => {
       // save and prompt edit modal
       const exported = app.typewriter.export();
-      const id = lastLoadedId || Storage.create(exported);
-      let submit = 'Save Writing';
-      let cancel = 'Delete';
 
       if (exported === '[]') {
         // empty should not be saved
+        menu.closeMenu();
         return;
       }
+
+      const id = lastLoadedId || Storage.create(exported);
+      let submit = 'Save Writing';
+      let cancel = 'Delete';
 
       if (lastLoadedId) {
         submit = 'Update Writing';
