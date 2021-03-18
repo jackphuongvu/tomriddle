@@ -1,6 +1,7 @@
 import createElement from './utils/createElement';
 import * as Storage from './Storage';
 import prettyDate from './utils/prettyDate';
+import { exportSaved, importSaved } from './utils/importExportSaved';
 
 // TODO: add search
 class SavedList {
@@ -16,6 +17,14 @@ class SavedList {
   dialogBody = createElement('div', {
     className: 'dialog-body',
   });
+
+  dialogFooter = createElement('footer', {
+    className: 'dialog-footer',
+  });
+
+  exportButton: HTMLButtonElement;
+
+  importButton: HTMLButtonElement;
 
   clickCallback: (si: Storage.SavedItem) => void | boolean = () => {};
 
@@ -42,9 +51,35 @@ class SavedList {
       }
     });
 
+    // add action buttons to footer
+    this.exportButton = createElement('button', {
+      className: 'button',
+      type: 'button',
+      innerHTML: 'Export',
+      onclick: exportSaved,
+    });
+
+    this.importButton = createElement('button', {
+      className: 'button',
+      type: 'button',
+      innerHTML: 'import',
+      onclick: async () => {
+        try {
+          await importSaved();
+        } catch (e) {
+          // not sure
+        } finally {
+          this.refreshList();
+        }
+      },
+    });
+
     this.refreshList();
 
+    this.dialogFooter.appendChild(this.exportButton);
+    this.dialogFooter.appendChild(this.importButton);
     this.dialog.appendChild(this.dialogBody);
+    this.dialog.appendChild(this.dialogFooter);
     this.backdrop.appendChild(this.dialog);
   }
 
@@ -108,7 +143,7 @@ class SavedList {
   };
 
   destroy() {
-    this.backdrop?.parentNode?.removeChild(this.backdrop);
+    this.backdrop.parentNode?.removeChild(this.backdrop);
   }
 
   onClick = (cb: this['clickCallback']): this => {
@@ -144,24 +179,39 @@ class SavedList {
     this.destroy();
   }
 
-  refreshList() {
-    // TODO: do something if empty
-    const savedItems = this.getSaved();
-    const savedList = createElement('ul', {
-      className: 'saved-list',
-    });
-
-    // clear list
+  clearList() {
     for (const child of Array.from(this.dialogBody.children)) {
       child.parentNode?.removeChild(child);
     }
+  }
 
-    // add list
-    for (const item of savedItems) {
-      savedList.appendChild(item);
+  refreshList() {
+    const savedItems = this.getSaved();
+    const isEmpty = savedItems.length === 0;
+
+    this.exportButton.disabled = isEmpty;
+
+    this.clearList();
+
+    if (isEmpty) {
+      const emptyList = createElement('div', {
+        className: 'empty-list',
+        innerHTML: 'Nothing saved',
+      });
+
+      this.dialogBody.appendChild(emptyList);
+    } else {
+      // add list
+      const savedList = createElement('ul', {
+        className: 'saved-list',
+      });
+
+      for (const item of savedItems) {
+        savedList.appendChild(item);
+      }
+
+      this.dialogBody.appendChild(savedList);
     }
-
-    this.dialogBody.appendChild(savedList);
   }
 }
 

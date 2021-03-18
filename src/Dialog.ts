@@ -23,9 +23,11 @@ class Dialog {
     className: 'dialog-footer',
   });
 
-  submitButton: HTMLButtonElement | null;
+  /** used for tests */
+  submitButton: HTMLButtonElement;
 
-  cancelButton: HTMLButtonElement | null;
+  /** used for tests */
+  cancelButton: HTMLButtonElement;
 
   submitCallback: (a: Record<string, any>) => void | boolean = () => {};
 

@@ -27,21 +27,21 @@ describe('Dialog', () => {
 
   it('can dismiss the dialog with the cancel button', () => {
     jest.spyOn(Dialog.prototype, 'close');
-    dialog.cancelButton?.click();
+    dialog.cancelButton.click();
     expect(dialog.close).toHaveBeenCalled();
   });
 
   it('calls onClose after cancel button click', () => {
     const onClose = jest.fn();
     dialog.onClose(onClose);
-    dialog.cancelButton?.click();
+    dialog.cancelButton.click();
     expect(onClose).toHaveBeenCalled();
   });
 
   it('calls onSubmit after submit button click', () => {
     const onSubmit = jest.fn();
     dialog.onSubmit(onSubmit);
-    dialog.submitButton?.click();
+    dialog.submitButton.click();
     expect(onSubmit).toHaveBeenCalled();
   });
 
@@ -71,7 +71,7 @@ describe('Dialog', () => {
     });
 
     dialog.onSubmit(onSubmit);
-    dialog.submitButton?.click();
+    dialog.submitButton.click();
 
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -83,7 +83,7 @@ describe('Dialog', () => {
   it('calls onClose after submit button click', () => {
     const onClose = jest.fn();
     dialog.onClose(onClose);
-    dialog.submitButton?.click();
+    dialog.submitButton.click();
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -92,7 +92,7 @@ describe('Dialog', () => {
     const onSubmit = jest.fn(() => false);
     dialog.onClose(onClose);
     dialog.onSubmit(onSubmit);
-    dialog.submitButton?.click();
+    dialog.submitButton.click();
     expect(onClose).not.toHaveBeenCalled();
   });
 });
