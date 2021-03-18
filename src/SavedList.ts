@@ -121,7 +121,9 @@ class SavedList {
     const edit = createElement('button', {
       className: 'edit-saved',
       innerHTML: '✏️',
-      onclick: () => {
+      onclick: (e) => {
+        // button is inside of view button :D
+        e.stopImmediatePropagation();
         this.editCallback(savedItem);
       },
     });
@@ -130,7 +132,7 @@ class SavedList {
       className: 'delete-saved',
       innerHTML: '🗑',
       onclick: (e) => {
-        // delete button is inside of view button :D
+        // button is inside of view button :D
         e.stopImmediatePropagation();
         this.deleteCallback(savedItem);
       },
