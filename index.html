@@ -84,9 +84,12 @@
           role="search"
         >
           <!-- prevent autocomplete -->
-          <input type="password" style="display: none" readonly="readonly" />
-          <input type="text" style="display: none" readonly="readonly" />
-          <input type="search" style="display: none" readonly="readonly" />
+          <div id="lp"><input type="text" /><input type="password" /></div>
+          <script type="text/javascript">
+            setTimeout(function () {
+              document.getElementById('lp').style.display = 'none';
+            }, 75);
+          </script>
 
           <input
             type="text"
@@ -94,6 +97,7 @@
             tabindex="0"
             autocomplete="one-time-code"
             autocorrect="off"
+            data-lpignore="true"
           />
         </form>
       </div>
