@@ -7,7 +7,7 @@ import commonjs from '@rollup/plugin-commonjs';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-console.log(JSON.stringify(process.env));
+console.log(JSON.stringify(Object.keys(process.env)));
 
 const commonPlugins = [
   replace({
