@@ -9,7 +9,7 @@ import Menu from './Menu';
 import addLongTouch from './utils/addLongTouch';
 import getAppMenu from './getAppMenu';
 
-const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 5);
+const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 7);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
 const eventTarget = cursorCanvas;
 

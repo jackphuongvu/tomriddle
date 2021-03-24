@@ -7,6 +7,13 @@ import commonjs from '@rollup/plugin-commonjs';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+const hash = require('child_process')
+  .execSync('git rev-parse HEAD')
+  .toString()
+  .trim();
+
+console.log({ hash });
+
 const commonPlugins = [
   replace({
     'process.env.NODE_ENV': JSON.stringify(
@@ -15,6 +22,7 @@ const commonPlugins = [
     'process.env.npm_package_version': JSON.stringify(
       process.env.npm_package_version
     ),
+    'process.env.git_hash': JSON.stringify(hash || ''),
   }),
   commonjs(),
   typescript(),

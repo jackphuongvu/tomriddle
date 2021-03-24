@@ -1,6 +1,6 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-restricted-globals */
-const CACHE_NAME = `typewritesomething@${process.env.npm_package_version}`;
+const CACHE_NAME = `typewritesomething@${process.env.npm_package_version}.${process.env.git_hash}`;
 
 self.addEventListener('install', function install(e: any) {
   e.waitUntil(
