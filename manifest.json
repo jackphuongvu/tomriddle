@@ -9,39 +9,9 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/static/img/logo-on-bg-36.png",
+      "src": "/static/img/logo-on-bg.png",
       "type": "image/png",
       "sizes": "36x36"
-    },
-    {
-      "src": "/static/img/logo-on-bg-48.png",
-      "type": "image/png",
-      "sizes": "48x48"
-    },
-    {
-      "src": "/static/img/logo-on-bg-72.png",
-      "type": "image/png",
-      "sizes": "72x72"
-    },
-    {
-      "src": "/static/img/logo-on-bg-96.png",
-      "type": "image/png",
-      "sizes": "96x96"
-    },
-    {
-      "src": "/static/img/logo-on-bg-144.png",
-      "type": "image/png",
-      "sizes": "144x144"
-    },
-    {
-      "src": "/static/img/logo-on-bg-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/static/img/logo-on-bg-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
     }
   ]
 }
