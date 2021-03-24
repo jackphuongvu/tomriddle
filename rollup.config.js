@@ -17,7 +17,9 @@ const commonPlugins = [
     'process.env.npm_package_version': JSON.stringify(
       process.env.npm_package_version
     ),
-    'process.env.git_hash': JSON.stringify(''),
+    'process.env.git_hash': JSON.stringify(
+      process.env.NOW_GITHUB_COMMIT_SHA || ''
+    ),
   }),
   commonjs(),
   typescript(),
