@@ -6,13 +6,10 @@ self.addEventListener('install', function install(e: any) {
   e.waitUntil(
     caches.open(CACHE_NAME).then(function caching(cache) {
       return cache.addAll([
-        '/',
-        '/dist/',
         '/dist/main.js',
         '/favicon.ico',
         '/index.html',
         '/manifest.json',
-        '/static/',
         '/static/audio/keypress.mp3',
         '/static/audio/return.mp3',
         '/static/fonts/specialelite-webfont.ttf',
