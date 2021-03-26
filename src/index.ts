@@ -49,12 +49,18 @@ window.addEventListener('load', onload);
 // Register service worker to control making site work offline
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch((e): void => {
-    // eslint-disable-next-line no-console
-    console.error('Service Worker failed');
-    // eslint-disable-next-line no-console
-    console.error(e);
-  });
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(() => {
+      // eslint-disable-next-line no-console
+      console.error('Service Worker registered');
+    })
+    .catch((e): void => {
+      // eslint-disable-next-line no-console
+      console.error('Service Worker failed');
+      // eslint-disable-next-line no-console
+      console.error(e);
+    });
 }
 
 if (isDebugMode()) {
