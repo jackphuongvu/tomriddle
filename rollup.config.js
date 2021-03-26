@@ -7,8 +7,10 @@ import commonjs from '@rollup/plugin-commonjs';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const gitHash = process.env.NOW_GITHUB_COMMIT_SHA
-  ? process.env.NOW_GITHUB_COMMIT_SHA.substr(0, 7)
+  ? `${process.env.NOW_GITHUB_COMMIT_SHA.substr(0, 7)}"`
   : '';
+
+console.log({ gitHash });
 
 const commonPlugins = [
   replace({
