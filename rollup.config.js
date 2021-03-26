@@ -6,6 +6,9 @@ import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
 
 const isProduction = process.env.NODE_ENV === 'production';
+const gitHash = process.env.NOW_GITHUB_COMMIT_SHA
+  ? process.env.NOW_GITHUB_COMMIT_SHA.substr(0, 7)
+  : '';
 
 const commonPlugins = [
   replace({
@@ -15,9 +18,7 @@ const commonPlugins = [
     'process.env.npm_package_version': JSON.stringify(
       process.env.npm_package_version
     ),
-    'process.env.git_hash': JSON.stringify(
-      process.env.NOW_GITHUB_COMMIT_SHA || ''
-    ).substr(0, 7),
+    'process.env.git_hash': JSON.stringify(gitHash).substr(0, 7),
   }),
   commonjs(),
   typescript(),
