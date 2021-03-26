@@ -5,22 +5,21 @@ import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
 
-const isProduction = process.env.NODE_ENV === 'production';
-const gitHash = process.env.NOW_GITHUB_COMMIT_SHA
-  ? `${process.env.NOW_GITHUB_COMMIT_SHA.substr(0, 7)}"`
-  : '';
+const {
+  NODE_ENV,
+  NOW_GITHUB_COMMIT_SHA = '',
+  npm_package_version,
+} = process.env;
+const isProduction = NODE_ENV === 'production';
+const gitHash = NOW_GITHUB_COMMIT_SHA.substr(0, 7);
 
 console.log({ gitHash });
 
 const commonPlugins = [
   replace({
-    'process.env.NODE_ENV': JSON.stringify(
-      process.env.NODE_ENV || 'development'
-    ),
-    'process.env.npm_package_version': JSON.stringify(
-      process.env.npm_package_version
-    ),
-    'process.env.git_hash': JSON.stringify(gitHash).substr(0, 7),
+    'process.env.NODE_ENV': JSON.stringify(NODE_ENV || 'development'),
+    'process.env.npm_package_version': JSON.stringify(npm_package_version),
+    'process.env.git_hash': JSON.stringify(gitHash),
   }),
   commonjs(),
   typescript(),
