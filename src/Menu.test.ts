@@ -55,7 +55,18 @@ describe('Menu', () => {
 
     expect(menu.menu?.children).toHaveLength(1);
 
-    expect((menu.menu?.children[0] as HTMLElement).innerText).toBe('text');
+    expect((menu.menu?.children[0] as HTMLElement).innerHTML).toBe('text');
+  });
+
+  it('can add html entities as titles', () => {
+    menu.addMenuItem('&nbsp; text');
+
+    expect(menu.menu?.children).toHaveLength(1);
+
+    expect((menu.menu?.children[0] as HTMLElement).innerHTML).toBe(
+      '&nbsp; text'
+    );
+    expect((menu.menu?.children[0] as HTMLElement).textContent).toBe('  text');
   });
 
   it('can add clickable menu items', () => {
