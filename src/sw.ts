@@ -2,6 +2,24 @@
 /* eslint-disable no-restricted-globals */
 const CACHE_NAME = `typewritesomething@${process.env.npm_package_version}-${process.env.git_hash}`;
 
+// On version update, remove old cached files
+self.addEventListener('activate', function activate(e: any) {
+  e.waitUntil(
+    caches
+      .keys()
+      .then(function deleteAll(keys) {
+        return Promise.all(
+          keys
+            .filter((key) => key !== CACHE_NAME)
+            .map((key) => caches.delete(key))
+        );
+      })
+      .then(function endWait() {
+        return (self as any).clients.claim();
+      })
+  );
+});
+
 self.addEventListener('install', function install(e: any) {
   e.waitUntil(
     caches.open(CACHE_NAME).then(function caching(cache) {

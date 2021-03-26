@@ -17,7 +17,7 @@ const commonPlugins = [
     ),
     'process.env.git_hash': JSON.stringify(
       process.env.NOW_GITHUB_COMMIT_SHA || ''
-    ),
+    ).substr(0, 7),
   }),
   commonjs(),
   typescript(),
