@@ -38,10 +38,10 @@ class Menu {
     this.menuBackdrop.parentNode?.removeChild(this.menuBackdrop);
   }
 
-  addMenuItem(innerText: string, { callback, href }: MenuItem = {}) {
+  addMenuItem(innerHTML: string, { callback, href }: MenuItem = {}) {
     const tagname = href ? 'a' : 'div';
     const menuItem = createElement(tagname, {
-      innerText,
+      innerHTML,
       className: 'menu-item',
     });
 
@@ -52,6 +52,11 @@ class Menu {
 
     if (callback) {
       menuItem.addEventListener('click', callback);
+      menuItem.addEventListener('keydown', (e: any) => {
+        if (e.key === 'Enter') {
+          callback();
+        }
+      });
     }
 
     if (callback || href) {

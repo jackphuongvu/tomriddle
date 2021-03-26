@@ -8,7 +8,7 @@ const getAppMenu = (app: import('./App').default) => {
 
   let lastLoadedId: ReturnType<typeof Storage.create>;
 
-  menu.addMenuItem('📃 New', {
+  menu.addMenuItem('📃 &nbsp; New', {
     callback: () => {
       lastLoadedId = '';
       menu.closeMenu();
@@ -16,7 +16,7 @@ const getAppMenu = (app: import('./App').default) => {
     },
   });
 
-  menu.addMenuItem('💾 Save', {
+  menu.addMenuItem('💾 &nbsp; Save', {
     // TODO: maybe should export all of these callbacks for testing
     callback: () => {
       // save and prompt edit modal
@@ -75,7 +75,7 @@ const getAppMenu = (app: import('./App').default) => {
     },
   });
 
-  menu.addMenuItem('👀 View Saved', {
+  menu.addMenuItem('👀 &nbsp; View Saved', {
     callback: () => {
       menu.closeMenu();
 
@@ -125,7 +125,7 @@ const getAppMenu = (app: import('./App').default) => {
     },
   });
 
-  menu.addMenuItem('📋 Paste Text', {
+  menu.addMenuItem('📋 &nbsp; Paste Text', {
     callback: () => {
       const pasteDialog = new Dialog('Paste Text');
 
@@ -153,11 +153,11 @@ const getAppMenu = (app: import('./App').default) => {
 
   menu.addDivider();
 
-  menu.addMenuItem('☎️ Report a Problem', {
+  menu.addMenuItem('☎️ &nbsp; Report a Problem', {
     href: 'https://github.com/bozdoz/typewritesomething/issues/new',
   });
 
-  menu.addMenuItem('🥰 Sponsor Me', {
+  menu.addMenuItem('🥰 &nbsp; Sponsor Me', {
     href: 'https://www.paypal.com/paypalme/bozdoz',
   });
 
