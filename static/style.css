@@ -79,8 +79,8 @@ h5 {
 #splash {
   background: #fffdf3;
   background: linear-gradient(to bottom, #fffdf3 0%, #fcfaf5 100%);
-  box-shadow: inset rgba(216, 180, 126, 0.2) 0em 10em 4em,
-    inset rgba(216, 180, 126, 0.2) 0em -6em 4em;
+  box-shadow: rgba(216, 180, 126, 0.2) 0em 10em 4em inset,
+    rgba(216, 180, 126, 0.2) 0em -6em 4em inset;
   position: absolute;
   top: 0;
   left: 0;
@@ -90,7 +90,7 @@ h5 {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  margin-top: -20px;
+  padding-bottom: 40px;
   align-items: center;
   opacity: 1;
   /* needed for safari click event */
@@ -344,7 +344,7 @@ body.debug #text-input {
 
 .dialog-footer .button:not([disabled]):hover {
   cursor: pointer;
-  box-shadow: inset rgba(0, 0, 0, 0.05) -1000px 0;
+  box-shadow: rgba(0, 0, 0, 0.05) -1000px 0 inset;
 }
 
 .dialog-footer .button-primary {
