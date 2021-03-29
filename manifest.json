@@ -4,14 +4,32 @@
   "display": "standalone",
   "background_color": "#f6f3e3",
   "theme_color": "#150904",
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "related_applications": [],
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/static/img/logo-on-bg.png",
+      "src": "/static/img/logo-on-bg-36.png",
       "type": "image/png",
       "sizes": "36x36"
+    },
+    {
+      "src": "/static/img/logo-on-bg-96.png",
+      "type": "image/png",
+      "sizes": "96x96",
+      "purpose": "any masked"
+    },
+    {
+      "src": "/static/img/logo-on-bg-144.png",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": "any masked"
+    },
+    {
+      "src": "/static/img/logo-on-bg-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any masked"
     }
   ]
 }

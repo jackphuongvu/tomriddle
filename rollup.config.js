@@ -7,7 +7,7 @@ import commonjs from '@rollup/plugin-commonjs';
 
 const {
   NODE_ENV,
-  NOW_GITHUB_COMMIT_SHA = '',
+  NOW_GITHUB_COMMIT_SHA = Math.random().toString(16).substr(2),
   npm_package_version,
 } = process.env;
 const isProduction = NODE_ENV === 'production';
@@ -52,8 +52,7 @@ export default () => [
     input: `src/sw.ts`,
     output: {
       // vercel builds to dist then copies dist to root
-      // sw.js can go to root, so this is good
-      file: `dist/sw.js`,
+      file: isProduction ? `dist/sw.js` : 'sw.js',
       sourcemap: false,
       format: 'cjs',
     },

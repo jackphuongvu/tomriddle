@@ -53,7 +53,7 @@ if ('serviceWorker' in navigator) {
     .register('/sw.js')
     .then(() => {
       // eslint-disable-next-line no-console
-      console.error('Service Worker registered');
+      console.log('Service Worker registered');
     })
     .catch((e): void => {
       // eslint-disable-next-line no-console
