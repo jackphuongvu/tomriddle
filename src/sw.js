@@ -8,7 +8,7 @@ self.addEventListener('install', (event) => {
   console.log('install');
   event.waitUntil(
     caches
-      .open(PRECACHE)
+      .open(CACHE_NAME)
       .then((cache) => cache.addAll(PRECACHE_URLS))
       .then(self.skipWaiting())
   );
@@ -16,7 +16,7 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   console.log('activate');
-  const currentCaches = [PRECACHE, RUNTIME];
+  const currentCaches = [CACHE_NAME];
   event.waitUntil(
     caches
       .keys()
@@ -44,7 +44,9 @@ self.addEventListener('fetch', (event) => {
           return cachedResponse;
         }
 
-        return caches.open(RUNTIME).then((cache) => {
+        console.log('fetching', event.request);
+
+        return caches.open(CACHE_NAME).then((cache) => {
           return fetch(event.request).then((response) => {
             return response;
           });
