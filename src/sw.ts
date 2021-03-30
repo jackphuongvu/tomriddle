@@ -37,18 +37,14 @@ self.addEventListener('install', (e: any) => {
 self.addEventListener('activate', function activate(e: any) {
   console.log('activating');
   e.waitUntil(
-    caches
-      .keys()
-      .then(
-        (keys) =>
-          console.log('deleting keys') ||
-          Promise.all(
-            keys
-              .filter((key) => key !== CACHE_NAME)
-              .map((key) => caches.delete(key))
-          )
-      )
-      .then(() => console.log('claiming') || (self as any).clients.claim())
+    caches.keys().then((keys) => {
+      console.log('deleting keys');
+      return Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      );
+    })
   );
 });
 
