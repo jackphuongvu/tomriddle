@@ -1,11 +1,28 @@
 const CACHE_NAME = `typewritesomething@${process.env.npm_package_version}-${process.env.git_hash}`;
 
 // list the files you want cached by the service worker
-PRECACHE_URLS = ['/index.html', '/dist/main.js'];
+const PRECACHE_URLS = [
+  '/',
+  '/dist/main.js',
+  '/favicon.ico',
+  '/index.html',
+  '/manifest.json',
+  '/static/style.css',
+  '/static/audio/keypress.mp3',
+  '/static/audio/return.mp3',
+  '/static/fonts/specialelite-webfont.ttf',
+  '/static/fonts/specialelite-webfont.woff',
+  '/static/fonts/specialelite-webfont.woff2',
+  '/static/img/handmadepaper.png',
+  '/static/img/logo-on-bg-36.png',
+  '/static/img/logo-on-bg-96.png',
+  '/static/img/logo-on-bg-144.png',
+  '/static/img/logo-on-bg-512.png',
+  '/static/img/logo-on-bg.png',
+];
 
 // the rest below handles the installing and caching
 self.addEventListener('install', (event) => {
-  console.log('install');
   event.waitUntil(
     caches
       .open(CACHE_NAME)
@@ -15,7 +32,6 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('activate');
   const currentCaches = [CACHE_NAME];
   event.waitUntil(
     caches
@@ -43,8 +59,6 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) {
           return cachedResponse;
         }
-
-        console.log('fetching', event.request);
 
         return caches.open(CACHE_NAME).then((cache) => {
           return fetch(event.request).then((response) => {
