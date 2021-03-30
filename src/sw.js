@@ -1,19 +1,11 @@
-/*
- * @Author: Vincent Wang
- * @Date:   20171114 11:45:27
- * @Last Modified by:   Vincent Wang
- * @Last Modified time: 2017-11-21 14:53:45
- */
-const PRECACHE = 'precache-v1';
-const RUNTIME = 'runtime-v2';
+const CACHE_NAME = `typewritesomething@${process.env.npm_package_version}-${process.env.git_hash}`;
 
 // list the files you want cached by the service worker
-PRECACHE_URLS = [
-  // '/static/plugins.js',
-];
+PRECACHE_URLS = ['/index.html', '/dist/main.js'];
 
 // the rest below handles the installing and caching
 self.addEventListener('install', (event) => {
+  console.log('install');
   event.waitUntil(
     caches
       .open(PRECACHE)
@@ -23,6 +15,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
+  console.log('activate');
   const currentCaches = [PRECACHE, RUNTIME];
   event.waitUntil(
     caches
