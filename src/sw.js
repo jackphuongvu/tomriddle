@@ -8,17 +8,6 @@ const PRECACHE_URLS = [
   '/index.html',
   '/manifest.json',
   '/static/style.css',
-  '/static/audio/keypress.mp3',
-  '/static/audio/return.mp3',
-  '/static/fonts/specialelite-webfont.ttf',
-  '/static/fonts/specialelite-webfont.woff',
-  '/static/fonts/specialelite-webfont.woff2',
-  '/static/img/handmadepaper.png',
-  '/static/img/logo-on-bg-36.png',
-  '/static/img/logo-on-bg-96.png',
-  '/static/img/logo-on-bg-144.png',
-  '/static/img/logo-on-bg-512.png',
-  '/static/img/logo-on-bg.png',
 ];
 
 // the rest below handles the installing and caching
