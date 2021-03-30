@@ -56,6 +56,7 @@ export default () => [
       file: isProduction ? `dist/sw.js` : 'sw.js',
       sourcemap: false,
       format: 'cjs',
+      strict: false,
     },
   },
 ];
