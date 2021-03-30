@@ -49,7 +49,7 @@ export default () => [
   },
   {
     plugins,
-    input: `src/sw.ts`,
+    input: `src/sw.js`,
     output: {
       // vercel builds to dist then copies dist to root
       file: isProduction ? `dist/sw.js` : 'sw.js',
