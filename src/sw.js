@@ -1,53 +1,62 @@
-self.addEventListener('install', function (event) {
+/*
+ * @Author: Vincent Wang
+ * @Date:   20171114 11:45:27
+ * @Last Modified by:   Vincent Wang
+ * @Last Modified time: 2017-11-21 14:53:45
+ */
+const PRECACHE = 'precache-v1';
+const RUNTIME = 'runtime-v2';
+
+// list the files you want cached by the service worker
+PRECACHE_URLS = [
+  // '/static/plugins.js',
+];
+
+// the rest below handles the installing and caching
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open('v1').then(function (cache) {
-      return cache.addAll([
-        '/',
-        '/index.html',
-        '/dist/main.js',
-        '/favicon.ico',
-        '/manifest.json',
-        '/static/audio/keypress.mp3',
-        '/static/audio/return.mp3',
-        '/static/fonts/specialelite-webfont.ttf',
-        '/static/fonts/specialelite-webfont.woff',
-        '/static/fonts/specialelite-webfont.woff2',
-        '/static/img/handmadepaper.png',
-        '/static/style.css',
-        '/static/img/logo-on-bg-36.png',
-        '/static/img/logo-on-bg-96.png',
-        '/static/img/logo-on-bg-144.png',
-        '/static/img/logo-on-bg-512.png',
-        '/static/img/logo-on-bg.png',
-      ]);
-    })
+    caches
+      .open(PRECACHE)
+      .then((cache) => cache.addAll(PRECACHE_URLS))
+      .then(self.skipWaiting())
   );
 });
 
-self.addEventListener('fetch', function (event) {
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      // caches.match() always resolves
-      // but in case of success response will have value
-      if (response !== undefined) {
-        return response;
-      } else {
-        return fetch(event.request)
-          .then(function (response) {
-            // response may be used only once
-            // we need to save clone to put one copy in cache
-            // and serve second one
-            let responseClone = response.clone();
-
-            caches.open('v1').then(function (cache) {
-              cache.put(event.request, responseClone);
-            });
-            return response;
+self.addEventListener('activate', (event) => {
+  const currentCaches = [PRECACHE, RUNTIME];
+  event.waitUntil(
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return cacheNames.filter(
+          (cacheName) => !currentCaches.includes(cacheName)
+        );
+      })
+      .then((cachesToDelete) => {
+        return Promise.all(
+          cachesToDelete.map((cacheToDelete) => {
+            return caches.delete(cacheToDelete);
           })
-          .catch(function () {
-            return caches.match('/sw-test/gallery/myLittleVader.jpg');
-          });
-      }
-    })
+        );
+      })
+      .then(() => self.clients.claim())
   );
+});
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        return caches.open(RUNTIME).then((cache) => {
+          return fetch(event.request).then((response) => {
+            return response;
+          });
+        });
+      })
+    );
+  }
 });
