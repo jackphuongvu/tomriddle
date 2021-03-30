@@ -31,9 +31,10 @@ const commonPlugins = [
   }),
 ];
 
-const plugins = isProduction
-  ? [...commonPlugins, require('rollup-plugin-terser').terser()]
-  : commonPlugins;
+const plugins =
+  isProduction && false
+    ? [...commonPlugins, require('rollup-plugin-terser').terser()]
+    : commonPlugins;
 
 export default () => [
   {
