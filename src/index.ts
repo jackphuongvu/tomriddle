@@ -51,9 +51,17 @@ window.addEventListener('load', onload);
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('/sw.js')
-    .then(() => {
-      // eslint-disable-next-line no-console
-      console.log('Service Worker registered');
+    .then((reg) => {
+      if (reg.installing) {
+        // eslint-disable-next-line no-console
+        console.log('Service worker installing');
+      } else if (reg.waiting) {
+        // eslint-disable-next-line no-console
+        console.log('Service worker installed');
+      } else if (reg.active) {
+        // eslint-disable-next-line no-console
+        console.log('Service worker active');
+      }
     })
     .catch((e): void => {
       // eslint-disable-next-line no-console

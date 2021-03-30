@@ -24,6 +24,7 @@ const URLS = [
 ];
 
 self.addEventListener('install', (e: any) => {
+  console.log('installing');
   e.waitUntil(
     caches
       .open(CACHE_NAME)
@@ -34,27 +35,33 @@ self.addEventListener('install', (e: any) => {
 
 // On version update, remove old cached files
 self.addEventListener('activate', function activate(e: any) {
+  console.log('activating');
   e.waitUntil(
     caches
       .keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== CACHE_NAME)
-            .map((key) => caches.delete(key))
-        )
+      .then(
+        (keys) =>
+          console.log('deleting keys') ||
+          Promise.all(
+            keys
+              .filter((key) => key !== CACHE_NAME)
+              .map((key) => caches.delete(key))
+          )
       )
-      .then(() => (self as any).clients.claim())
+      .then(() => console.log('claiming') || (self as any).clients.claim())
   );
 });
 
 self.addEventListener('fetch', function handleFetch(e: any) {
+  console.log('fetching');
   if (e.request.url.startsWith(self.location.origin)) {
     e.respondWith(
       caches.match(e.request).then((cachedResponse) => {
         if (cachedResponse) {
+          console.log('cached', e.request);
           return cachedResponse;
         }
+        console.log('NOT Cached', e.request);
 
         return caches.open(CACHE_NAME).then(() =>
           fetch(e.request).then((response) => {
