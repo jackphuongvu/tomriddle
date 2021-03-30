@@ -8,6 +8,8 @@ const PRECACHE_URLS = [
   '/index.html',
   '/manifest.json',
   '/static/style.css',
+  '/static/audio/keypress.mp3',
+  '/static/audio/return.mp3',
 ];
 
 // the rest below handles the installing and caching
