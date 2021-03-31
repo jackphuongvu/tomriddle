@@ -4,7 +4,7 @@
   "display": "standalone",
   "background_color": "#f6f3e3",
   "theme_color": "#150904",
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "related_applications": [],
   "prefer_related_applications": false,
   "icons": [
