@@ -1,6 +1,5 @@
 const CACHE_NAME = `typewritesomething@${process.env.npm_package_version}-${process.env.git_hash}`;
 
-// the rest below handles the installing and caching
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
