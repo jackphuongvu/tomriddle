@@ -36,8 +36,8 @@ const plugins =
     ? [...commonPlugins, require('rollup-plugin-terser').terser()]
     : commonPlugins;
 
-export default () => [
-  {
+export default () => {
+  const main = {
     plugins,
     input: `src/index.ts`,
     output: {
@@ -47,16 +47,24 @@ export default () => [
       sourcemap: !isProduction,
       format: 'cjs',
     },
-  },
-  {
-    plugins,
-    input: `src/sw.js`,
-    output: {
-      // vercel builds to dist then copies dist to root
-      file: isProduction ? `dist/sw.js` : 'sw.js',
-      sourcemap: false,
-      format: 'cjs',
-      strict: false,
+  };
+
+  if (!isProduction) {
+    return main;
+  }
+
+  return [
+    main,
+    {
+      plugins,
+      input: `src/sw.js`,
+      output: {
+        // vercel builds to dist then copies dist to root
+        file: isProduction ? `dist/sw.js` : 'sw.js',
+        sourcemap: false,
+        format: 'cjs',
+        strict: false,
+      },
     },
-  },
-];
+  ];
+};

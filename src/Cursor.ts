@@ -54,12 +54,13 @@ export class Cursor {
 
     this.position = vec;
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       positionElem(textInput, {
         x: Math.min(vec.x, window.innerWidth),
         y: Math.min(vec.y, window.innerHeight),
       });
-    }, 0);
+    });
+
     this.draw();
   };
 
@@ -115,7 +116,7 @@ export class Cursor {
 
   fadeOut = () => {
     this._time = new Date();
-    this._raf = window.requestAnimationFrame(this._fadeanim.bind(this));
+    this._raf = requestAnimationFrame(this._fadeanim.bind(this));
   };
 
   _fadeanim = () => {

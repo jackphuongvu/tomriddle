@@ -117,9 +117,11 @@ class App {
       this.pressedKeys[e.code] = true;
 
       if (e.key === 'Enter') {
-        newlineAudio.play();
+        requestAnimationFrame(newlineAudio.play);
       } else {
-        keypressAudio.play();
+        requestAnimationFrame(() => {
+          keypressAudio.play();
+        });
       }
       return true;
     }

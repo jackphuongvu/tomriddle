@@ -47,8 +47,7 @@ const onload = (): void => {
 window.addEventListener('load', onload);
 
 // Register service worker to control making site work offline
-
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
   navigator.serviceWorker
     .register('/sw.js')
     .then((reg) => {
