@@ -1,11 +1,9 @@
 @font-face {
   font-family: 'Special Elite';
   src: url('fonts/specialelite-webfont.woff2') format('woff2');
-  src: url('fonts/specialelite-webfont.woff2') format('woff2'),
-    url('fonts/specialelite-webfont.woff') format('woff'),
-    url('fonts/specialelite-webfont.ttf') format('truetype');
   font-weight: 400;
   font-style: 400;
+  font-display: fallback;
 }
 
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
