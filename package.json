@@ -1,7 +1,7 @@
 {
   "name": "typewritesomething",
   "version": "1.0.0",
-  "description": "A minimalist typewriter simulator to help creative writing",
+  "description": "A minimalist typewriter simulator to inspire creative writing",
   "private": true,
   "scripts": {
     "start": "npm run watch",
