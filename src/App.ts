@@ -9,7 +9,13 @@ import Menu from './Menu';
 import addLongTouch from './utils/addLongTouch';
 import getAppMenu from './getAppMenu';
 
-const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', 7);
+const isIos = /iPad|iPhone|iPod/.test(navigator.platform);
+
+const keypressAudio = new MultiAudio(
+  '/static/audio/keypress.mp3',
+  // ios struggles with playing multi-audio; needs to have at most 3
+  isIos ? 3 : 7
+);
 const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
 const eventTarget = cursorCanvas;
 

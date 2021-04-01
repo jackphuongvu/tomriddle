@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "alwaysStrict": false,
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
@@ -10,6 +11,7 @@
     "module": "es2015",
     "moduleResolution": "node",
     "noImplicitAny": true,
+    "noImplicitUseStrict": true,
     "noUnusedLocals": true,
     "outDir": "dist",
     "pretty": true,

@@ -47,13 +47,20 @@ const onload = (): void => {
 window.addEventListener('load', onload);
 
 // Register service worker to control making site work offline
-
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
   navigator.serviceWorker
     .register('/sw.js')
-    .then(() => {
-      // eslint-disable-next-line no-console
-      console.error('Service Worker registered');
+    .then((reg) => {
+      if (reg.installing) {
+        // eslint-disable-next-line no-console
+        console.log('Service worker installing');
+      } else if (reg.waiting) {
+        // eslint-disable-next-line no-console
+        console.log('Service worker installed');
+      } else if (reg.active) {
+        // eslint-disable-next-line no-console
+        console.log('Service worker active');
+      }
     })
     .catch((e): void => {
       // eslint-disable-next-line no-console
