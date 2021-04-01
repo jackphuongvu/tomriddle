@@ -20,6 +20,6 @@
     "target": "es5",
     "types": ["jest", "node"]
   },
-  "include": ["src/**/*.ts", "src/sw.js"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
