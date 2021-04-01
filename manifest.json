@@ -17,19 +17,19 @@
       "src": "/static/img/logo-on-bg-96.png",
       "type": "image/png",
       "sizes": "96x96",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/static/img/logo-on-bg-144.png",
+      "src": "/static/img/logo-on-bg-180.png",
       "type": "image/png",
-      "sizes": "144x144",
-      "purpose": "any"
+      "sizes": "180x180",
+      "purpose": "any maskable"
     },
     {
       "src": "/static/img/logo-on-bg-512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }

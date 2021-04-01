@@ -22,7 +22,7 @@ self.addEventListener('install', (event) => {
           '/static/img/handmadepaper.png',
           '/static/img/logo-on-bg-36.png',
           '/static/img/logo-on-bg-96.png',
-          '/static/img/logo-on-bg-144.png',
+          '/static/img/logo-on-bg-180.png',
           '/static/img/logo-on-bg-512.png',
           '/static/img/logo-on-bg.png',
         ]);
