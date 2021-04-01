@@ -18,8 +18,6 @@ self.addEventListener('install', (event) => {
           '/index.html',
           '/manifest.json',
           '/static/style.css',
-          '/static/fonts/specialelite-webfont.ttf',
-          '/static/fonts/specialelite-webfont.woff',
           '/static/fonts/specialelite-webfont.woff2',
           '/static/img/handmadepaper.png',
           '/static/img/logo-on-bg-36.png',
