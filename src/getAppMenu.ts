@@ -153,7 +153,7 @@ const getAppMenu = (app: import('./App').default) => {
 
   menu.addDivider();
 
-  menu.addMenuItem('☎️ &nbsp; Report a Problem', {
+  menu.addMenuItem('🙋‍♀️ &nbsp; App Feedback', {
     href: 'https://github.com/bozdoz/typewritesomething/issues/new',
   });
 
