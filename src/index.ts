@@ -35,6 +35,8 @@ const onload = (): void => {
     window.location.hash = '';
   }
 
+  splash.focus();
+
   splash.addEventListener('click', startApp);
   splash.addEventListener('keydown', startApp);
 
