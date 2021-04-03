@@ -121,6 +121,10 @@ const getAppMenu = (app: import('./App').default) => {
             })
             .open();
         })
+        .onClose(() => {
+          app.focusText();
+          app.typewriter.cursor.draw();
+        })
         .open();
     },
   });
