@@ -75,10 +75,18 @@ class SavedList {
       },
     });
 
+    const closeButton = createElement('button', {
+      className: 'button',
+      type: 'button',
+      innerHTML: 'Close',
+      onclick: this.close.bind(this),
+    });
+
     this.refreshList();
 
     this.dialogFooter.appendChild(this.exportButton);
     this.dialogFooter.appendChild(this.importButton);
+    this.dialogFooter.appendChild(closeButton);
     this.dialog.appendChild(this.dialogBody);
     this.dialog.appendChild(this.dialogFooter);
     this.backdrop.appendChild(this.dialog);
