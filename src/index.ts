@@ -72,6 +72,7 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
     });
 }
 
+// TODO: add unit tests for debug mode
 if (isDebugMode()) {
   document.body.classList.add('debug');
 }
