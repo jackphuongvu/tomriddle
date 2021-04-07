@@ -19,7 +19,7 @@ const startApp = (e: KeyboardEvent | MouseEvent | TouchEvent): void => {
   splash.classList.add('hide');
 
   splash.removeEventListener('click', startApp);
-  splash.removeEventListener('keydown', startApp);
+  splash.removeEventListener('keyup', startApp);
 
   const app = new App();
 
@@ -35,8 +35,10 @@ const onload = (): void => {
     window.location.hash = '';
   }
 
+  splash.focus();
+
   splash.addEventListener('click', startApp);
-  splash.addEventListener('keydown', startApp);
+  splash.addEventListener('keyup', startApp);
 
   window.removeEventListener('load', onload);
 };
@@ -70,6 +72,7 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
     });
 }
 
+// TODO: add unit tests for debug mode
 if (isDebugMode()) {
   document.body.classList.add('debug');
 }
