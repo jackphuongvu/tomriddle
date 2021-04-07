@@ -1,15 +1,5 @@
 import { fireEvent } from '@testing-library/dom';
 
-/**
- * Simulate keydown event
- */
-function getEvent(char: string) {
-  return {
-    key: char,
-    which: char.toLowerCase().charCodeAt(0) - 32,
-  };
-}
-
 const appStart = jest.fn();
 const appFocus = jest.fn();
 
@@ -67,7 +57,6 @@ describe('index', () => {
         ...window,
         location: {
           ...window.location,
-          hash: 'asdf',
         },
       };
 
@@ -92,7 +81,7 @@ describe('index', () => {
   it('starts app after keyup on splash', () => {
     window.dispatchEvent(loadEvent);
 
-    fireEvent.keyUp(splash, getEvent('x'));
+    fireEvent.keyUp(splash);
 
     expect(appStart).toHaveBeenCalledTimes(1);
     expect(appFocus).toHaveBeenCalledTimes(1);
