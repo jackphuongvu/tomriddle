@@ -134,28 +134,24 @@ canvas {
 }
 
 #text-input {
-  width: 1px;
-  height: 1px;
-  border: none;
-  outline: none;
-  padding: 0;
-  margin: 0;
-  z-index: -1;
-  opacity: 0;
+  color: transparent;
+  background-color: transparent;
+  -webkit-text-fill-color: transparent;
+  caret-color: transparent;
+  border: 0;
+  outline: 0;
   overflow: hidden;
   position: absolute;
   white-space: nowrap;
 }
 
 body.debug #text-input {
-  width: initial;
-  height: initial;
+  color: initial;
+  background-color: initial;
+  -webkit-text-fill-color: initial;
+  caret-color: initial;
   border: initial;
   outline: initial;
-  padding: initial;
-  margin: initial;
-  z-index: initial;
-  opacity: initial;
   overflow: initial;
   font-size: 30pt;
 }

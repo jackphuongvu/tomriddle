@@ -73,6 +73,7 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
 }
 
 // TODO: add unit tests for debug mode
+// Mostly just debugs CSS for text-input
 if (isDebugMode()) {
   document.body.classList.add('debug');
 }
