@@ -5,7 +5,7 @@
 const addLongTouch = (
   elem: HTMLElement,
   callback: (event: TouchEvent) => void,
-  delay = 600
+  delay = 350
 ): (() => void) => {
   let timeout: number;
 
