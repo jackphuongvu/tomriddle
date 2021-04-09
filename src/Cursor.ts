@@ -34,7 +34,7 @@ export class Cursor {
   position = initialPosVec;
 
   reset = () => {
-    this.position = initialPosVec;
+    this.update(initialPosVec);
   };
 
   clear = () => {
@@ -50,17 +50,19 @@ export class Cursor {
    * @param {Vector} vec
    */
   update = (vec: Vector) => {
-    this.clear();
-
-    this.position = vec;
-
-    requestAnimationFrame(() => {
-      positionElem(textInput, {
-        x: Math.min(vec.x, window.innerWidth),
-        y: Math.min(vec.y, window.innerHeight),
-      });
+    // move the "hidden" input
+    positionElem(textInput, {
+      x: Math.min(vec.x, window.innerWidth),
+      y: Math.min(vec.y, window.innerHeight),
     });
 
+    // clear the canvas
+    this.clear();
+
+    // update the position
+    this.position = vec;
+
+    // draw canvas at new position
     this.draw();
   };
 
