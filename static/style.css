@@ -143,6 +143,7 @@ canvas {
   overflow: hidden;
   position: absolute;
   white-space: nowrap;
+  transform: translate(0, 0);
 }
 
 body.debug #text-input {
