@@ -36,7 +36,6 @@ class App {
     this.events('on');
     this.emptyText();
     this.focusText();
-    this.typewriter.cursor.draw();
   }
 
   start() {
