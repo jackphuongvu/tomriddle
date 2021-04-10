@@ -76,25 +76,25 @@ export class TypeWriter implements TypeWriterClass {
 
   resetCanvases = (): void => {
     [textCtx, cursorCtx].forEach((ctx) => {
-      const { canvas } = ctx!;
+      const { canvas } = ctx;
       const { devicePixelRatio = 1, innerWidth, innerHeight } = window;
 
-      ctx!.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
 
       canvas.width = innerWidth * devicePixelRatio;
       canvas.height = innerHeight * devicePixelRatio;
       canvas.style.width = `${innerWidth}px`;
       canvas.style.height = `${innerHeight}px`;
 
-      ctx!.scale(devicePixelRatio, devicePixelRatio);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
 
-      ctx!.globalAlpha = GLOBAL_ALPHA;
+      ctx.globalAlpha = GLOBAL_ALPHA;
     });
 
     // reset contexts, because resizing wipes them
-    textCtx!.font = `${letterSize}px Special Elite, serif`;
-    textCtx!.textBaseline = 'top';
-    textCtx!.fillStyle = TEXT_COLOR;
+    textCtx.font = `${letterSize}px Special Elite, serif`;
+    textCtx.textBaseline = 'top';
+    textCtx.fillStyle = TEXT_COLOR;
 
     cursorCtx.fillStyle = CURSOR_COLOR;
     cursorCtx.scale(this.containerScale, this.containerScale);
