@@ -5,6 +5,9 @@
 ![MIT License](http://img.shields.io/badge/license-MIT-lightgrey.svg)
 &nbsp;
 ![GitHub Build Status](https://img.shields.io/github/workflow/status/bozdoz/typewritesomething/test-workflow)
+&nbsp;
+[![Codecov Coverage](https://img.shields.io/codecov/c/github/bozdoz/typewritesomething/&lt;Branch Name>.svg?style=flat-square)](https://codecov.io/gh/bozdoz/typewritesomething/)
+&nbsp;
 
 A minimalist typewriter simulator to inspire creative writing.
 
