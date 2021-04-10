@@ -1,24 +1,15 @@
 # Typewrite Something
 
-![Made With <3](http://img.shields.io/badge/madewith-<3-pink.svg?style=flat)
+![Made With <3](http://img.shields.io/badge/madewith-<3-red.svg?style=flat)
 &nbsp;
 ![MIT License](http://img.shields.io/badge/license-MIT-lightgrey.svg)
 &nbsp;
+![GitHub Build Status](https://img.shields.io/github/workflow/status/bozdoz/typewritesomething/test-workflow)
 
-A repo to showcase how to make an online typewriter simulator with JavaScript and the HTML5 canvas element. Useable on mobile, tablet, and desktop.
-
-![Screenshot](http://imgur.com/UtYegLY.png)
-
-See it live on [typewritesomething.com](http://typewritesomething.com)
+A minimalist typewriter simulator to inspire creative writing.
 
 ## Mobile App
 
-This project has been made into an app using PhoneGap (see the [:octocat: GitHub](https://github.com/bozdoz/phonegap-typewritesomething)):
+This project has an **old** version which was made into a proper Android app using PhoneGap (see the [:octocat: GitHub](https://github.com/bozdoz/phonegap-typewritesomething)):
 
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.phonegap.typewritesomething)
-
-## Wish List
-
-- Social Sharing
-- Scaling/zoom options
-- Hamburger side-sliding menu for settings/options
