@@ -6,7 +6,7 @@
 &nbsp;
 ![GitHub Build Status](https://img.shields.io/github/workflow/status/bozdoz/typewritesomething/test-workflow)
 &nbsp;
-[![Codecov Coverage](https://img.shields.io/codecov/c/github/bozdoz/typewritesomething/staging.svg?style=flat-square)](https://codecov.io/gh/bozdoz/typewritesomething/)
+[![codecov](https://codecov.io/gh/bozdoz/typewritesomething/branch/master/graph/badge.svg?token=5QGFIHRGBG)](https://codecov.io/gh/bozdoz/typewritesomething)
 &nbsp;
 
 A minimalist typewriter simulator to inspire creative writing.
