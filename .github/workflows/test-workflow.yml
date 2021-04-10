@@ -4,14 +4,14 @@ on:
   pull_request:
     paths:
       - '**.js'
-      - '.github/workflows'
+      - '.github/workflows/**.yml'
   push:
     branches:
       - master
       - staging
     paths:
       - '**.js'
-      - '.github/workflows'
+      - '.github/workflows/**.yml'
       
 jobs:
   build:
