@@ -308,6 +308,7 @@ class App {
 
   focusText = () => {
     textInput.focus();
+    // TODO: reposition canvas to quasi-center textInput
   };
 }
 

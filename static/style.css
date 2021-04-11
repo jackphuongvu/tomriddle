@@ -58,6 +58,11 @@ main,
   font-size: 10pt;
 }
 
+form {
+  overflow: hidden;
+  position: absolute;
+}
+
 html,
 body {
   overflow: hidden;
