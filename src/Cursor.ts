@@ -19,6 +19,9 @@ const paddingVec = (function getPaddingVec() {
   return new Vector(_x, _y);
 })();
 
+textInput.style.width = `${cursorWidth}px`;
+textInput.style.height = `${cursorHeight}px`;
+
 // top-left
 const initialPosVec = paddingVec;
 
@@ -52,7 +55,7 @@ export class Cursor {
   update = (vec: Vector) => {
     // move the "hidden" input
     positionElem(textInput, {
-      x: Math.min(vec.x, window.innerWidth),
+      x: Math.min(vec.x, window.innerWidth - cursorWidth),
       y: Math.min(vec.y, window.innerHeight),
     });
 
