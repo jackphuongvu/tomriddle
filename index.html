@@ -85,30 +85,22 @@
 
         <canvas id="cursor-canvas"></canvas>
 
-        <form
-          id="search"
-          aria-hidden="true"
-          autocomplete="off"
-          action=""
-          role="search"
-        >
-          <!-- prevent autocomplete -->
-          <div id="lp"><input type="text" /><input type="password" /></div>
-          <script type="text/javascript">
-            setTimeout(function () {
-              document.getElementById('lp').style.display = 'none';
-            }, 75);
-          </script>
+        <!-- prevent autocomplete -->
+        <div id="lp"><input type="text" /><input type="password" /></div>
+        <script type="text/javascript">
+          setTimeout(function () {
+            document.getElementById('lp').style.display = 'none';
+          }, 75);
+        </script>
 
-          <input
-            type="text"
-            id="text-input"
-            tabindex="0"
-            autocomplete="one-time-code"
-            autocorrect="off"
-            data-lpignore="true"
-          />
-        </form>
+        <input
+          type="text"
+          id="text-input"
+          tabindex="0"
+          autocomplete="one-time-code"
+          autocorrect="off"
+          data-lpignore="true"
+        />
       </div>
       <aside id="splash" tabindex="0">
         <h1>Typewrite Something</h1>

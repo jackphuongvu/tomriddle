@@ -56,11 +56,7 @@ main,
   height: 100vh;
   width: 100vw;
   font-size: 10pt;
-}
-
-form {
   overflow: hidden;
-  position: absolute;
 }
 
 html,
