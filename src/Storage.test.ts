@@ -1,13 +1,11 @@
-import lzString from 'lz-string';
+import { compressToUTF16 } from 'lz-string';
 import * as Storage from './Storage';
 
 jest.mock('lz-string', () => ({
-  default: {
-    // fake compress
-    compress: jest.fn((str: string) => `_____${str}`),
-    // fake decompress
-    decompress: jest.fn((str: string) => str.substr(5)),
-  },
+  // fake compress
+  compressToUTF16: jest.fn((str: string) => `_____${str}`),
+  // fake decompress
+  decompressFromUTF16: jest.fn((str: string) => str.substr(5)),
 }));
 
 describe('Storage', () => {
@@ -46,8 +44,8 @@ describe('Storage', () => {
     const str = '[JSON data]';
     Storage.create(str);
 
-    expect(lzString.compress).toHaveBeenCalledTimes(1);
-    expect(lzString.compress).toHaveBeenCalledWith(str);
+    expect(compressToUTF16).toHaveBeenCalledTimes(1);
+    expect(compressToUTF16).toHaveBeenCalledWith(str);
   });
 
   it('can create new entry', () => {

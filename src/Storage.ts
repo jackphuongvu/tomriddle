@@ -1,4 +1,4 @@
-import lzString from 'lz-string';
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
 export interface SavedItem {
   name: string;
@@ -24,7 +24,7 @@ export const setInfo = (info: SavedInfo) => {
 
 export const updateWriting = (key: string, str: string) => {
   // save data (might need try/catch)
-  localStorage.setItem(key, lzString.compress(str));
+  localStorage.setItem(key, compressToUTF16(str));
 };
 
 export const create = (
@@ -78,7 +78,7 @@ export const get = (key: string): string | null => {
   if (data) {
     try {
       const stored = localStorage.getItem(data.key) || '';
-      const uncompressed = lzString.decompress(stored);
+      const uncompressed = decompressFromUTF16(stored);
 
       return uncompressed;
     } catch (e) {
