@@ -4,7 +4,7 @@
 &nbsp;
 ![MIT License](http://img.shields.io/badge/license-MIT-lightgrey.svg)
 &nbsp;
-![GitHub Build Status](https://img.shields.io/github/workflow/status/bozdoz/typewritesomething/test-workflow)
+![GitHub Build Status](https://github.com/bozdoz/typewritesomething/actions/workflows/test-workflow.yml/badge.svg?branch=master)
 &nbsp;
 [![codecov](https://codecov.io/gh/bozdoz/typewritesomething/branch/staging/graph/badge.svg?token=5QGFIHRGBG)](https://codecov.io/gh/bozdoz/typewritesomething)
 &nbsp;
