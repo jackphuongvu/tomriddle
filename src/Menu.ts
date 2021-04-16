@@ -98,6 +98,10 @@ class Menu {
     e.preventDefault();
 
     this.openMenu({ x, y });
+
+    window.gtag({
+      event: 'menu:open',
+    });
   };
 
   openMenu(position: { x: number; y: number }) {

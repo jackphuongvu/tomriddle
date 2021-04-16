@@ -21,9 +21,14 @@ if (process.env.NODE_ENV === 'production') {
   loadScript('https://www.googletagmanager.com/gtag/js?id=UA-73887811-5');
 
   window.dataLayer = window.dataLayer || [];
-  window.gtag = (...args) => {
-    window.dataLayer.push(...args);
-  };
+
+  // eslint-disable-next-line no-inner-declarations
+  function gtag() {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer.push(arguments);
+  }
+
+  window.gtag = gtag;
 
   window.gtag('js', new Date());
 

@@ -13,6 +13,9 @@ const getAppMenu = (app: import('./App').default) => {
       lastLoadedId = '';
       menu.closeMenu();
       app.reset();
+      window.gtag({
+        event: 'menu:new',
+      });
     },
   });
 
@@ -25,6 +28,9 @@ const getAppMenu = (app: import('./App').default) => {
       if (exported === '[]') {
         // empty should not be saved
         menu.closeMenu();
+        window.gtag({
+          event: 'menu:save:empty',
+        });
         return;
       }
 
@@ -62,6 +68,10 @@ const getAppMenu = (app: import('./App').default) => {
             name,
           });
 
+          window.gtag({
+            event: 'menu:save:success',
+          });
+
           return true;
         })
         .onCancel(() => {
@@ -70,6 +80,9 @@ const getAppMenu = (app: import('./App').default) => {
             // newly created should delete the writing
             Storage.deleteById(id);
           }
+          window.gtag({
+            event: 'menu:save:cancel',
+          });
         })
         .open();
     },
@@ -78,6 +91,10 @@ const getAppMenu = (app: import('./App').default) => {
   menu.addMenuItem('👀 &nbsp; View Saved', {
     callback: () => {
       menu.closeMenu();
+
+      window.gtag({
+        event: 'menu:view-saved',
+      });
 
       const savedList = new SavedList('Saved Writings');
       savedList
@@ -88,15 +105,25 @@ const getAppMenu = (app: import('./App').default) => {
             app.typewriter.import(writing);
             // handle save as if it may be update instead
             lastLoadedId = key;
+            window.gtag({
+              event: 'menu:view-saved:view',
+            });
           } else {
             // empty writings got no reason to live
             Storage.deleteById(key);
+            window.gtag({
+              event: 'menu:view-saved:delete-empty',
+            });
           }
         })
         .onDelete(({ key }) => {
           Storage.deleteById(key);
           // refresh list
           savedList.refreshList();
+
+          window.gtag({
+            event: 'menu:view-saved:delete',
+          });
         })
         .onEdit(({ name, key }) => {
           new Dialog('Update', { submit: 'Update Writing' })
@@ -117,6 +144,10 @@ const getAppMenu = (app: import('./App').default) => {
 
               savedList.refreshList();
 
+              window.gtag({
+                event: 'menu:view-saved:edit',
+              });
+
               return true;
             })
             .open();
@@ -134,6 +165,10 @@ const getAppMenu = (app: import('./App').default) => {
       const pasteDialog = new Dialog('Paste Text');
 
       menu.closeMenu();
+
+      window.gtag({
+        event: 'menu:paste-text',
+      });
 
       pasteDialog
         .addTextArea('Text', {

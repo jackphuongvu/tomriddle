@@ -3,6 +3,7 @@
 ### Bug Fixes
 
 - Changed Google Analytics to Gtag Manager, because the previous implementation stopped working completely.
+- Added some analytics events to track usage
 
 ## 1.0.1 (2021-04-14)
 
