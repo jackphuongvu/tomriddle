@@ -3,6 +3,12 @@ import * as Storage from './Storage';
 import Dialog from './Dialog';
 import SavedList from './SavedList';
 
+const menuEvent = (event: string) => {
+  window.gtag('event', event, {
+    event_category: 'menu',
+  });
+};
+
 const getAppMenu = (app: import('./App').default) => {
   const menu = new Menu();
 
@@ -13,9 +19,7 @@ const getAppMenu = (app: import('./App').default) => {
       lastLoadedId = '';
       menu.closeMenu();
       app.reset();
-      window.gtag({
-        event: 'menu:new',
-      });
+      menuEvent('menu:new');
     },
   });
 
@@ -28,9 +32,7 @@ const getAppMenu = (app: import('./App').default) => {
       if (exported === '[]') {
         // empty should not be saved
         menu.closeMenu();
-        window.gtag({
-          event: 'menu:save:empty',
-        });
+        menuEvent('menu:save:empty');
         return;
       }
 
@@ -68,9 +70,7 @@ const getAppMenu = (app: import('./App').default) => {
             name,
           });
 
-          window.gtag({
-            event: 'menu:save:success',
-          });
+          menuEvent('menu:save:success');
 
           return true;
         })
@@ -80,9 +80,7 @@ const getAppMenu = (app: import('./App').default) => {
             // newly created should delete the writing
             Storage.deleteById(id);
           }
-          window.gtag({
-            event: 'menu:save:cancel',
-          });
+          menuEvent('menu:save:cancel');
         })
         .open();
     },
@@ -92,9 +90,7 @@ const getAppMenu = (app: import('./App').default) => {
     callback: () => {
       menu.closeMenu();
 
-      window.gtag({
-        event: 'menu:view-saved',
-      });
+      menuEvent('menu:view-saved');
 
       const savedList = new SavedList('Saved Writings');
       savedList
@@ -105,15 +101,11 @@ const getAppMenu = (app: import('./App').default) => {
             app.typewriter.import(writing);
             // handle save as if it may be update instead
             lastLoadedId = key;
-            window.gtag({
-              event: 'menu:view-saved:view',
-            });
+            menuEvent('menu:view-saved:view');
           } else {
             // empty writings got no reason to live
             Storage.deleteById(key);
-            window.gtag({
-              event: 'menu:view-saved:delete-empty',
-            });
+            menuEvent('menu:view-saved:delete-empty');
           }
         })
         .onDelete(({ key }) => {
@@ -121,9 +113,7 @@ const getAppMenu = (app: import('./App').default) => {
           // refresh list
           savedList.refreshList();
 
-          window.gtag({
-            event: 'menu:view-saved:delete',
-          });
+          menuEvent('menu:view-saved:delete');
         })
         .onEdit(({ name, key }) => {
           new Dialog('Update', { submit: 'Update Writing' })
@@ -144,9 +134,7 @@ const getAppMenu = (app: import('./App').default) => {
 
               savedList.refreshList();
 
-              window.gtag({
-                event: 'menu:view-saved:edit',
-              });
+              menuEvent('menu:view-saved:edit');
 
               return true;
             })
@@ -166,9 +154,7 @@ const getAppMenu = (app: import('./App').default) => {
 
       menu.closeMenu();
 
-      window.gtag({
-        event: 'menu:paste-text',
-      });
+      menuEvent('menu:paste-text');
 
       pasteDialog
         .addTextArea('Text', {

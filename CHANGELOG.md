@@ -1,3 +1,9 @@
+## 1.0.3 (2021-04-15)
+
+### Bug Fixes
+
+- Fixes to how the analytics events are being sent
+
 ## 1.0.2 (2021-04-15)
 
 ### Bug Fixes
