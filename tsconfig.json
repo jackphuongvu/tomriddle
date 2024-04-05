@@ -17,7 +17,7 @@
     "pretty": true,
     "rootDir": ".",
     "strict": true,
-    "target": "es5",
+    "target": "es6",
     "types": ["jest", "node"]
   },
   "include": ["src/**/*.ts"],

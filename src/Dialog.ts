@@ -155,6 +155,8 @@ class Dialog {
   };
 
   open() {
+    // console.log('Dialog');
+    // console.log('open');
     document.body.appendChild(this.backdrop);
 
     const firstInput = this.dialogForm.querySelector('input, textarea') as

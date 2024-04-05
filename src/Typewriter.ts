@@ -52,6 +52,11 @@ export class TypeWriter implements TypeWriterClass {
   }
 
   addCharacter = (_chars: string, _x?: number, _y?: number): void => {
+    console.log('addCharacter in TS file.');
+    // console.log('_chars: ', _chars);
+    // console.log('this.chars: ', this.chars);
+    // console.log('_x: ', _x);
+    // console.log('_y: ', _y);
     // manually set position and update cursor
     if (_x !== undefined && _y !== undefined) {
       this.chars.push(new Character(this, _chars, _x, _y));
@@ -68,9 +73,12 @@ export class TypeWriter implements TypeWriterClass {
       this.chars.push(new Character(this, char, x, y));
       this.cursor.moveright();
     }
+    // console.log('chars: ', this.chars);
   };
 
   redraw = (): void => {
+    // console.log('redraw');
+    // console.log('chars: ', this.chars);
     this.chars.forEach((char) => char.draw());
   };
 
