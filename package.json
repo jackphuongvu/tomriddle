@@ -1,7 +1,7 @@
 {
-  "name": "typewritesomething",
+  "name": "journal",
   "version": "1.0.4",
-  "description": "A minimalist typewriter simulator to inspire creative writing",
+  "description": "A magic journal",
   "private": true,
   "main": "dist/main.js",
   "scripts": {
