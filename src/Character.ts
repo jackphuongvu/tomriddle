@@ -50,8 +50,8 @@ export class Character extends Vector {
   }
 
   draw = () => {
-    console.log('draw');
-    console.log('this.s', this.s);
+    // console.log('draw');
+    // console.log('this.s', this.s);
     // apply current typewriter offsets
     const vec = this.add(this.typewriter.canvasOffset);
     // console.log('vec', vec);

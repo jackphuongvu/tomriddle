@@ -311,9 +311,9 @@ class Character extends Vector {
     super(randMargin(_x, TRANSLATE_MARGIN), randMargin(_y, TRANSLATE_MARGIN));
 
     this.draw = () => {
-      console.log('draw');
-      console.log('this.s', this.s); // apply current typewriter offsets
-
+      // console.log('draw');
+      // console.log('this.s', this.s);
+      // apply current typewriter offsets
       const vec = this.add(this.typewriter.canvasOffset); // console.log('vec', vec);
       //
       // console.log('textCtx', textCtx);
@@ -1781,7 +1781,8 @@ const menuEvent = event => {
 const getAppMenu = app => {
   const menu = new Menu();
   let lastLoadedId;
-  menu.addMenuItem('📃 &nbsp; New', {
+  menu.addMenuItem( // '📃 &nbsp; New'
+  'New', {
     callback: () => {
       lastLoadedId = '';
       menu.closeMenu();
@@ -1789,7 +1790,8 @@ const getAppMenu = app => {
       menuEvent('menu:new');
     }
   });
-  menu.addMenuItem('💾 &nbsp; Save', {
+  menu.addMenuItem( // '💾 &nbsp; Save'
+  'Save', {
     // TODO: maybe should export all of these callbacks for testing
     callback: () => {
       // save and prompt edit modal
@@ -1851,11 +1853,13 @@ const getAppMenu = app => {
       }).open();
     }
   });
-  menu.addMenuItem('👀 &nbsp; View Saved', {
+  menu.addMenuItem( // '👀 &nbsp; View Saved'
+  'View Saved', {
     callback: () => {
       menu.closeMenu();
-      menuEvent('menu:view-saved');
-      const savedList = new SavedList('Saved Writings');
+      menuEvent('menu:view-saved'); // const savedList = new SavedList('Saved Writings');
+
+      const savedList = new SavedList('Saved journals');
       savedList.onClick((_ref2) => {
         let {
           key
@@ -1913,41 +1917,42 @@ const getAppMenu = app => {
         app.typewriter.cursor.draw();
       }).open();
     }
-  });
-  menu.addMenuItem('📋 &nbsp; Paste Text', {
-    callback: () => {
-      const pasteDialog = new Dialog('Paste Text');
-      menu.closeMenu();
-      menuEvent('menu:paste-text');
-      pasteDialog.addTextArea('Text', {
-        name: 'content'
-      }).onSubmit((_ref6) => {
-        let {
-          content
-        } = _ref6;
-        const lines = content.split(/[\r\n]/);
-        const {
-          typewriter
-        } = app;
-        const {
-          cursor
-        } = typewriter;
-        typewriter.reset();
+  }); // menu.addMenuItem('📋 &nbsp; Paste Text', {
+  //   callback: () => {
+  //     const pasteDialog = new Dialog('Paste Text');
+  //
+  //     menu.closeMenu();
+  //
+  //     menuEvent('menu:paste-text');
+  //
+  //     pasteDialog
+  //       .addTextArea('Text', {
+  //         name: 'content',
+  //       })
+  //       .onSubmit<{ content: string }>(({ content }) => {
+  //         const lines = content.split(/[\r\n]/);
+  //         const { typewriter } = app;
+  //         const { cursor } = typewriter;
+  //
+  //         typewriter.reset();
+  //
+  //         for (const line of lines) {
+  //           typewriter.addCharacter(line);
+  //           cursor.newline();
+  //         }
+  //       })
+  //       .open();
+  //   },
+  // });
+  // menu.addDivider();
+  // menu.addMenuItem('🙋‍♀️ &nbsp; App Feedback', {
+  //   href: 'https://github.com/bozdoz/typewritesomething/issues/new',
+  // });
+  //
+  // menu.addMenuItem('🥰 &nbsp; Sponsor Me', {
+  //   href: 'https://www.paypal.com/paypalme/bozdoz',
+  // });
 
-        for (const line of lines) {
-          typewriter.addCharacter(line);
-          cursor.newline();
-        }
-      }).open();
-    }
-  });
-  menu.addDivider();
-  menu.addMenuItem('🙋‍♀️ &nbsp; App Feedback', {
-    href: 'https://github.com/bozdoz/typewritesomething/issues/new'
-  });
-  menu.addMenuItem('🥰 &nbsp; Sponsor Me', {
-    href: 'https://www.paypal.com/paypalme/bozdoz'
-  });
   return menu;
 };
 
@@ -2030,11 +2035,7 @@ class App {
       if (!noAudio) {
         this.pressedKeys[e.code] = true;
 
-        if (e.key === 'Enter') {
-          newlineAudio.play();
-        } else {
-          keypressAudio.play();
-        }
+        if (e.key === 'Enter') ;
 
         return true;
       }

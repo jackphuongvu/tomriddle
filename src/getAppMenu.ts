@@ -14,7 +14,10 @@ const getAppMenu = (app: import('./App').default) => {
 
   let lastLoadedId: ReturnType<typeof Storage.create>;
 
-  menu.addMenuItem('📃 &nbsp; New', {
+  menu.addMenuItem(
+    // '📃 &nbsp; New'
+    'New'
+    , {
     callback: () => {
       lastLoadedId = '';
       menu.closeMenu();
@@ -23,7 +26,10 @@ const getAppMenu = (app: import('./App').default) => {
     },
   });
 
-  menu.addMenuItem('💾 &nbsp; Save', {
+  menu.addMenuItem(
+    // '💾 &nbsp; Save'
+    'Save'
+    , {
     // TODO: maybe should export all of these callbacks for testing
     callback: () => {
       // save and prompt edit modal
@@ -86,13 +92,17 @@ const getAppMenu = (app: import('./App').default) => {
     },
   });
 
-  menu.addMenuItem('👀 &nbsp; View Saved', {
+  menu.addMenuItem(
+    // '👀 &nbsp; View Saved'
+    'View Saved'
+    , {
     callback: () => {
       menu.closeMenu();
 
       menuEvent('menu:view-saved');
 
-      const savedList = new SavedList('Saved Writings');
+      // const savedList = new SavedList('Saved Writings');
+      const savedList = new SavedList('Saved journals');
       savedList
         .onClick(({ key }) => {
           const writing = Storage.get(key);
@@ -148,43 +158,43 @@ const getAppMenu = (app: import('./App').default) => {
     },
   });
 
-  menu.addMenuItem('📋 &nbsp; Paste Text', {
-    callback: () => {
-      const pasteDialog = new Dialog('Paste Text');
+  // menu.addMenuItem('📋 &nbsp; Paste Text', {
+  //   callback: () => {
+  //     const pasteDialog = new Dialog('Paste Text');
+  //
+  //     menu.closeMenu();
+  //
+  //     menuEvent('menu:paste-text');
+  //
+  //     pasteDialog
+  //       .addTextArea('Text', {
+  //         name: 'content',
+  //       })
+  //       .onSubmit<{ content: string }>(({ content }) => {
+  //         const lines = content.split(/[\r\n]/);
+  //         const { typewriter } = app;
+  //         const { cursor } = typewriter;
+  //
+  //         typewriter.reset();
+  //
+  //         for (const line of lines) {
+  //           typewriter.addCharacter(line);
+  //           cursor.newline();
+  //         }
+  //       })
+  //       .open();
+  //   },
+  // });
 
-      menu.closeMenu();
+  // menu.addDivider();
 
-      menuEvent('menu:paste-text');
-
-      pasteDialog
-        .addTextArea('Text', {
-          name: 'content',
-        })
-        .onSubmit<{ content: string }>(({ content }) => {
-          const lines = content.split(/[\r\n]/);
-          const { typewriter } = app;
-          const { cursor } = typewriter;
-
-          typewriter.reset();
-
-          for (const line of lines) {
-            typewriter.addCharacter(line);
-            cursor.newline();
-          }
-        })
-        .open();
-    },
-  });
-
-  menu.addDivider();
-
-  menu.addMenuItem('🙋‍♀️ &nbsp; App Feedback', {
-    href: 'https://github.com/bozdoz/typewritesomething/issues/new',
-  });
-
-  menu.addMenuItem('🥰 &nbsp; Sponsor Me', {
-    href: 'https://www.paypal.com/paypalme/bozdoz',
-  });
+  // menu.addMenuItem('🙋‍♀️ &nbsp; App Feedback', {
+  //   href: 'https://github.com/bozdoz/typewritesomething/issues/new',
+  // });
+  //
+  // menu.addMenuItem('🥰 &nbsp; Sponsor Me', {
+  //   href: 'https://www.paypal.com/paypalme/bozdoz',
+  // });
 
   return menu;
 };

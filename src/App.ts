@@ -122,9 +122,9 @@ class App {
       this.pressedKeys[e.code] = true;
 
       if (e.key === 'Enter') {
-        newlineAudio.play();
+        // newlineAudio.play();
       } else {
-        keypressAudio.play();
+        // keypressAudio.play();
       }
       return true;
     }
