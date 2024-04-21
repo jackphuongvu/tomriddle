@@ -1,4 +1,4 @@
-import MultiAudio from './utils/MultiAudio';
+// import MultiAudio from './utils/MultiAudio';
 import NO_AUDIO from './helpers/NO_AUDIO';
 import { TypeWriter } from './Typewriter';
 import { container, textInput, cursorCanvas } from './helpers/getElements';
@@ -9,14 +9,14 @@ import Menu from './Menu';
 import addLongTouch from './utils/addLongTouch';
 import getAppMenu from './getAppMenu';
 
-const isIos = /iPad|iPhone|iPod/.test(navigator.platform);
+// const isIos = /iPad|iPhone|iPod/.test(navigator.platform);
 
-const keypressAudio = new MultiAudio(
-  '/static/audio/keypress.mp3',
-  // ios struggles with playing multi-audio; needs to have at most 3
-  isIos ? 3 : 7
-);
-const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
+// const keypressAudio = new MultiAudio(
+//   '/static/audio/keypress.mp3',
+//   // ios struggles with playing multi-audio; needs to have at most 3
+//   isIos ? 3 : 7
+// );
+// const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
 const eventTarget = cursorCanvas;
 
 class App {

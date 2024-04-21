@@ -1,30 +1,6 @@
 'use strict';
 
 /**
- * A single audio can only play once; this creates multiple instances
- * and rotates playing them.
- *
- * @param {string} src source of audio file
- * @param {number} instances number of simultaneous instances of this sound
- */
-const MultiAudio = function multiAudio(src) {
-  let instances = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
-  const output = [];
-
-  for (let i = 0; i < instances; i += 1) {
-    output.push(new Audio(src));
-  }
-
-  let current = 0;
-
-  this.play = function play() {
-    const audio = output[(current += 1) % instances];
-    audio.currentTime = 0;
-    audio.play();
-  };
-};
-
-/**
  * mapping for soundless keys
  * Don't ever allow Android's ridiculous 229 code
  */
@@ -163,8 +139,7 @@ class Cursor {
     };
 
     this.clear = () => {
-      console.log('clear');
-
+      // console.log('clear');
       const _pos = this.position.subtract(1).divideBy(containerScale); // rect appears to have a border on the bottom-right
 
 
@@ -178,8 +153,8 @@ class Cursor {
 
 
     this.update = vec => {
-      console.log('update'); // move the "hidden" input
-
+      // console.log('update');
+      // move the "hidden" input
       positionElem(textInput, {
         x: Math.min(vec.x, window.innerWidth - cursorWidth),
         y: Math.min(vec.y, window.innerHeight)
@@ -200,12 +175,11 @@ class Cursor {
     };
 
     this.draw = () => {
-      console.log('draw');
-      console.log('_raf', this._raf);
+      // console.log('draw');
+      // console.log('_raf', this._raf);
+      this._draw(); // console.log('this._cursorTimeout: ', this._cursorTimeout);
+      // 2.2s
 
-      this._draw();
-
-      console.log('this._cursorTimeout: ', this._cursorTimeout); // 2.2s
 
       window.clearTimeout(this._cursorTimeout);
 
@@ -213,8 +187,8 @@ class Cursor {
         window.cancelAnimationFrame(this._raf);
       }
 
-      this._opacity = GLOBAL_ALPHA;
-      console.log('this._opacity: ', this._opacity);
+      this._opacity = GLOBAL_ALPHA; // console.log('this._opacity: ', this._opacity);
+
       this._cursorTimeout = window.setTimeout(this.fadeOut.bind(this), 2200);
     };
 
@@ -253,7 +227,7 @@ class Cursor {
     };
 
     this.fadeOut = () => {
-      console.log('fadeOut');
+      // console.log('fadeOut');
       this._time = new Date();
       this._raf = requestAnimationFrame(this._fadeanim.bind(this));
     };
@@ -373,17 +347,18 @@ class TypeWriter {
     this.cursor = new Cursor();
 
     this.addCharacter = (_chars, _x, _y) => {
-      console.log('addCharacter in TS file.'); // console.log('_chars: ', _chars);
+      // console.log('addCharacter in TS file.');
+      // console.log('_chars: ', _chars);
       // console.log('this.chars: ', this.chars);
       // console.log('_x: ', _x);
       // console.log('_y: ', _y);
       // manually set position and update cursor
-
       if (_x !== undefined && _y !== undefined) {
         this.chars.push(new Character(this, _chars, _x, _y));
         this.cursor.update(new Vector(_x, _y));
         return;
-      } // iterate characters and move cursor right
+      } // console.log('chars: ', this.chars);
+      // iterate characters and move cursor right
 
 
       for (let i = 0, len = _chars.length; i < len; i += 1) {
@@ -1956,10 +1931,14 @@ const getAppMenu = app => {
   return menu;
 };
 
-const isIos = /iPad|iPhone|iPod/.test(navigator.platform);
-const keypressAudio = new MultiAudio('/static/audio/keypress.mp3', // ios struggles with playing multi-audio; needs to have at most 3
-isIos ? 3 : 7);
-const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
+// import MultiAudio from './utils/MultiAudio';
+// const keypressAudio = new MultiAudio(
+//   '/static/audio/keypress.mp3',
+//   // ios struggles with playing multi-audio; needs to have at most 3
+//   isIos ? 3 : 7
+// );
+// const newlineAudio = new MultiAudio('/static/audio/return.mp3', 2);
+
 const eventTarget$1 = cursorCanvas;
 
 class App {

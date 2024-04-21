@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cbda2946-4bba-44cc-acde-8014d9474306" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/img/logo16.ico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/main.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Character.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Character.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/getAppMenu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/getAppMenu.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cursor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cursor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Typewriter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Typewriter.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -24,29 +21,10 @@
     <favorites_list name="typewritesomething" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="75" column="6" lean-forward="true" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>chairs</find>
-      <find>cn</find>
-      <find>chars</find>
-      <find>reposition</find>
-      <find>_chars</find>
-      <find>//</find>
-      <find>redraw</find>
-      <find>github</find>
-      <find>.css</find>
       <find>App</find>
       <find>npm</find>
       <find>@testing-library/dom</find>
@@ -61,13 +39,22 @@
       <find>handleKeyPress</find>
       <find>sound</find>
       <find>audio</find>
-      <find>keypressAudio</find>
       <find>noAudio</find>
       <find>NO_AUDIO</find>
       <find>Storage</find>
       <find>Saved Writings</find>
       <find>icon</find>
       <find>logo</find>
+      <find>ch</find>
+      <find>TypeWriterClass</find>
+      <find>Character</find>
+      <find>chars</find>
+      <find>keypressAudio</find>
+      <find>update</find>
+      <find>console.log</find>
+      <find>this.chars</find>
+      <find>export</find>
+      <find>reset</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/static</dir>
@@ -85,25 +72,25 @@
         <option value="$PROJECT_DIR$/src/utils/debounce.ts" />
         <option value="$PROJECT_DIR$/tsconfig.json" />
         <option value="$PROJECT_DIR$/dist/main.js" />
-        <option value="$PROJECT_DIR$/src/Cursor.ts" />
-        <option value="$PROJECT_DIR$/src/Typewriter.ts" />
         <option value="$PROJECT_DIR$/dist/main.js.map" />
         <option value="$PROJECT_DIR$/src/index.ts" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/src/Character.ts" />
         <option value="$PROJECT_DIR$/src/Dialog.ts" />
-        <option value="$PROJECT_DIR$/src/App.ts" />
         <option value="$PROJECT_DIR$/src/getAppMenu.ts" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/src/App.ts" />
+        <option value="$PROJECT_DIR$/src/Typewriter.ts" />
+        <option value="$PROJECT_DIR$/src/Cursor.ts" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="452" />
-    <option name="y" value="25" />
-    <option name="width" value="1408" />
-    <option name="height" value="996" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="50" />
+    <option name="y" value="66" />
+    <option name="width" value="1201" />
+    <option name="height" value="986" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -117,17 +104,6 @@
             <path>
               <item name="typewritesomething" type="b2602c69:ProjectViewProjectNode" />
               <item name="typewritesomething" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="typewritesomething" type="b2602c69:ProjectViewProjectNode" />
-              <item name="typewritesomething" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="typewritesomething" type="b2602c69:ProjectViewProjectNode" />
-              <item name="typewritesomething" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="img" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -191,18 +167,18 @@
       <workItem from="1712889249238" duration="1826000" />
       <workItem from="1713406090811" duration="8855000" />
       <workItem from="1713430062713" duration="543000" />
-      <workItem from="1713434413976" duration="2013000" />
+      <workItem from="1713434413976" duration="10337000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="88588000" />
+    <option name="totallyTimeSpent" value="96912000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="452" y="25" width="1408" height="996" extended-state="0" />
+    <frame x="-1" y="25" width="1920" height="996" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5876777" visible="true" weight="0.20331651" />
-      <window_info id="Structure" order="1" sideWeight="0.41232228" side_tool="true" weight="0.1484992" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49590835" visible="true" weight="0.1484992" />
+      <window_info id="Structure" order="1" sideWeight="0.5040917" side_tool="true" visible="true" weight="0.1484992" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" sideWeight="0.4047619" side_tool="true" weight="0.17899929" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -216,7 +192,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="TypeScript" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.3908686" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.31959912" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -306,16 +282,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="6" lean-forward="true" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Cursor.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="128" column="19" lean-forward="true" selection-start-line="128" selection-start-column="19" selection-end-line="128" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#61#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -436,17 +402,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Typewriter.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="78" column="24" lean-forward="true" selection-start-line="78" selection-start-column="24" selection-end-line="78" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-            <marker date="1711961780219" expanded="true" signature="1504:1544" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/index.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="298">
@@ -504,26 +459,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="116" column="20" lean-forward="true" selection-start-line="116" selection-start-column="20" selection-end-line="116" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Character.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="59" column="18" lean-forward="true" selection-start-line="59" selection-start-column="18" selection-end-line="59" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/img/logo.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -542,8 +477,49 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="75" column="6" lean-forward="true" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
+        <state relative-caret-position="287">
+          <caret line="77" column="9" lean-forward="true" selection-start-line="77" selection-start-column="9" selection-end-line="77" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="18" column="51" lean-forward="true" selection-start-line="18" selection-start-column="51" selection-end-line="18" selection-end-column="51" />
+          <folding>
+            <element signature="e#48#90#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Character.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="18" column="2" lean-forward="true" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="2" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Cursor.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="54" column="5" lean-forward="true" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Typewriter.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="132" column="17" lean-forward="true" selection-start-line="132" selection-start-column="17" selection-end-line="132" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+            <marker date="1713447868740" expanded="true" signature="1507:1547" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

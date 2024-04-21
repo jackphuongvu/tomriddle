@@ -52,7 +52,7 @@ export class TypeWriter implements TypeWriterClass {
   }
 
   addCharacter = (_chars: string, _x?: number, _y?: number): void => {
-    console.log('addCharacter in TS file.');
+    // console.log('addCharacter in TS file.');
     // console.log('_chars: ', _chars);
     // console.log('this.chars: ', this.chars);
     // console.log('_x: ', _x);
@@ -63,6 +63,7 @@ export class TypeWriter implements TypeWriterClass {
       this.cursor.update(new Vector(_x, _y));
       return;
     }
+    // console.log('chars: ', this.chars);
     // iterate characters and move cursor right
     for (let i = 0, len = _chars.length; i < len; i += 1) {
       const {

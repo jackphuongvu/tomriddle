@@ -41,7 +41,7 @@ export class Cursor {
   };
 
   clear = () => {
-    console.log('clear');
+    // console.log('clear');
     const _pos = this.position.subtract(1).divideBy(containerScale);
 
     // rect appears to have a border on the bottom-right
@@ -54,7 +54,7 @@ export class Cursor {
    * @param {Vector} vec
    */
   update = (vec: Vector) => {
-    console.log('update');
+    // console.log('update');
     // move the "hidden" input
     positionElem(textInput, {
       x: Math.min(vec.x, window.innerWidth - cursorWidth),
@@ -79,18 +79,18 @@ export class Cursor {
   };
 
   draw = () => {
-    console.log('draw');
-    console.log('_raf', this._raf);
+    // console.log('draw');
+    // console.log('_raf', this._raf);
     this._draw();
 
-    console.log('this._cursorTimeout: ', this._cursorTimeout);
+    // console.log('this._cursorTimeout: ', this._cursorTimeout);
     // 2.2s
     window.clearTimeout(this._cursorTimeout!);
     if (this._raf) {
       window.cancelAnimationFrame(this._raf);
     }
     this._opacity = GLOBAL_ALPHA;
-    console.log('this._opacity: ', this._opacity);
+    // console.log('this._opacity: ', this._opacity);
 
 
 
@@ -131,7 +131,7 @@ export class Cursor {
   };
 
   fadeOut = () => {
-    console.log('fadeOut');
+    // console.log('fadeOut');
     this._time = new Date();
     this._raf = requestAnimationFrame(this._fadeanim.bind(this));
   };
